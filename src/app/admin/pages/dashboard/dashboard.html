@@ -6,23 +6,23 @@
     </div>
 
     <nav class="menu">
-      <button mat-button class="menu-item">
+      <button mat-button class="menu-item" (click)="setSection('inicio')">
         <mat-icon>home</mat-icon>
         Inicio
       </button>
-      <button mat-button class="menu-item">
+      <button mat-button class="menu-item" (click)="setSection('usuarios')">
         <mat-icon>group</mat-icon>
         Usuarios
       </button>
-      <button mat-button class="menu-item">
+      <button mat-button class="menu-item" (click)="setSection('cursos')">
         <mat-icon>menu_book</mat-icon>
         Cursos
       </button>
-      <button mat-button class="menu-item">
+      <button mat-button class="menu-item" (click)="setSection('reportes')">
         <mat-icon>bar_chart</mat-icon>
         Reportes
       </button>
-      <button mat-button class="menu-item">
+      <button mat-button class="menu-item" (click)="setSection('configuracion')">
         <mat-icon>settings</mat-icon>
         Configuración
       </button>
@@ -43,29 +43,50 @@
       </button>
     </mat-toolbar>
 
-    <!-- Page content -->
+    <!-- Dynamic Page content -->
     <div class="admin-content">
-      <h1>Panel del Administrador</h1>
+      <!-- Inicio -->
+      <ng-container *ngIf="section === 'inicio'">
+        <h1>Panel del Administrador</h1>
+        <p>Desde aquí puedes gestionar todos los módulos del sistema.</p>
+      </ng-container>
 
-      <div class="cards-container">
-        <mat-card class="dashboard-card">
-          <mat-icon class="card-icon">group</mat-icon>
-          <h3>Gestión de usuarios</h3>
-          <p>Administra roles, permisos y cuentas activas.</p>
-        </mat-card>
+      <!-- Usuarios -->
+      <ng-container *ngIf="section === 'usuarios'">
+        <h1>Gestión de Usuarios</h1>
+        <p>Aquí podrás visualizar, editar y gestionar las cuentas registradas.</p>
+      </ng-container>
 
-        <mat-card class="dashboard-card">
-          <mat-icon class="card-icon">menu_book</mat-icon>
-          <h3>Cursos</h3>
-          <p>Crea, edita y publica cursos en la plataforma.</p>
-        </mat-card>
+      <!-- Cursos -->
+      <ng-container *ngIf="section === 'cursos'">
+        <h1>Gestión de Cursos</h1>
 
-        <mat-card class="dashboard-card">
-          <mat-icon class="card-icon">bar_chart</mat-icon>
-          <h3>Reportes</h3>
-          <p>Consulta estadísticas y progreso general.</p>
-        </mat-card>
-      </div>
+        <div class="courses-container">
+          <mat-card *ngFor="let curso of cursos" class="course-card">
+            <mat-icon class="course-icon">menu_book</mat-icon>
+            <h3>{{ curso.nombre }}</h3>
+            <p>Instructor: {{ curso.instructor }}</p>
+          </mat-card>
+
+          <!-- Tarjeta agregar nuevo curso -->
+          <mat-card class="add-course-card" (click)="agregarCurso()">
+            <mat-icon class="add-icon">add</mat-icon>
+            <p>Agregar nuevo curso</p>
+          </mat-card>
+        </div>
+      </ng-container>
+
+      <!-- Reportes -->
+      <ng-container *ngIf="section === 'reportes'">
+        <h1>Reportes Generales</h1>
+        <p>Consulta estadísticas, métricas y progresos de usuarios.</p>
+      </ng-container>
+
+      <!-- Configuración -->
+      <ng-container *ngIf="section === 'configuracion'">
+        <h1>Configuración del Sistema</h1>
+        <p>Administra los ajustes y preferencias de la plataforma.</p>
+      </ng-container>
     </div>
   </mat-sidenav-content>
 </mat-sidenav-container>
