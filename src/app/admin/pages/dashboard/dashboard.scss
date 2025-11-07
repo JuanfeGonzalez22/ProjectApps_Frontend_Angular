@@ -24,16 +24,19 @@
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
+
   .menu-item {
     justify-content: flex-start;
     color: #080808;
     font-weight: 500;
     text-transform: none;
     padding-left: 1.5rem;
+
     mat-icon {
       margin-right: 0.75rem;
       color: #000000;
     }
+
     &:hover {
       background-color: rgba(53, 111, 237, 0.08);
     }
@@ -47,25 +50,34 @@
   padding: 0 1.5rem;
   display: flex;
   align-items: center;
+
   .welcome {
     font-size: 1.1rem;
     font-weight: 600;
   }
+
   .spacer {
     flex: 1 1 auto;
   }
 }
 
-/* Content */
+/* Contenido principal */
 .admin-content {
   padding: 2rem;
+
   h1 {
     color: #030303;
     font-weight: 700;
     margin-bottom: 2rem;
   }
+
+  p {
+    color: #4f4f4f;
+    font-size: 0.95rem;
+  }
 }
 
+/* Tarjetas de panel general (inicio) */
 .cards-container {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
@@ -81,20 +93,97 @@
   flex-direction: column;
   align-items: flex-start;
   transition: transform 0.2s ease;
+
   &:hover {
     transform: translateY(-5px);
   }
+
   .card-icon {
     color: #2b7ce5;
     font-size: 40px;
     margin-bottom: 0.5rem;
   }
+
   h3 {
     margin: 0.5rem 0;
-    color: #ffffff;
+    color: #030303;
   }
+
   p {
-    color: #e2e1e1;
+    color: #666;
     font-size: 0.9rem;
+  }
+}
+
+/* Cursos */
+.courses-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+}
+
+/* Tarjeta normal de curso (cuando existan cursos) */
+.course-card {
+  border-radius: 12px;
+  padding: 1rem;
+  background: #ffffff;
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.05);
+  width: 260px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  transition: transform 0.2s ease;
+
+  &:hover {
+    transform: translateY(-5px);
+  }
+
+  .course-icon {
+    color: #2b7ce5;
+    font-size: 36px;
+    margin-bottom: 0.5rem;
+  }
+
+  h3 {
+    margin: 0.3rem 0;
+    font-weight: 600;
+    color: #222;
+  }
+
+  p {
+    color: #555;
+    font-size: 0.9rem;
+  }
+}
+
+/* Tarjeta “Agregar nuevo curso”*/
+.add-course-card {
+  width: 320px;
+  height: 200px;
+  border-radius: 12px;
+  background: #ffffff !important; 
+  border-top: 8px solid #8a2be2; 
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+
+  .add-icon {
+    color: #8a2be2; 
+    font-size: 48px;
+    margin-bottom: 0.5rem;
+  }
+
+  p {
+    color: #4f4f4f; 
+    font-weight: 600;
+  }
+
+  &:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 15px rgba(138, 43, 226, 0.3);
   }
 }
