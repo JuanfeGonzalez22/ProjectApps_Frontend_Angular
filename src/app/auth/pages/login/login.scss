@@ -1,0 +1,114 @@
+html, body{
+    margin: 0;
+    height: 100%;
+    font-family: 'Inter', 'Roboto', sans-serif;
+    background-color: #0a0a0a;
+    color: #fff;
+}
+
+.login-container{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.login-container h2{
+    margin-bottom: 24px;
+    font-weight: 600;
+    color: #ffffff;
+}
+
+form{
+    display: flex;
+    flex-direction: column;
+    width: 340px;
+    padding: 32px;
+    background-color: #1e1e1e;
+    border-radius: 12px;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
+}
+
+label{
+    font-size: 14px;
+    color: #cccccc;
+    margin-bottom: 6px;
+}
+
+input {
+  margin-bottom: 18px;
+  padding: 12px;
+  border: 1px solid #3f3f3f;
+  border-radius: 8px;
+  background-color: #2e2e2e;
+  color: #ffffff;
+  outline: none;
+  transition: border-color 0.3s ease;
+}
+
+input:focus {
+  border-color: #1976d2;
+}
+/* Estilos para los botones */
+.button-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.btn-primary,
+.btn-secondary {
+  flex: 1;
+  padding: 12px;
+  border: none;
+  border-radius: 8px;
+  color: white;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+/* Azul */
+.btn-primary {
+  background-color: #1976d2;
+}
+.btn-primary:hover:not(:disabled) {
+  background-color: #1565c0;
+}
+
+/* Morado */
+.btn-secondary {
+  background-color: #673ab7;
+}
+.btn-secondary:hover {
+  background-color: #5e35b1;
+}
+
+button:hover:not(:disabled) {
+    background-color: #1565c0;
+}
+
+button:disabled {
+    background-color: #555555;
+    cursor: not-allowed;
+}
+
+a{
+    margin-top: 10px;
+    text-align: center;
+    color: #9e9e9e;
+    text-decoration: none;
+    font-size: 14px;
+}
+
+a:hover{
+    color: #ffffff;
+}
+
+.error-message{
+    color: #ff5252;
+    margin-top: 12px;
+    font-size: 14px;
+    text-align: center;
+}

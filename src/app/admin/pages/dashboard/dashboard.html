@@ -1,0 +1,71 @@
+<mat-sidenav-container class="admin-container">
+  <!-- Sidebar -->
+  <mat-sidenav mode="side" opened class="admin-sidenav">
+    <div class="logo">
+      <h2>LevelUpCorp</h2>
+    </div>
+
+    <nav class="menu">
+      <button mat-button class="menu-item">
+        <mat-icon>home</mat-icon>
+        Inicio
+      </button>
+      <button mat-button class="menu-item">
+        <mat-icon>group</mat-icon>
+        Usuarios
+      </button>
+      <button mat-button class="menu-item">
+        <mat-icon>menu_book</mat-icon>
+        Cursos
+      </button>
+      <button mat-button class="menu-item">
+        <mat-icon>bar_chart</mat-icon>
+        Reportes
+      </button>
+      <button mat-button class="menu-item">
+        <mat-icon>settings</mat-icon>
+        Configuración
+      </button>
+    </nav>
+  </mat-sidenav>
+
+  <!-- Main content -->
+  <mat-sidenav-content>
+    <!-- Header -->
+    <mat-toolbar class="admin-header">
+      <span class="welcome">Bienvenido, Administrador 👋</span>
+      <span class="spacer"></span>
+      <button mat-icon-button>
+        <mat-icon>notifications</mat-icon>
+      </button>
+      <button mat-icon-button>
+        <mat-icon>account_circle</mat-icon>
+      </button>
+    </mat-toolbar>
+
+    <!-- Page content -->
+    <div class="admin-content">
+      <h1>Panel del Administrador</h1>
+
+      <div class="cards-container">
+        <mat-card class="dashboard-card">
+          <mat-icon class="card-icon">group</mat-icon>
+          <h3>Gestión de usuarios</h3>
+          <p>Administra roles, permisos y cuentas activas.</p>
+        </mat-card>
+
+        <mat-card class="dashboard-card">
+          <mat-icon class="card-icon">menu_book</mat-icon>
+          <h3>Cursos</h3>
+          <p>Crea, edita y publica cursos en la plataforma.</p>
+        </mat-card>
+
+        <mat-card class="dashboard-card">
+          <mat-icon class="card-icon">bar_chart</mat-icon>
+          <h3>Reportes</h3>
+          <p>Consulta estadísticas y progreso general.</p>
+        </mat-card>
+      </div>
+    </div>
+  </mat-sidenav-content>
+</mat-sidenav-container>

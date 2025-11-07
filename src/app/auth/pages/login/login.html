@@ -1,0 +1,45 @@
+<div class="login-container">
+  <div class="login-card">
+    <h2>Iniciar sesión</h2>
+
+    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+      <div class="form-group">
+        <label>Email</label>
+        <input
+          type="email"
+          formControlName="email"
+          placeholder="empresa@correo.com"
+          required
+        />
+      </div>
+
+      <div class="form-group">
+        <label>Contraseña</label>
+        <input
+          type="password"
+          formControlName="password"
+          placeholder="Ingrese su contraseña"
+          required
+        />
+      </div>
+
+      <div class="button-row">
+        <button
+          type="submit"
+          [disabled]="loginForm.invalid"
+          class="btn-primary"
+        >
+          Iniciar sesión
+        </button>
+
+        <button type="button" class="btn-secondary">
+          Registrarse
+        </button>
+      </div>
+
+      <a href="#" class="forgot-password">¿Olvidaste tu contraseña?</a>
+    </form>
+
+    <p *ngIf="errorMsg" class="error-msg">{{ errorMsg }}</p>
+  </div>
+</div>
