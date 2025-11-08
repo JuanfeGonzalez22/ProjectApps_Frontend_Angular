@@ -1,0 +1,36 @@
+<h1>Gestión de Cursos</h1>
+
+<mat-form-field appearance="outline" class="search-bar">
+  <mat-label>Buscar curso</mat-label>
+  <input matInput placeholder="Ejemplo: Java Básico" />
+  <button mat-icon-button matSuffix>
+    <mat-icon>search</mat-icon>
+  </button>
+</mat-form-field>
+
+<table class="course-table">
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th>Título</th>
+      <th>Descripción</th>
+      <th>Duración estimada</th>
+      <th>Nivel</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let curso of cursos">
+      <td>{{ curso.id }}</td>
+      <td>{{ curso.title }}</td>
+      <td>{{ curso.description }}</td>
+      <td>{{ curso.estimatedDuration }}</td>
+      <td>{{ curso.level }}</td>
+    </tr>
+  </tbody>
+</table>
+
+<div class="bottom-action">
+  <button mat-raised-button color="warn" class="eliminar">Eliminar</button>
+  <button mat-raised-button color="primary" class="editar">Editar</button>
+  <button mat-raised-button class="volver" (click)="setSection('cursos')">Volver</button>
+</div>

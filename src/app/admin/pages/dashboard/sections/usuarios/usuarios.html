@@ -1,0 +1,38 @@
+<ng-container *ngIf="section === 'usuarios'">
+  <h1>Gestión de Usuarios</h1>
+  <mat-form-field appearance="outline" class="search-bar">
+    <mat-label>Buscar usuario</mat-label>
+    <input matInput placeholder="Ejemplo: Andres Gomez" />
+    <button mat-icon-button matSuffix>
+      <mat-icon>search</mat-icon>
+    </button>
+  </mat-form-field>
+
+  <table class="course-table">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Nombre completo</th>
+        <th>Email</th>
+        <th>Rol</th>
+        <th>Departamento</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let usuario of usuarios">
+        <td>{{ usuario.id }}</td>
+        <td>{{ usuario.nombre }}</td>
+        <td>{{ usuario.email }}</td>
+        <td>{{ usuario.rol }}</td>
+        <td>{{ usuario.departamento }}</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="bottom-action">
+    <button mat-raised-button color="warn" class="eliminar">Eliminar</button>
+    <button mat-raised-button color="primary" class="editar">Editar</button>
+    <button mat-raised-button class="crear">Crear usuario</button>
+    <button mat-raised-button (click)="volver()">Volver</button>
+  </div>
+</ng-container>
