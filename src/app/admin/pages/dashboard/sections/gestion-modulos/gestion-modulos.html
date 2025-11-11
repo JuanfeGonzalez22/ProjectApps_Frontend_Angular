@@ -1,0 +1,37 @@
+<h1>Gestión de Módulos</h1>
+
+<mat-form-field appearance="outline" class="search-bar">
+  <mat-label>Buscar módulo</mat-label>
+  <input matInput placeholder="Ejemplo: Introducción a Java" />
+  <button mat-icon-button matSuffix>
+    <mat-icon>search</mat-icon>
+  </button>
+</mat-form-field>
+
+<table class="module-table">
+  <thead>
+    <tr>
+        <th>ID</th>
+        <th>ID del Curso</th>
+        <th>Titulo</th>
+        <th>Tipo</th>
+        <th>Orden</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let m of modulos">
+        <td>{{ m.id }}</td>
+        <td>{{ m.courseId }}</td>
+        <td>{{ m.title }}</td>
+        <td>{{ m.type }}</td>
+        <td>{{ m.order }}</td>
+    </tr>
+  </tbody>
+</table>
+
+<div class="bottom-action">
+  <button mat-raised-button color="warn" class="eliminar">Eliminar</button>
+  <button mat-raised-button color="primary" class="editar">Editar</button>
+  <button mat-raised-button color="accent" class="crear">Crear módulo</button>
+  <button mat-raised-button class="volver" (click)="volver()">Volver</button>
+</div>

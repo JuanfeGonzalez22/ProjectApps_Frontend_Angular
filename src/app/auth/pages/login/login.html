@@ -1,5 +1,6 @@
-<div class="login-container">
-  <div class="login-card">
+<div class="auth-wrapper">
+  <!-- LOGIN -->
+  <div *ngIf="!mostrarRegistro" class="auth-card login">
     <h2>Iniciar sesión</h2>
 
     <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
@@ -24,15 +25,11 @@
       </div>
 
       <div class="button-row">
-        <button
-          type="submit"
-          [disabled]="loginForm.invalid"
-          class="btn-primary"
-        >
+        <button type="submit" [disabled]="loginForm.invalid" class="btn-primary">
           Iniciar sesión
         </button>
 
-        <button type="button" class="btn-secondary">
+        <button type="button" class="btn-secondary" (click)="abrirRegistro()">
           Registrarse
         </button>
       </div>
@@ -41,5 +38,10 @@
     </form>
 
     <p *ngIf="errorMsg" class="error-msg">{{ errorMsg }}</p>
+  </div>
+
+  <!-- REGISTRO -->
+  <div *ngIf="mostrarRegistro" class="auth-card register">
+    <app-register (cerrarRegistro)="cerrarRegistro()"></app-register>
   </div>
 </div>

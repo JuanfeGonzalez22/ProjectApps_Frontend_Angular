@@ -1,0 +1,67 @@
+<div class="register-wrapper">
+  <div class="register-container">
+    <h2>Registro</h2>
+
+    <mat-form-field appearance="outline" class="input-field">
+  <mat-label>Nombre completo</mat-label>
+  <input 
+    matInput 
+    [(ngModel)]="nombre" 
+    name="nombre" 
+    placeholder="Ejemplo: Andrés Gómez" 
+    required
+  />
+</mat-form-field>
+
+<mat-form-field appearance="outline" class="input-field">
+  <mat-label>Email</mat-label>
+  <input 
+    matInput 
+    [(ngModel)]="email" 
+    name="email" 
+    type="email" 
+    placeholder="correo@empresa.com" 
+    required
+  />
+</mat-form-field>
+
+<mat-form-field appearance="outline" class="input-field">
+  <mat-label>Contraseña</mat-label>
+  <input 
+    matInput 
+    [(ngModel)]="password" 
+    name="password"
+    type="password" 
+    placeholder="********" 
+    required
+  />
+</mat-form-field>
+
+<mat-form-field appearance="outline" class="input-field">
+  <mat-label>Departamento</mat-label>
+  <mat-select 
+    [(ngModel)]="selectedDepto" 
+    name="department" 
+    placeholder="Selecciona un departamento"
+    required
+  >
+    <mat-option *ngFor="let dep of departamentos" [value]="dep">{{ dep }}</mat-option>
+  </mat-select>
+</mat-form-field>
+
+    <div class="tipo-usuario">
+      <label>Tipo de usuario:</label>
+      <mat-radio-group [(ngModel)]="role">
+        <mat-radio-button value="USER">Aprendiz</mat-radio-button>
+        <mat-radio-button value="ADMIN">Admin</mat-radio-button>
+        <mat-radio-button value="INSTRUCTOR">Instructor</mat-radio-button>
+      </mat-radio-group>
+
+    </div>
+
+    <div class="button-group">
+        <button mat-raised-button color="primary" class="registrarse" (click)="registrar()">Registrarse</button>
+        <button mat-raised-button color="warn" class="volver" (click)="cerrarRegistro.emit()">Volver</button>
+    </div>
+
+</div>

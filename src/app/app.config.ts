@@ -4,6 +4,7 @@ import { provideRouter, Routes } from '@angular/router';
 import { provideHttpClient } from '@angular/common/http';
 import{provideAnimations}from'@angular/platform-browser/animations';
 import { LoginComponent } from './auth/pages/login/login';
+import { HttpClientModule } from '@angular/common/http';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'auth/login', pathMatch: 'full' },
@@ -18,6 +19,7 @@ export const routes: Routes = [
 
 export const appConfig: ApplicationConfig = {
   providers: [
+   [provideHttpClient()],
     provideAnimations(),
     provideRouter(routes),
     provideHttpClient()
