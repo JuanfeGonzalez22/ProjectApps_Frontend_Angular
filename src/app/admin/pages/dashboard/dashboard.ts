@@ -10,6 +10,7 @@ import { Cursos } from './sections/cursos/cursos';
 import { GestionCursos } from './sections/gestion-cursos/gestion-cursos';
 import { Reportes } from './sections/reportes/reportes';
 import { Configuracion } from './sections/configuracion/configuracion';
+import { GestionModulos } from "./sections/gestion-modulos/gestion-modulos";
 
 @Component({
   selector: 'app-dashboard',
@@ -25,8 +26,9 @@ import { Configuracion } from './sections/configuracion/configuracion';
     Cursos,
     GestionCursos,
     Reportes,
-    Configuracion
-  ],
+    Configuracion,
+    GestionModulos
+],
   templateUrl: './dashboard.html',
   styleUrl: './dashboard.scss',
 })
@@ -35,6 +37,12 @@ export class Dashboard {
   section: string = 'inicio';
   cursos: any[] = [];
   usuarios: any[] = [];
+
+  ngOnInit(){
+    window.addEventListener('changeSection', (event: any) => {
+      this.section = event.detail;
+    });
+  }
 
   setSection(seccion: string) {
     this.section = seccion;

@@ -36,7 +36,19 @@ export class GestionCursos {
   volver() { history.back(); }
 
   setSection(seccion: string) {
-    this.section = seccion;
+    const event = new CustomEvent('changeSection', { detail: seccion });
+    window.dispatchEvent(event);
   }
+
+  ngOnInit(){
+    window.addEventListener('changeSection', (event: any) => {
+    this.section = event.detail;
+    });
+  }
+
+  abrirModulos() {
+    window.open('/admin/modulos', '_blank');
+  }
+
 }
 

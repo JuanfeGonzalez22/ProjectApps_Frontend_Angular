@@ -1,0 +1,92 @@
+/* Fondo general gris */
+body, html {
+  height: 100%;
+  margin: 0;
+  background-color: #bebebe;
+  font-family: 'Inter', 'Roboto', sans-serif;
+}
+
+/* Contenedor principal centrado */
+.register-container {
+  width: 420px;
+  margin: 5rem auto;
+  padding: 2rem 2.5rem;
+  background-color: #bebebe;
+  border-radius: 12px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* Título */
+.register-container h2 {
+  color: #000;
+  font-weight: 700;
+  margin-bottom: 1.5rem;
+}
+
+/* Campos de entrada */
+mat-form-field.input-field {
+  width: 100%;
+  margin-bottom: 1rem;
+  background-color: #bebebe;
+}
+
+/* Grupo de tipo de usuario */
+.tipo-usuario {
+  width: 100%;
+  text-align: left;
+  margin-top: 1.5rem;
+  margin-bottom: 1.5rem;
+
+  label {
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    display: block;
+    color: #000;
+  }
+
+  mat-radio-group {
+    display: flex;
+    justify-content: space-around;
+    width: 100%;
+  }
+
+  mat-radio-button {
+    color: #000;
+  }
+}
+
+/* Botones */
+.button-group {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  margin-top: 1.5rem;
+
+  button {
+    flex: 1;
+    margin: 0 0.5rem;
+    font-weight: 600;
+    border-radius: 8px;
+    padding: 10px 0;
+    color: #fff !important;
+    transition: all 0.3s ease;
+  }
+
+  .registrarse {
+    background-color: #2e7be7 !important;
+    &:hover {
+      background-color: #1e63c1 !important;
+    }
+  }
+
+  .volver {
+    background-color: #2b2b2b !important;
+    &:hover {
+      background-color: #000000 !important;
+    }
+  }
+}

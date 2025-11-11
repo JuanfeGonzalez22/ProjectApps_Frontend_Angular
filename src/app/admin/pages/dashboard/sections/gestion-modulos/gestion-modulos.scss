@@ -3,7 +3,7 @@
   margin-bottom: 1rem;
 }
 
-.course-table {
+.module-table {
   width: 100%;
   border-collapse: collapse;
   margin-bottom: 1.5rem;
@@ -51,23 +51,24 @@
     }
   }
 
+  .crear {
+    background-color: #7b1fa2 !important;
+    &:hover {
+      background-color: #6a1b9a !important;
+    }
+  }
+
   .volver {
     background-color: #9e9e9e !important;
     &:hover {
       background-color: #757575 !important;
     }
   }
+}
 
-  .modulos {
-  background-color: #8e24aa !important; 
-  color: white !important;
-  font-weight: 500;
-  border-radius: 8px;
-  transition: background-color 0.3s ease;
-
-  &:hover {
-    background-color: #6a1b9a !important;
-  }
-
-  }
+h1 {
+  font-size: 1.8rem;
+  font-weight: 600;
+  color: #000000;
+  margin-bottom: 1rem;
 }

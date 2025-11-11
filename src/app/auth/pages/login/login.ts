@@ -2,18 +2,20 @@ import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
-import { AuthService } from '../../services/auth'; 
+import { AuthService } from '../../services/auth';
+import { Register } from "../register/register"; 
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule, Register],
   templateUrl: './login.html',
   styleUrls: ['./login.scss']
 })
 export class LoginComponent {
   loginForm: FormGroup;
   errorMsg = '';
+  mostrarRegistro = false;
 
   constructor(
     private fb: FormBuilder,
@@ -25,6 +27,17 @@ export class LoginComponent {
       email: ['', [Validators.required, Validators.email]],
       password: ['', Validators.required]
     });
+  }
+
+  abrirRegistro(){
+    this.mostrarRegistro = true;
+    console.log("✅ Registro abierto");
+  }
+
+  cerrarRegistro(){
+    this.mostrarRegistro = false;
+    console.log("❌ Registro cerrado");
+
   }
 
   onSubmit(): void {

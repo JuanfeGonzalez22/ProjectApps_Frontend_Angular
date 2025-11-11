@@ -5,6 +5,9 @@ import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTableModule } from '@angular/material/table';
+import { User } from '../../../../../core/models/user.model';
+import { UserService } from '../../../../../core/services/user.service';
+
 
 @Component({
   selector: 'app-usuarios',
@@ -21,15 +24,32 @@ import { MatTableModule } from '@angular/material/table';
   styleUrls: ['./usuarios.scss']
 })
 export class Usuarios {
-  usuarios = [
-    { id: 1, nombre: 'Andrés Gómez', email: 'andres@mail.com', rol: 'Admin', departamento: 'TI' },
-  ];
+  usuarios: User[] = [];
   section: string = 'usuarios';
-  volver() {
-    history.back(); 
+
+  constructor(private userService: UserService) {}
+
+  ngOnInit() {
+    this.cargarUsuarios();
   }
+
+  cargarUsuarios() {
+  console.log('📡 Ejecutando getAll()...');
+  this.userService.getAll().subscribe({
+    next: (data) => {
+      console.log('✅ Datos recibidos del backend:', data);
+      this.usuarios = data;
+    },
+    error: (err) => console.error('❌ Error cargando usuarios:', err)
+  });
+}
+
 
   setSection(seccion: string) {
     this.section = seccion;
+  }
+
+  volver() {
+    history.back();
   }
 }

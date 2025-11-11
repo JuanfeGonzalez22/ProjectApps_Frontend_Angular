@@ -5,6 +5,7 @@ import { Observable } from 'rxjs';
 export interface LoginRequest {
   email: string;
   password: string;
+  providedIn: 'root';
 }
 
 export interface UserResponse {
@@ -20,11 +21,11 @@ export class AuthService {
 
   constructor(private http: HttpClient) {}
 
-  login(credentials: LoginRequest): Observable<UserResponse> {
-    return this.http.post<UserResponse>(`${this.apiUrl}/login`, credentials);
+  login(credentials: { email: string; password: string}): Observable<any> {
+    return this.http.post(`${this.apiUrl}/login`, credentials);
   }
 
-  register(data: any): Observable<UserResponse> {
-    return this.http.post<UserResponse>(`${this.apiUrl}/register`, data);
+  register(userData: { name: string; email: string; password: string; role: string }): Observable<any> {
+    return this.http.post(`${this.apiUrl}/register`, userData);
   }
 }
