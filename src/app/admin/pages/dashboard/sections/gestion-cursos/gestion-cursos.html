@@ -2,13 +2,32 @@
 
 <mat-form-field appearance="outline" class="search-bar">
   <mat-label>Buscar curso</mat-label>
-  <input matInput placeholder="Ejemplo: Java Básico" />
-  <button mat-icon-button matSuffix>
+  <input
+    matInput
+    placeholder="Ejemplo: Java Básico"
+    [(ngModel)]="searchTerm"
+    (input)="filtrarCursos()"
+  />
+  <button mat-icon-button matSuffix (click)="filtrarCursos()">
     <mat-icon>search</mat-icon>
+  </button>
+  <button
+    mat-icon-button
+    matSuffix
+    *ngIf="searchTerm"
+    (click)="limpiarBusqueda()"
+    matTooltip="Limpiar búsqueda"
+  >
+    <mat-icon>close</mat-icon>
   </button>
 </mat-form-field>
 
-<table class="course-table">
+<!-- Mostrar si no hay resultados -->
+<div *ngIf="cursosFiltrados.length === 0 && searchTerm" class="no-results">
+  <p>No se encontraron cursos que coincidan con "{{ searchTerm }}"</p>
+</div>
+
+<table class="course-table" *ngIf="cursosFiltrados.length > 0">
   <thead>
     <tr>
       <th>ID</th>
@@ -19,11 +38,12 @@
     </tr>
   </thead>
   <tbody>
-    <tr *ngFor="let curso of cursos">
+    <!--cursosFiltrados -->
+    <tr *ngFor="let curso of cursosFiltrados">
       <td>{{ curso.id }}</td>
       <td>{{ curso.title }}</td>
       <td>{{ curso.description }}</td>
-      <td>{{ curso.estimatedDuration }}</td>
+      <td>{{ formatearDuracion(curso.estimatedDuration) }}</td>
       <td>{{ curso.level }}</td>
     </tr>
   </tbody>
