@@ -1,25 +1,20 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
+import { FormsModule } from '@angular/forms';
 import { MatTableModule } from '@angular/material/table';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatIconModule } from '@angular/material/icon';
-
-interface Modulo {
-  id: number;
-  courseId: number;
-  title: string;
-  type: string;
-  order: number;
-}
+import { ModuleService, ModuleData } from '../../../../../core/services/module.service';
 
 @Component({
   selector: 'app-gestion-modulos',
   standalone: true,
   imports: [
     CommonModule,
+    FormsModule,
     MatTableModule,
     MatButtonModule,
     MatFormFieldModule,
@@ -29,12 +24,76 @@ interface Modulo {
   templateUrl: './gestion-modulos.html',
   styleUrl: './gestion-modulos.scss',
 })
-export class GestionModulos {
-  modulos: Modulo[] = [];
+export class GestionModulos implements OnInit {
+  modulos: ModuleData[] = [];
+  modulosFiltrados: ModuleData[] = [];
+  searchTerm: string = '';
 
-  constructor(private router: Router) {}
+  // Columnas a mostrar en la tabla
+  displayedColumns: string[] = ['id', 'courseId', 'title', 'type', 'order'];
 
-  volver() {
+  constructor(
+    private router: Router,
+    private moduleService: ModuleService
+  ) {}
+
+  ngOnInit(): void {
+    this.cargarModulos();
+  }
+
+  cargarModulos(): void {
+    console.log('📡 Cargando módulos...');
+    this.moduleService.getAll().subscribe({
+      next: (data: ModuleData[]) => {
+        console.log('✅ Módulos recibidos:', data);
+        this.modulos = data;
+        this.modulosFiltrados = [...data];
+      },
+      error: (err: any) => {
+        console.error('❌ Error cargando módulos:', err);
+        this.modulos = [];
+        this.modulosFiltrados = [];
+      }
+    });
+  }
+
+  //filtrar módulos
+  filtrarModulos(): void {
+    const termino = this.searchTerm.toLowerCase().trim();
+
+    if (!termino) {
+      this.modulosFiltrados = [...this.modulos];
+      return;
+    }
+
+    this.modulosFiltrados = this.modulos.filter(modulo =>
+      modulo.title?.toLowerCase().includes(termino) ||
+      modulo.type?.toLowerCase().includes(termino) ||
+      modulo.id?.toString().includes(termino) ||
+      modulo.courseId?.toString().includes(termino)
+    );
+
+    console.log(`Búsqueda: "${termino}" - Resultados: ${this.modulosFiltrados.length}`);
+  }
+
+  limpiarBusqueda(): void {
+    this.searchTerm = '';
+    this.modulosFiltrados = [...this.modulos];
+  }
+
+  crearModulo(): void {
+    console.log('Crear nuevo módulo');
+  }
+
+  editarModulo(): void {
+    console.log('Editar módulo');
+  }
+
+  eliminarModulo(): void {
+    console.log('Eliminar módulo');
+  }
+
+  volver(): void {
     this.router.navigate(['/admin/cursos']);
   }
 }

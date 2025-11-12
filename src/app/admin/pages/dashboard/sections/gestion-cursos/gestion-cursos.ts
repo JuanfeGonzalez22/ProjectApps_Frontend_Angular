@@ -1,13 +1,14 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTableModule } from '@angular/material/table';
-import { Cursos } from '../cursos/cursos';
+import { FormsModule } from '@angular/forms';
+import { CourseService, CourseData } from '../../../../../core/services/course.service';
 
-interface Curso{
+interface Curso {
   id: number;
   title: string;
   description: string;
@@ -24,15 +25,20 @@ interface Curso{
     MatInputModule,
     MatButtonModule,
     MatIconModule,
-    MatTableModule
+    MatTableModule,
+    FormsModule
   ],
   templateUrl: './gestion-cursos.html',
   styleUrls: ['./gestion-cursos.scss']
 })
-
-export class GestionCursos {
+export class GestionCursos implements OnInit {
   cursos: Curso[] = [];
+  cursosFiltrados: Curso[] = [];
+  searchTerm: string = '';
   section: string = 'cursos';
+
+  constructor(private courseService: CourseService) {}
+
   volver() { history.back(); }
 
   setSection(seccion: string) {
@@ -40,15 +46,88 @@ export class GestionCursos {
     window.dispatchEvent(event);
   }
 
-  ngOnInit(){
+  ngOnInit() {
     window.addEventListener('changeSection', (event: any) => {
-    this.section = event.detail;
+      this.section = event.detail;
     });
+
+    this.cargarCursos();
+  }
+
+  cargarCursos() {
+    this.courseService.getAll().subscribe({
+      next: (courses: CourseData[]) => {
+        this.cursos = courses.map(course => ({
+          id: course.id || 0,
+          title: course.title,
+          description: course.description || '',
+          estimatedDuration: course.estimatedDuration || '',
+          level: course.level?.toString() || ''
+        }));
+        this.cursosFiltrados = [...this.cursos];
+        console.log('Cursos cargados:', this.cursos);
+      },
+      error: (error) => {
+        console.error('Error al cargar cursos:', error);
+        this.cursos = [];
+        this.cursosFiltrados = [];
+      }
+    });
+  }
+
+  // filtrar cursos
+  filtrarCursos() {
+    const termino = this.searchTerm.toLowerCase().trim();
+
+    if (!termino) {
+      this.cursosFiltrados = [...this.cursos];
+      return;
+    }
+
+    this.cursosFiltrados = this.cursos.filter(curso =>
+      curso.title.toLowerCase().includes(termino) ||
+      curso.description.toLowerCase().includes(termino)
+    );
+
+    console.log(`Búsqueda: "${termino}" - Resultados: ${this.cursosFiltrados.length}`);
+  }
+
+  // limpiar búsqueda
+  limpiarBusqueda() {
+    this.searchTerm = '';
+    this.cursosFiltrados = [...this.cursos];
+  }
+
+  formatearDuracion(duracion: string): string {
+    if (!duracion || duracion === '' || duracion === null || duracion === undefined) {
+      return 'No especificada';
+    }
+
+    const partes = duracion.split(':');
+    if (partes.length === 3) {
+      const horas = parseInt(partes[0], 10);
+      const minutos = parseInt(partes[1], 10);
+      const segundos = parseInt(partes[2], 10);
+
+      let resultado = '';
+
+      if (horas > 0) {
+        resultado += `${horas}h `;
+      }
+      if (minutos > 0) {
+        resultado += `${minutos}min`;
+      }
+      if (horas === 0 && minutos === 0 && segundos > 0) {
+        resultado += `${segundos}s`;
+      }
+
+      return resultado.trim() || 'No especificada';
+    }
+
+    return duracion;
   }
 
   abrirModulos() {
     window.open('/admin/modulos', '_blank');
   }
-
 }
-
