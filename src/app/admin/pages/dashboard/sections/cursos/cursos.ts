@@ -5,8 +5,10 @@ import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTableModule } from '@angular/material/table';
-import { MatCard } from '@angular/material/card';
-
+import { MatCardModule } from '@angular/material/card';
+import { CourseService } from '../../../../../core/services/course.service';
+import { AgregarCursoComponent } from '../gestion-cursos/agregar-curso/agregar-curso';
+import { CourseData } from '../../../../../core/models/course.model';
 @Component({
   selector: 'app-cursos',
   standalone: true,
@@ -16,18 +18,46 @@ import { MatCard } from '@angular/material/card';
     MatInputModule,
     MatButtonModule,
     MatIconModule,
-    MatTableModule, 
-    MatCard
+    MatTableModule,
+    MatCardModule,
+    AgregarCursoComponent
   ],
   templateUrl: './cursos.html',
   styleUrls: ['./cursos.scss']
 })
 export class Cursos {
-  cursos = [
-    { id: 1, nombre: 'Angular Básico', instructor: 'Carlos Pérez' },
-  ];
 
-  agregarCurso() {
-    alert('Abrir formulario para crear un nuevo curso');
+  vista: 'grid' | 'form' = 'grid';
+
+  cursos: CourseData[] = [];
+
+  constructor(private courseService: CourseService) {}
+
+  ngOnInit() {
+    this.cargarCursos();
+  }
+
+  cargarCursos() {
+  this.courseService.getAll().subscribe({
+    next: (data) => {
+      console.log('📚 Cursos desde el backend:', data);
+      this.cursos = data;   // ✅ Nada de curso ejemplo
+    },
+    error: (err) => console.error('Error cargando cursos:', err)
+  });
+}
+
+  abrirFormulario() {
+    this.vista = 'form';
+  }
+
+  cerrarFormulario() {
+    this.vista = 'grid';
+  }
+
+  // 👇 aquí NO armamos un literal con {nombre,...}, usamos el objeto tal cual del backend
+  agregarCursoALista(curso: CourseData) {
+    this.cursos = [...this.cursos, curso];
+    this.vista = 'grid';
   }
 }

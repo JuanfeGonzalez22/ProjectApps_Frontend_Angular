@@ -6,7 +6,9 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTableModule } from '@angular/material/table';
 import { FormsModule } from '@angular/forms';
-import { CourseService, CourseData } from '../../../../../core/services/course.service';
+import { CourseService } from '../../../../../core/services/course.service';
+import { CourseData } from '../../../../../core/models/course.model';
+import { EditarCursoComponent } from './editar-curso/editar-curso';
 
 interface Curso {
   id: number;
@@ -26,7 +28,8 @@ interface Curso {
     MatButtonModule,
     MatIconModule,
     MatTableModule,
-    FormsModule
+    FormsModule,
+    EditarCursoComponent
   ],
   templateUrl: './gestion-cursos.html',
   styleUrls: ['./gestion-cursos.scss']
@@ -36,6 +39,9 @@ export class GestionCursos implements OnInit {
   cursosFiltrados: Curso[] = [];
   searchTerm: string = '';
   section: string = 'cursos';
+
+  vista: 'tabla' | 'editar' = 'tabla';
+  cursoSeleccionado: Curso | null = null;
 
   constructor(private courseService: CourseService) {}
 
@@ -73,6 +79,26 @@ export class GestionCursos implements OnInit {
         this.cursosFiltrados = [];
       }
     });
+  }
+
+  onCursoActualizado(curso: CourseData) {
+    this.cursos = this.cursos.map(c =>
+      c.id === curso.id
+        ? {
+            id: curso.id || 0,
+            title: curso.title,
+            description: curso.description || '',
+            estimatedDuration: curso.estimatedDuration || '',
+            level: curso.level?.toString() || ''
+          }
+        : c
+    );
+
+    // volver a aplicar filtros
+    this.filtrarCursos();
+
+    // volver a la tabla
+    this.vista = 'tabla';
   }
 
   // filtrar cursos
@@ -129,5 +155,49 @@ export class GestionCursos implements OnInit {
 
   abrirModulos() {
     window.open('/admin/modulos', '_blank');
+  }
+
+  seleccionarCurso(curso: Curso) {
+    this.cursoSeleccionado = curso;
+    console.log("Curso seleccionado:", curso);
+  }
+
+  
+  eliminarCurso(): void {
+    if (!this.cursoSeleccionado || this.cursoSeleccionado.id == null) {
+      alert('Selecciona un curso primero.');
+      return;
+    }
+
+    const confirmar = confirm(
+      `¿Seguro que deseas eliminar el curso "${this.cursoSeleccionado.title}" (ID: ${this.cursoSeleccionado.id})?`
+    );
+    if (!confirmar) return;
+
+    this.courseService.delete(this.cursoSeleccionado.id).subscribe({
+      next: () => {
+        this.cursos = this.cursos.filter(
+          c => c.id !== this.cursoSeleccionado!.id
+        );
+        this.cursosFiltrados = this.cursosFiltrados.filter(
+          c => c.id !== this.cursoSeleccionado!.id
+        );
+
+        this.cursoSeleccionado = null;
+        alert('Curso eliminado correctamente ✅');
+      },
+      error: err => {
+        console.error('❌ Error eliminando curso:', err);
+        alert('Error al eliminar el curso.');
+      }
+    });
+  }
+
+  editarCurso() {
+    if (!this.cursoSeleccionado) {
+      alert('Selecciona primero un curso de la tabla.');
+      return;
+    }
+    this.vista = 'editar';
   }
 }

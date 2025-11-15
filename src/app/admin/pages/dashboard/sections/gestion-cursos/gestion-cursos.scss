@@ -22,6 +22,26 @@
   td {
     color: #333;
   }
+
+  tr {
+    transition: background-color 0.25s ease, transform 0.15s ease;
+    cursor: pointer;
+  }
+
+  tbody tr:hover {
+    background-color: #f1f5ff; // azul muy clarito
+    transform: translateY(-1px);
+  }
+
+  tbody tr.seleccionado {
+    background-color: #e3f2fd; // azul clarito
+    border-left: 4px solid #1e88e5;
+    transform: translateY(-1px);
+  }
+
+  tbody tr:active {
+    transform: scale(0.99);
+  }
 }
 
 .bottom-action {
@@ -70,4 +90,7 @@
   }
 
   }
+
 }
+
+

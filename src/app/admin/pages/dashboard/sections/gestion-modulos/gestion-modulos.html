@@ -27,7 +27,7 @@
   <p>No se encontraron módulos que coincidan con "{{ searchTerm }}"</p>
 </div>
 
-<!-- mostrar tabla -->
+<!-- Tabla -->
 <table class="module-table" *ngIf="modulosFiltrados.length > 0">
   <thead>
     <tr>
@@ -38,11 +38,15 @@
       <th>Orden</th>
     </tr>
   </thead>
+
   <tbody>
-    <!--modulosFiltrados-->
-    <tr *ngFor="let m of modulosFiltrados">
-      <td>{{ m.courseId  }}</td>
+    <tr 
+      *ngFor="let m of modulosFiltrados"
+      (click)="seleccionarModulo(m)"
+      [class.seleccionado]="moduloSeleccionado?.id === m.id"
+    >
       <td>{{ m.id }}</td>
+      <td>{{ m.courseId }}</td>
       <td>{{ m.title }}</td>
       <td>{{ m.type }}</td>
       <td>{{ m.order }}</td>
