@@ -7,6 +7,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatTableModule } from '@angular/material/table';
 import { User } from '../../../../../core/models/user.model';
 import { UserService } from '../../../../../core/services/user.service';
+import { EditarUsuario } from './editar-usuario/editar-usuario';
 
 
 @Component({
@@ -18,7 +19,8 @@ import { UserService } from '../../../../../core/services/user.service';
     MatInputModule,
     MatButtonModule,
     MatIconModule,
-    MatTableModule
+    MatTableModule,
+    EditarUsuario
   ],
   templateUrl: './usuarios.html',
   styleUrls: ['./usuarios.scss']
@@ -26,10 +28,16 @@ import { UserService } from '../../../../../core/services/user.service';
 export class Usuarios {
   usuarios: User[] = [];
   section: string = 'usuarios';
+  
+  usuarioSeleccionado: User | null = null;
+  vista: 'tabla' | 'editar' = 'tabla';
+
 
   constructor(private userService: UserService) {}
 
   ngOnInit() {
+    this.section = 'usuarios';
+    this.vista = 'tabla';
     this.cargarUsuarios();
   }
 
@@ -52,4 +60,25 @@ export class Usuarios {
   volver() {
     history.back();
   }
+
+  seleccionarUsuario(usuario: User) {
+    this.usuarioSeleccionado = usuario;
+  }
+
+  editarUsuario() {
+    if (!this.usuarioSeleccionado) {
+      alert('Selecciona un usuario primero.');
+      return;
+    }
+    this.vista = 'editar';
+  }
+
+  onUsuarioActualizado(usuario: User) {
+    this.usuarios = this.usuarios.map(u =>
+      u.id === usuario.id ? usuario : u
+    );
+    this.vista = 'tabla';
+  }
+
+
 }

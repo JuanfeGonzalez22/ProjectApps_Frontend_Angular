@@ -65,3 +65,19 @@
     }
   }
 }
+
+.seleccionado {
+  background-color: #dbe8ff !important;
+}
+
+tr:hover {
+  background-color: #eef3ff;
+  cursor: pointer;
+}
+
+.course-table tr.seleccionado {
+  background-color: rgba(46, 123, 231, 0.15); /* Azul clarito */
+  transition: background 0.2s ease-in-out;
+}
+
+

@@ -1,0 +1,45 @@
+<div class="form-wrapper">
+  <div class="form-card">
+
+    <h2>Editar curso</h2>
+
+    <form [formGroup]="cursoForm">
+
+      <mat-form-field appearance="outline">
+        <mat-label>ID Curso</mat-label>
+        <input matInput formControlName="id" readonly />
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Título del curso</mat-label>
+        <input matInput formControlName="title" />
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Descripción</mat-label>
+        <input matInput formControlName="description" />
+      </mat-form-field>
+
+      <div class="row">
+        <mat-form-field appearance="outline">
+          <mat-label>Duración estimada (HH:mm)</mat-label>
+          <input matInput formControlName="estimatedDuration" />
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Nivel</mat-label>
+          <mat-select formControlName="level">
+            <mat-option *ngFor="let n of niveles" [value]="n">{{ n }}</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+
+      <div class="buttons">
+        <button mat-button class="cancelar" (click)="onCancelar()">Cancelar</button>
+        <button mat-raised-button class="guardar" (click)="guardar()">Guardar</button>
+      </div>
+
+    </form>
+
+  </div>
+</div>

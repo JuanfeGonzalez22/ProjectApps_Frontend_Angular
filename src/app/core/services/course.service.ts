@@ -1,43 +1,21 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { tap, catchError, map } from 'rxjs/operators';
-import { of } from 'rxjs';
-
-export interface CourseData {
-  id?: number;
-  title: string;
-  description?: string;
-  instructor?: string;
-  estimatedDuration?: string;
-  level?: number;
-}
+import { CourseData } from '../models/course.model';
 
 @Injectable({
   providedIn: 'root'
 })
 export class CourseService {
-  private apiUrl = 'http://localhost:8080/api/v1/courses'; //URL
+  private apiUrl = 'http://localhost:8080/api/v1/courses';
 
   constructor(private http: HttpClient) {}
 
   // Obtener todos los cursos
   getAll(): Observable<CourseData[]> {
-    console.log('🔍 Llamando a:', this.apiUrl);
-    return this.http.get<any[]>(this.apiUrl).pipe(
-      map((courses, index) => {
-        console.log('📦 Respuesta cruda del backend:', courses);
-
-        
-        return courses.map((course, idx) => ({
-          id: idx + 1, 
-          title: course.title,
-          description: course.description,
-          estimatedDuration: course.estimatedDuration,
-          level: course.level
-        }));
-      }),
-      tap(data => console.log('✅ Cursos mapeados:', data)),
+    return this.http.get<CourseData[]>(this.apiUrl).pipe(
+      tap(data => console.log('📚 Cursos del backend:', data)),
       catchError(error => {
         console.error('❌ Error en getAll:', error);
         return of([]);
@@ -47,15 +25,7 @@ export class CourseService {
 
   // Obtener un curso por ID
   getById(id: number): Observable<CourseData> {
-    return this.http.get<any>(`${this.apiUrl}/${id}`).pipe(
-      map(course => ({
-        id: id, // Usar el ID que pasamos
-        title: course.title,
-        description: course.description,
-        estimatedDuration: course.estimatedDuration,
-        level: course.level
-      }))
-    );
+    return this.http.get<CourseData>(`${this.apiUrl}/${id}`);
   }
 
   // Crear un nuevo curso

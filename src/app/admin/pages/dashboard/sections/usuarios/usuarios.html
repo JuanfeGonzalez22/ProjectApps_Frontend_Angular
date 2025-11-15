@@ -1,5 +1,7 @@
-<ng-container *ngIf="section === 'usuarios'">
+<!-- VISTA TABLA -->
+<div *ngIf="section === 'usuarios' && vista === 'tabla'">
   <h1>Gestión de Usuarios</h1>
+
   <mat-form-field appearance="outline" class="search-bar">
     <mat-label>Buscar usuario</mat-label>
     <input matInput placeholder="Ejemplo: Andres Gomez" />
@@ -19,7 +21,10 @@
       </tr>
     </thead>
     <tbody>
-      <tr *ngFor="let usuario of usuarios">
+      <tr *ngFor="let usuario of usuarios"
+          (click)="seleccionarUsuario(usuario)"
+          [class.seleccionado]="usuarioSeleccionado?.id === usuario.id"
+      >
         <td>{{ usuario.id }}</td>
         <td>{{ usuario.fullName }}</td>
         <td>{{ usuario.email }}</td>
@@ -31,8 +36,26 @@
 
   <div class="bottom-action">
     <button mat-raised-button color="warn" class="eliminar">Eliminar</button>
-    <button mat-raised-button color="primary" class="editar">Editar</button>
+
+    <button mat-raised-button 
+            color="primary" 
+            class="editar" 
+            (click)="editarUsuario()">
+      Editar
+    </button>
+
     <button mat-raised-button class="crear">Crear usuario</button>
     <button mat-raised-button (click)="volver()">Volver</button>
   </div>
-</ng-container>
+</div>
+
+<!-- VISTA EDICIÓN -->
+<div *ngIf="section === 'usuarios' && vista === 'editar'" class="form-container">
+  <app-editar-usuario
+    [usuario]="usuarioSeleccionado"
+    (cancelar)="vista = 'tabla'"
+    (usuarioActualizado)="onUsuarioActualizado($event)"
+  >
+  </app-editar-usuario>
+</div>
+

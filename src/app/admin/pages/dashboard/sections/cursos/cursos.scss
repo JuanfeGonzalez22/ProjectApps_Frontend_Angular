@@ -7,7 +7,7 @@
 .course-card {
   border-radius: 12px;
   padding: 1rem;
-  background: #ffffff;
+  background: #ffffff !important;
   box-shadow: 0 3px 8px rgba(0, 0, 0, 0.05);
   width: 260px;
   display: flex;
@@ -55,4 +55,8 @@
     transform: translateY(-5px);
     box-shadow: 0 6px 15px rgba(138, 43, 226, 0.3);
   }
+
+  
+
+
 }

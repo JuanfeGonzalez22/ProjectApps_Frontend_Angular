@@ -29,6 +29,8 @@ export class GestionModulos implements OnInit {
   modulosFiltrados: ModuleData[] = [];
   searchTerm: string = '';
 
+  moduloSeleccionado: ModuleData | null = null;
+
   // Columnas a mostrar en la tabla
   displayedColumns: string[] = ['id', 'courseId', 'title', 'type', 'order'];
 
@@ -90,10 +92,42 @@ export class GestionModulos implements OnInit {
   }
 
   eliminarModulo(): void {
-    console.log('Eliminar módulo');
+  if (!this.moduloSeleccionado) {
+    alert('Primero selecciona un módulo de la tabla.');
+    return;
   }
+
+  const confirmado = confirm(
+    `¿Seguro que quieres eliminar el módulo "${this.moduloSeleccionado.title}" (ID: ${this.moduloSeleccionado.id})?`
+  );
+
+  if (!confirmado) return;
+
+  const id = this.moduloSeleccionado.id!;
+  
+  this.moduleService.delete(id).subscribe({
+    next: () => {
+      console.log('✅ Módulo eliminado:', id);
+
+      this.modulos = this.modulos.filter(m => m.id !== id);
+      this.modulosFiltrados = this.modulosFiltrados.filter(m => m.id !== id);
+
+      this.moduloSeleccionado = null;
+      alert('Módulo eliminado correctamente.');
+    },
+    error: (err: any) => {
+      console.error('❌ Error eliminando módulo:', err);
+      alert('Ocurrió un error al eliminar el módulo.');
+    }
+  });
+}
 
   volver(): void {
     this.router.navigate(['/admin/cursos']);
+  }
+
+  seleccionarModulo(modulo: ModuleData): void {
+    this.moduloSeleccionado = modulo;
+    console.log('✅ Módulo seleccionado:', modulo);
   }
 }

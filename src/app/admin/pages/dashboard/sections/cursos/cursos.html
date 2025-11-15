@@ -1,7 +1,31 @@
 <h1>Gestión de Cursos</h1>
-<div class="courses-container">
-  <mat-card class="add-course-card" (click)="agregarCurso()">
+
+<!-- Vista grid -->
+<div class="courses-container" *ngIf="vista === 'grid'">
+
+  <!-- Card agregar -->
+  <mat-card class="add-course-card" (click)="vista = 'form'">
     <mat-icon class="add-icon">add</mat-icon>
     <p>Agregar nuevo curso</p>
   </mat-card>
+
+  <!-- Cards de cursos existentes -->
+  <mat-card class="course-card" *ngFor="let curso of cursos">
+    <!-- Título del curso (del backend) -->
+    <h3>{{ curso.title }}</h3>
+
+    <!-- Descripción opcional -->
+    <p>{{ curso.description || 'Sin descripción' }}</p>
+
+    <!-- Instructor opcional -->
+    <p>Instructor: {{ curso.instructor || 'Sin asignar' }}</p>
+  </mat-card>
+</div>
+
+<!-- Vista formulario -->
+<div *ngIf="vista === 'form'" class="form-container">
+  <app-agregar-curso 
+    (cancelar)="cerrarFormulario()"
+    (cursoCreado)="agregarCursoALista($event)">
+  </app-agregar-curso>
 </div>
