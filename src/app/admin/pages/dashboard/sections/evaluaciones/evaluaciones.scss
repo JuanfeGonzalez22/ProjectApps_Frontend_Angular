@@ -1,0 +1,90 @@
+h1 {
+  font-size: 32px;
+  font-weight: 700;
+  margin-bottom: 16px;
+}
+
+.search-container {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.search-bar {
+  width: 400px;
+}
+
+.btn-buscar {
+  height: 48px;
+  padding: 0 24px;
+  font-weight: 600;
+}
+
+.eval-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 0.5rem;
+
+  th,
+  td {
+    border: 1px solid #ccc;
+    padding: 0.75rem;
+    text-align: left;
+  }
+
+  th {
+    background-color: #f5f5f5;
+    font-weight: 600;
+  }
+
+  td {
+    color: #333;
+  }
+}
+
+.eval-table tr:hover {
+  background-color: #eef3ff;
+  cursor: pointer;
+}
+
+.eval-table tr.seleccionado {
+  background-color: rgba(46, 123, 231, 0.2);
+  transition: background 0.2s ease-in-out;
+}
+
+.bottom-action {
+  display: flex;
+  gap: 1rem;
+  margin-top: 1.5rem;
+
+  button {
+    font-weight: 600;
+    border-radius: 8px;
+    padding: 0.6rem 1.4rem;
+  }
+
+  .eliminar {
+    background-color: #e53935 !important;
+    color: #fff !important;
+  }
+
+  .editar {
+    background-color: #2e7be7 !important;
+    color: #fff !important;
+  }
+
+  .crear {
+    background-color: #43a047 !important;
+    color: #fff !important;
+  }
+
+  .volver {
+    background-color: #d4d4d4 !important;
+    color: #000 !important;
+  }
+}
+
+.placeholder {
+  padding: 2rem;
+}

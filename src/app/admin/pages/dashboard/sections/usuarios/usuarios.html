@@ -4,22 +4,11 @@
 
   <mat-form-field appearance="outline" class="search-bar">
     <mat-label>Buscar usuario</mat-label>
-    <input matInput 
-           placeholder="Ejemplo: Andres Gomez" 
-           [(ngModel)]="terminoBusqueda"
-           (input)="filtrarUsuarios()" />
-    <button mat-icon-button matSuffix (click)="limpiarBusqueda()">
-      <mat-icon>{{terminoBusqueda ? 'clear' : 'search'}}</mat-icon>
+    <input matInput placeholder="Ejemplo: Andres Gomez" />
+    <button mat-icon-button matSuffix>
+      <mat-icon>search</mat-icon>
     </button>
   </mat-form-field>
-
-  <!-- Mostrar contador de resultados -->
-  <div class="resultados-info" *ngIf="terminoBusqueda">
-    <small>
-      Mostrando {{usuariosFiltrados.length}} de {{usuarios.length}} usuarios
-      <span *ngIf="terminoBusqueda">para "{{terminoBusqueda}}"</span>
-    </small>
-  </div>
 
   <table class="course-table">
     <thead>
@@ -32,8 +21,7 @@
       </tr>
     </thead>
     <tbody>
-      <!-- Cambia 'usuarios' por 'usuariosFiltrados' -->
-      <tr *ngFor="let usuario of usuariosFiltrados"
+      <tr *ngFor="let usuario of usuarios"
           (click)="seleccionarUsuario(usuario)"
           [class.seleccionado]="usuarioSeleccionado?.id === usuario.id"
       >
@@ -46,21 +34,22 @@
     </tbody>
   </table>
 
-  <!-- Mensaje si no hay resultados -->
-  <div *ngIf="usuariosFiltrados.length === 0 && terminoBusqueda" class="no-resultados">
-    <p>No se encontraron usuarios para "{{terminoBusqueda}}"</p>
-    <button mat-button (click)="limpiarBusqueda()">Limpiar búsqueda</button>
-  </div>
-
   <div class="bottom-action">
     <button mat-raised-button color="warn" class="eliminar">Eliminar</button>
+
     <button mat-raised-button 
             color="primary" 
             class="editar" 
             (click)="editarUsuario()">
       Editar
     </button>
-    <button mat-raised-button class="crear" (click)="crearUsuario()">Crear usuario</button>
+
+    <button mat-raised-button 
+            class="crear"
+            (click)="crearUsuario()">
+    Crear usuario
+    </button>
+
     <button mat-raised-button (click)="volver()">Volver</button>
   </div>
 </div>
@@ -73,15 +62,5 @@
     (usuarioActualizado)="onUsuarioActualizado($event)"
   >
   </app-editar-usuario>
-</div>
-
-<!-- VISTA CREACIÓN -->
-<div *ngIf="section === 'usuarios' && vista === 'crear'" class="form-container">
-  <app-crear-usuario
-    (cancelar)="vista = 'tabla'"
-    (usuarioCreado)="onUsuarioCreado($event)"
-  >
-  </app-crear-usuario>
-</div>
 
 

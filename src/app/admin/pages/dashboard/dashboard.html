@@ -21,6 +21,9 @@
       <button mat-button class="menu-item" (click)="setSection('gestion-modulos')">
         <mat-icon>view_module</mat-icon> Gestión de módulos
       </button>
+      <button mat-button class="menu-item" (click)="setSection('evaluaciones')">
+        <mat-icon>assignment</mat-icon> Evaluaciones
+      </button>
       <button mat-button class="menu-item" (click)="setSection('reportes')">
         <mat-icon>bar_chart</mat-icon> Reportes
       </button>
@@ -47,6 +50,7 @@
       <app-gestion-cursos *ngIf="section === 'gestion-cursos'"></app-gestion-cursos>
       <app-reportes *ngIf="section === 'reportes'"></app-reportes>
       <app-configuracion *ngIf="section === 'configuracion'"></app-configuracion>
+      <app-evaluaciones *ngIf="section === 'evaluaciones'"></app-evaluaciones>
     </div>
   </mat-sidenav-content>
 </mat-sidenav-container>

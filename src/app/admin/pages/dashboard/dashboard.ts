@@ -11,6 +11,7 @@ import { GestionCursos } from './sections/gestion-cursos/gestion-cursos';
 import { ReportesComponent as Reportes } from './sections/reportes/reportes';
 import { Configuracion } from './sections/configuracion/configuracion';
 import { GestionModulos } from "./sections/gestion-modulos/gestion-modulos";
+import { Evaluaciones } from './sections/evaluaciones/evaluaciones';
 
 @Component({
   selector: 'app-dashboard',
@@ -27,7 +28,8 @@ import { GestionModulos } from "./sections/gestion-modulos/gestion-modulos";
     GestionCursos,
     Reportes,
     Configuracion,
-    GestionModulos
+    GestionModulos,
+    Evaluaciones
 ],
   templateUrl: './dashboard.html',
   styleUrls: ['./dashboard.scss'],

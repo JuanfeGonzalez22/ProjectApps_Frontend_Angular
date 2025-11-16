@@ -1,0 +1,109 @@
+<!-- VISTA TABLA -->
+<div *ngIf="vista === 'tabla'">
+  <h1>Evaluaciones</h1>
+
+  <div class="search-container">
+    <mat-form-field appearance="outline" class="search-bar">
+      <input
+        matInput
+        placeholder="Buscar evaluación..."
+        [(ngModel)]="searchTerm"
+        (input)="filtrarEvaluaciones()"
+      />
+      <button mat-icon-button matSuffix (click)="filtrarEvaluaciones()">
+        <mat-icon>search</mat-icon>
+      </button>
+      <button
+        mat-icon-button
+        matSuffix
+        *ngIf="searchTerm"
+        (click)="limpiarBusqueda()"
+      >
+        <mat-icon>close</mat-icon>
+      </button>
+    </mat-form-field>
+
+    <button mat-raised-button color="primary" class="btn-buscar" (click)="filtrarEvaluaciones()">
+      Buscar
+    </button>
+  </div>
+
+  <table class="eval-table">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>ID modulo</th>
+        <th>Titulo</th>
+        <th>Tipo</th>
+        <th>Puntaje Maximo</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr
+        *ngFor="let ev of evaluacionesFiltradas"
+        (click)="seleccionarEvaluacion(ev)"
+        [class.seleccionado]="evaluacionSeleccionada?.id === ev.id"
+      >
+        <td>{{ ev.id }}</td>
+        <td>{{ ev.moduleId }}</td>
+        <td>{{ ev.title }}</td>
+        <td>{{ ev.type }}</td>
+        <td>{{ ev.maxScore }}</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="bottom-action">
+    <button
+      mat-raised-button
+      color="warn"
+      class="eliminar"
+      (click)="eliminarEvaluacion()"
+    >
+      Eliminar
+    </button>
+
+    <button
+      mat-raised-button
+      color="primary"
+      class="editar"
+      (click)="editarEvaluacion()"
+    >
+      Editar
+    </button>
+
+    <button
+      mat-raised-button
+      class="crear"
+      (click)="crearEvaluacion()"
+    >
+      Crear evaluación
+    </button>
+
+    <button
+      mat-raised-button
+      class="volver"
+      (click)="volver()"
+    >
+      Volver
+    </button>
+  </div>
+</div>
+
+<!-- VISTA EDITAR -->
+<div *ngIf="vista === 'editar'" class="placeholder">
+  <h2>Editar evaluación</h2>
+  <p>Aquí va el formulario de edición (lo armamos después).</p>
+  <button mat-raised-button color="primary" (click)="volver()">
+    Volver
+  </button>
+</div>
+
+<!-- VISTA CREAR -->
+<div *ngIf="vista === 'crear'" class="placeholder">
+  <h2>Crear evaluación</h2>
+  <p>Aquí va el formulario para crear nueva evaluación.</p>
+  <button mat-raised-button color="primary" (click)="volver()">
+    Volver
+  </button>
+</div>
