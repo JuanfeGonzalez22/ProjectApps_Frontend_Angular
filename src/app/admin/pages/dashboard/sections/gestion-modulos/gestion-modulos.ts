@@ -7,7 +7,11 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatIconModule } from '@angular/material/icon';
-import { ModuleService, ModuleData } from '../../../../../core/services/module.service';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { ModuleService } from '../../../../../core/services/module.service';
+import { ModuleData } from '../../../../../core/models/module.model';
+import { AgregarModuloComponent } from './agregar-modulo/agregar-modulo';
+import { EditarModuloComponent } from './editar-modulo/editar-modulo';
 
 @Component({
   selector: 'app-gestion-modulos',
@@ -20,19 +24,21 @@ import { ModuleService, ModuleData } from '../../../../../core/services/module.s
     MatFormFieldModule,
     MatInputModule,
     MatIconModule,
+    MatTooltipModule,
+    AgregarModuloComponent,
+    EditarModuloComponent
   ],
   templateUrl: './gestion-modulos.html',
-  styleUrl: './gestion-modulos.scss',
+  styleUrls: ['./gestion-modulos.scss']
 })
 export class GestionModulos implements OnInit {
   modulos: ModuleData[] = [];
   modulosFiltrados: ModuleData[] = [];
   searchTerm: string = '';
-
   moduloSeleccionado: ModuleData | null = null;
-
-  // Columnas a mostrar en la tabla
-  displayedColumns: string[] = ['id', 'courseId', 'title', 'type', 'order'];
+  
+  // ✅ NUEVA PROPIEDAD PARA CONTROLAR VISTAS
+  vista: 'lista' | 'crear' | 'editar' = 'lista';
 
   constructor(
     private router: Router,
@@ -59,7 +65,6 @@ export class GestionModulos implements OnInit {
     });
   }
 
-  //filtrar módulos
   filtrarModulos(): void {
     const termino = this.searchTerm.toLowerCase().trim();
 
@@ -84,43 +89,43 @@ export class GestionModulos implements OnInit {
   }
 
   crearModulo(): void {
-    console.log('Crear nuevo módulo');
+    this.vista = 'crear';
   }
 
   editarModulo(): void {
-    console.log('Editar módulo');
+    if (this.moduloSeleccionado) {
+      this.vista = 'editar';
+    }
   }
 
   eliminarModulo(): void {
-  if (!this.moduloSeleccionado) {
-    alert('Primero selecciona un módulo de la tabla.');
-    return;
-  }
-
-  const confirmado = confirm(
-    `¿Seguro que quieres eliminar el módulo "${this.moduloSeleccionado.title}" (ID: ${this.moduloSeleccionado.id})?`
-  );
-
-  if (!confirmado) return;
-
-  const id = this.moduloSeleccionado.id!;
-  
-  this.moduleService.delete(id).subscribe({
-    next: () => {
-      console.log('✅ Módulo eliminado:', id);
-
-      this.modulos = this.modulos.filter(m => m.id !== id);
-      this.modulosFiltrados = this.modulosFiltrados.filter(m => m.id !== id);
-
-      this.moduloSeleccionado = null;
-      alert('Módulo eliminado correctamente.');
-    },
-    error: (err: any) => {
-      console.error('❌ Error eliminando módulo:', err);
-      alert('Ocurrió un error al eliminar el módulo.');
+    if (!this.moduloSeleccionado) {
+      alert('Primero selecciona un módulo de la tabla.');
+      return;
     }
-  });
-}
+
+    const confirmado = confirm(
+      `¿Seguro que quieres eliminar el módulo "${this.moduloSeleccionado.title}" (ID: ${this.moduloSeleccionado.id})?`
+    );
+
+    if (!confirmado) return;
+
+    const id = this.moduloSeleccionado.id!;
+    
+    this.moduleService.delete(id).subscribe({
+      next: () => {
+        console.log('✅ Módulo eliminado:', id);
+        this.modulos = this.modulos.filter(m => m.id !== id);
+        this.modulosFiltrados = this.modulosFiltrados.filter(m => m.id !== id);
+        this.moduloSeleccionado = null;
+        alert('Módulo eliminado correctamente.');
+      },
+      error: (err: any) => {
+        console.error('❌ Error eliminando módulo:', err);
+        alert('Ocurrió un error al eliminar el módulo.');
+      }
+    });
+  }
 
   volver(): void {
     this.router.navigate(['/admin/cursos']);
@@ -129,5 +134,27 @@ export class GestionModulos implements OnInit {
   seleccionarModulo(modulo: ModuleData): void {
     this.moduloSeleccionado = modulo;
     console.log('✅ Módulo seleccionado:', modulo);
+  }
+
+  // ✅ NUEVOS MÉTODOS PARA GESTIONAR VISTAS
+  onModuloCreado(nuevoModulo: ModuleData): void {
+    this.modulos = [...this.modulos, nuevoModulo];
+    this.modulosFiltrados = [...this.modulos];
+    this.vista = 'lista';
+    this.moduloSeleccionado = null;
+  }
+
+  onModuloActualizado(moduloActualizado: ModuleData): void {
+    this.modulos = this.modulos.map(m => 
+      m.id === moduloActualizado.id ? moduloActualizado : m
+    );
+    this.modulosFiltrados = [...this.modulos];
+    this.vista = 'lista';
+    this.moduloSeleccionado = null;
+  }
+
+  volverALista(): void {
+    this.vista = 'lista';
+    this.moduloSeleccionado = null;
   }
 }

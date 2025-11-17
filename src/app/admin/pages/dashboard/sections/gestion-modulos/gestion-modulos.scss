@@ -32,9 +32,51 @@
     background-color: #f1f5ff; // azul muy clarito
   }
 
-    tr.seleccionado {
+  tr.seleccionado {
     background-color: #e3f2fd; // azul clarito
   }
+}
+
+// Badges para tipos de módulo
+.badge-type {
+  padding: 4px 8px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 500;
+  text-transform: capitalize;
+  
+  &.video { 
+    background: #ffebee; 
+    color: #c62828; 
+    border: 1px solid #ffcdd2;
+  }
+  &.texto { 
+    background: #e8f5e8; 
+    color: #2e7d32; 
+    border: 1px solid #c8e6c9;
+  }
+  &.quiz { 
+    background: #e3f2fd; 
+    color: #1565c0; 
+    border: 1px solid #bbdefb;
+  }
+  &.practica { 
+    background: #fff3e0; 
+    color: #ef6c00; 
+    border: 1px solid #ffe0b2;
+  }
+}
+
+// Mensaje cuando no hay resultados
+.no-results {
+  text-align: center;
+  padding: 2rem;
+  color: #666;
+  font-style: italic;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  margin: 1rem 0;
+  border: 1px dashed #ddd;
 }
 
 .bottom-action {
@@ -48,32 +90,42 @@
     border-radius: 8px;
     color: #fff !important;
     transition: background-color 0.3s ease;
+    
+    // Estilos para botones deshabilitados
+    &[disabled] {
+      opacity: 0.5;
+      cursor: not-allowed;
+      
+      &:hover {
+        background-color: inherit !important;
+      }
+    }
   }
 
   .eliminar {
     background-color: #e53935 !important;
-    &:hover {
+    &:hover:not([disabled]) {
       background-color: #c62828 !important;
     }
   }
 
   .editar {
     background-color: #2e7be7 !important;
-    &:hover {
+    &:hover:not([disabled]) {
       background-color: #1e63c1 !important;
     }
   }
 
   .crear {
     background-color: #7b1fa2 !important;
-    &:hover {
+    &:hover:not([disabled]) {
       background-color: #6a1b9a !important;
     }
   }
 
   .volver {
     background-color: #9e9e9e !important;
-    &:hover {
+    &:hover:not([disabled]) {
       background-color: #757575 !important;
     }
   }
@@ -86,4 +138,31 @@ h1 {
   margin-bottom: 1rem;
 }
 
+// Responsive
+@media (max-width: 768px) {
+  .search-bar {
+    width: 100%;
+  }
+  
+  .bottom-action {
+    flex-direction: column;
+    
+    button {
+      width: 100%;
+    }
+  }
+  
+  .module-table {
+    font-size: 14px;
+    
+    th, td {
+      padding: 0.5rem;
+    }
+  }
+}
 
+.form-container {
+  margin-top: 2rem;
+  border-top: 1px solid #eee;
+  padding-top: 2rem;
+}

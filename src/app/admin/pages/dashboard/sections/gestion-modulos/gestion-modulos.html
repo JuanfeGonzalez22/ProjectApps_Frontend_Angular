@@ -1,67 +1,101 @@
 <h1>Gestión de Módulos</h1>
 
-<mat-form-field appearance="outline" class="search-bar">
-  <mat-label>Buscar módulo</mat-label>
-  <input
-    matInput
-    placeholder="Ejemplo: Introducción a Java"
-    [(ngModel)]="searchTerm"
-    (input)="filtrarModulos()"
-  />
-  <button mat-icon-button matSuffix (click)="filtrarModulos()">
-    <mat-icon>search</mat-icon>
-  </button>
-  <button
-    mat-icon-button
-    matSuffix
-    *ngIf="searchTerm"
-    (click)="limpiarBusqueda()"
-    matTooltip="Limpiar búsqueda"
-  >
-    <mat-icon>close</mat-icon>
-  </button>
-</mat-form-field>
-
-<!-- Mostrar si no hay resultados -->
-<div *ngIf="modulosFiltrados.length === 0 && searchTerm" class="no-results">
-  <p>No se encontraron módulos que coincidan con "{{ searchTerm }}"</p>
-</div>
-
-<!-- Tabla -->
-<table class="module-table" *ngIf="modulosFiltrados.length > 0">
-  <thead>
-    <tr>
-      <th>ID</th>
-      <th>ID del Curso</th>
-      <th>Título</th>
-      <th>Tipo</th>
-      <th>Orden</th>
-    </tr>
-  </thead>
-
-  <tbody>
-    <tr 
-      *ngFor="let m of modulosFiltrados"
-      (click)="seleccionarModulo(m)"
-      [class.seleccionado]="moduloSeleccionado?.id === m.id"
+<!-- VISTA LISTA -->
+<div *ngIf="vista === 'lista'">
+  <mat-form-field appearance="outline" class="search-bar">
+    <mat-label>Buscar módulo</mat-label>
+    <input
+      matInput
+      placeholder="Ejemplo: Introducción a Java"
+      [(ngModel)]="searchTerm"
+      (input)="filtrarModulos()"
+    />
+    <button mat-icon-button matSuffix (click)="filtrarModulos()">
+      <mat-icon>search</mat-icon>
+    </button>
+    <button
+      mat-icon-button
+      matSuffix
+      *ngIf="searchTerm"
+      (click)="limpiarBusqueda()"
+      matTooltip="Limpiar búsqueda"
     >
-      <td>{{ m.id }}</td>
-      <td>{{ m.courseId }}</td>
-      <td>{{ m.title }}</td>
-      <td>{{ m.type }}</td>
-      <td>{{ m.order }}</td>
-    </tr>
-  </tbody>
-</table>
+      <mat-icon>close</mat-icon>
+    </button>
+  </mat-form-field>
 
-<!-- Mensaje cuando no hay módulos cargados -->
-<div *ngIf="modulosFiltrados.length === 0 && !searchTerm" class="no-results">
-  <p>No hay módulos disponibles</p>
+  <!-- Mostrar si no hay resultados -->
+  <div *ngIf="modulosFiltrados.length === 0 && searchTerm" class="no-results">
+    <p>No se encontraron módulos que coincidan con "{{ searchTerm }}"</p>
+  </div>
+
+  <!-- Tabla -->
+  <table class="module-table" *ngIf="modulosFiltrados.length > 0">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>ID del Curso</th>
+        <th>Título</th>
+        <th>Tipo</th>
+        <th>Orden</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <tr 
+        *ngFor="let m of modulosFiltrados"
+        (click)="seleccionarModulo(m)"
+        [class.seleccionado]="moduloSeleccionado?.id === m.id"
+      >
+        <td>{{ m.id }}</td>
+        <td>{{ m.courseId }}</td>
+        <td>{{ m.title }}</td>
+        <td>
+          <span class="badge-type {{ m.type }}">
+            {{ m.type }}
+          </span>
+        </td>
+        <td>{{ m.order }}</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- Mensaje cuando no hay módulos cargados -->
+  <div *ngIf="modulosFiltrados.length === 0 && !searchTerm" class="no-results">
+    <p>No hay módulos disponibles</p>
+  </div>
+
+  <div class="bottom-action">
+    <button mat-raised-button color="warn" class="eliminar" 
+            [disabled]="!moduloSeleccionado"
+            (click)="eliminarModulo()">
+      Eliminar
+    </button>
+    <button mat-raised-button color="primary" class="editar"
+            [disabled]="!moduloSeleccionado" 
+            (click)="editarModulo()">
+      Editar
+    </button>
+    <button mat-raised-button color="accent" class="crear" (click)="crearModulo()">
+      Crear módulo
+    </button>
+    <button mat-raised-button class="volver" (click)="volver()">Volver</button>
+  </div>
 </div>
 
-<div class="bottom-action">
-  <button mat-raised-button color="warn" class="eliminar" (click)="eliminarModulo()">Eliminar</button>
-  <button mat-raised-button color="primary" class="editar" (click)="editarModulo()">Editar</button>
-  <button mat-raised-button color="accent" class="crear" (click)="crearModulo()">Crear módulo</button>
-  <button mat-raised-button class="volver" (click)="volver()">Volver</button>
+<!-- VISTA CREAR MÓDULO -->
+<div *ngIf="vista === 'crear'" class="form-container">
+  <app-agregar-modulo
+    (volver)="volverALista()"
+    (moduloCreado)="onModuloCreado($event)">
+  </app-agregar-modulo>
+</div>
+
+<!-- VISTA EDITAR MÓDULO -->
+<div *ngIf="vista === 'editar' && moduloSeleccionado" class="form-container">
+  <app-editar-modulo
+    [modulo]="moduloSeleccionado"
+    (volver)="volverALista()"
+    (moduloActualizado)="onModuloActualizado($event)">
+  </app-editar-modulo>
 </div>

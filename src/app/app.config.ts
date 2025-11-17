@@ -1,10 +1,10 @@
 // src/app/app.config.ts
 import { ApplicationConfig } from '@angular/core';
 import { provideRouter, Routes } from '@angular/router';
-import { provideHttpClient } from '@angular/common/http';
-import{provideAnimations}from'@angular/platform-browser/animations';
+import { provideHttpClient, withInterceptors } from '@angular/common/http';
+import { provideAnimations } from '@angular/platform-browser/animations';
 import { LoginComponent } from './auth/pages/login/login';
-import { HttpClientModule } from '@angular/common/http';
+import { authInterceptor } from './auth/interceptors/auth.interceptor'; 
 
 export const routes: Routes = [
   { path: '', redirectTo: 'auth/login', pathMatch: 'full' },
@@ -19,9 +19,10 @@ export const routes: Routes = [
 
 export const appConfig: ApplicationConfig = {
   providers: [
-   [provideHttpClient()],
     provideAnimations(),
     provideRouter(routes),
-    provideHttpClient()
+    provideHttpClient(
+      withInterceptors([authInterceptor]) // ← CORREGIDO: Agrega el interceptor aquí
+    )
   ]
 };

@@ -7,7 +7,6 @@ export const routes: Routes = [
 
   { path: 'admin', loadComponent: () => import('./admin/pages/dashboard/dashboard').then(m => m.Dashboard), 
     children: [
-      
       {
         path: 'modulos',
         loadComponent: () =>
@@ -19,10 +18,10 @@ export const routes: Routes = [
         loadComponent: () =>
         import('./admin/pages/dashboard/sections/gestion-cursos/gestion-cursos')
           .then(c => c.GestionCursos)
-    }
+      },
 
+      
     ]
-    
   },
   { path: 'teacher', loadComponent: () => import('./teacher/pages/dashboard/dashboard').then(m => m.Dashboard) },
   { path: 'student', loadComponent: () => import('./student/pages/dashboard/dashboard').then(m => m.Dashboard) },

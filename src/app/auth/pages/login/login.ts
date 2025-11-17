@@ -37,7 +37,6 @@ export class LoginComponent {
   cerrarRegistro(){
     this.mostrarRegistro = false;
     console.log("❌ Registro cerrado");
-
   }
 
   onSubmit(): void {
@@ -46,31 +45,61 @@ export class LoginComponent {
       return;
     }
 
+    console.log('📤 Enviando login:', this.loginForm.value);
     
     this.auth.login(this.loginForm.value).subscribe({
-      next: (user) => {
-        console.log('✅ Login correcto:', user);
-        localStorage.setItem('user', JSON.stringify(user));
-
+      next: (response: any) => {
+        console.log('✅ Respuesta completa del backend:', response);
         
-        switch (user.role?.toUpperCase()) {
-          case 'ADMIN':
-            this.router.navigate(['/admin']);
-            break;
-          case 'TEACHER':
-            this.router.navigate(['/teacher']);
-            break;
-          case 'STUDENT':
-            this.router.navigate(['/student']);
-            break;
-          default:
-            this.router.navigate(['/']); 
-            break;
+        // ✅ CORRECCIÓN: El backend ahora devuelve {token, user, message}
+        const user = response.user; // ← Acceder al user dentro de la respuesta
+        const token = response.token; // ← Obtener el token
+        
+        console.log('👤 Usuario:', user);
+        console.log('🔐 Token:', token);
+        
+        if (user && token) {
+          // Guardar en localStorage (el AuthService ya lo hace, pero por si acaso)
+          localStorage.setItem('user', JSON.stringify(user));
+          localStorage.setItem('token', token);
+          
+          console.log('💾 Datos guardados en localStorage');
+          console.log('Role del usuario:', user.role);
+          
+          // Redirigir según el rol
+          switch (user.role?.toUpperCase()) {
+            case 'ADMIN':
+              console.log('🎯 Redirigiendo a ADMIN');
+              this.router.navigate(['/admin']);
+              break;
+            case 'INSTRUCTOR': // ← Asegúrate que coincida con tu backend
+            case 'TEACHER':
+              console.log('🎯 Redirigiendo a TEACHER');
+              this.router.navigate(['/teacher']);
+              break;
+            case 'STUDENT':
+            case 'USER':
+              console.log('🎯 Redirigiendo a STUDENT');
+              this.router.navigate(['/student']);
+              break;
+            default:
+              console.log('⚠️ Rol no reconocido, redirigiendo a home');
+              this.router.navigate(['/']);
+              break;
+          }
+        } else {
+          console.error('❌ Respuesta incompleta:', response);
+          this.errorMsg = 'Error en la respuesta del servidor';
         }
       },
       error: (err) => {
-        console.error('Error de login:', err);
+        console.error('❌ Error de login:', err);
         this.errorMsg = 'Credenciales inválidas o usuario no encontrado.';
+        
+        // Mostrar más detalles del error
+        if (err.error && err.error.error) {
+          this.errorMsg += ' - ' + err.error.error;
+        }
       }
     });
   }

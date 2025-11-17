@@ -1,2 +1,115 @@
-<h1>Reportes Generales</h1>
-<p>Consulta estadísticas, métricas y progresos de usuarios.</p>
+<!-- src/app/admin/pages/reportes/reportes.component.html -->
+<div class="reportes-container">
+  
+  <!-- Header Principal -->
+  <div class="header-principal">
+    <h1>Reportes Generales</h1>
+    
+    <div class="estadisticas-header">
+      <div class="estadistica">
+        <span class="label">Finalización:</span>
+        <span class="valor">{{ finalizacion }}%</span>
+      </div>
+      <div class="estadistica">
+        <span class="label">Cursos + tomados:</span>
+        <span class="valor">{{ cursosTomados }}</span>
+      </div>
+      <div class="estadistica">
+        <span class="label">Engagement:</span>
+        <span class="valor">{{ engagement }}%</span>
+      </div>
+      <div class="estadistica">
+        <span class="label">Total inscritos:</span>
+        <span class="valor">{{ totalInscritos }}</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Filtros -->
+  <div class="filtros-section">
+    <div class="filtro">
+      <label>Curso:</label>
+      <select [(ngModel)]="cursoSeleccionado" class="filtro-select" (change)="aplicarFiltros()">
+        <option value="Todos">Todos</option>
+        <option value="Java Basico">Java Básico</option>
+        <option value="Python">Python</option>
+        <option value="Spring Boot">Spring Boot</option>
+        <option value="Angular">Angular</option>
+      </select>
+    </div>
+
+    <div class="filtro">
+      <label>Departamento:</label>
+      <select [(ngModel)]="departamentoSeleccionado" class="filtro-select" (change)="aplicarFiltros()">
+        <option value="Todos">Todos</option>
+        <option value="TI">TI</option>
+        <option value="RH">RH</option>
+        <option value="Ventas">Ventas</option>
+        <option value="Marketing">Marketing</option>
+      </select>
+    </div>
+
+    <div class="filtro">
+      <label>Periodo:</label>
+      <select [(ngModel)]="periodoSeleccionado" class="filtro-select" (change)="aplicarFiltros()">
+        <option value="2025/Q2">2025/Q2</option>
+        <option value="2025/Q1">2025/Q1</option>
+        <option value="2024/Q4">2024/Q4</option>
+        <option value="2024/Q3">2024/Q3</option>
+      </select>
+    </div>
+  </div>
+
+  <!-- Loading State -->
+  <div *ngIf="loading" class="loading">
+    <div class="spinner"></div>
+    <p>Cargando reportes...</p>
+  </div>
+
+  <!-- Error State -->
+  <div *ngIf="error && !loading" class="error">
+    <p>{{ error }}</p>
+    <button class="btn-volver" (click)="reintentar()">Reintentar</button>
+  </div>
+
+  <!-- Tabla de Reportes -->
+  <div *ngIf="!loading && !error" class="tabla-reportes">
+    <table class="tabla">
+      <thead>
+        <tr>
+          <th>Acciones</th>
+          <th>Curso</th>
+          <th>Inscritos</th>
+          <th>Finalizados</th>
+          <th>% Finalizados</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let curso of cursosReport">
+          <td class="acciones">
+            <button class="btn-eliminar" (click)="eliminarReporte(curso.id)">Eliminar</button>
+            <button class="btn-editar" (click)="editarReporte(curso.id)">Editar</button>
+            <button class="btn-generar" (click)="generarReporte(curso.id)">Generar reporte</button>
+          </td>
+          <td>{{ curso.nombre }}</td>
+          <td>{{ curso.inscritos }}</td>
+          <td>{{ curso.finalizados }}</td>
+          <td>{{ curso.porcentajeFinalizados }}%</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Separador -->
+  <div class="separador"></div>
+
+  <!-- Footer con Acciones -->
+  <div class="footer-acciones">
+    <button class="btn-volver" (click)="volver()">Volver</button>
+    <div class="exportaciones">
+      <button class="btn-exportar btn-pdf" (click)="exportarPDF()">Exportar-PDF</button>
+      <button class="btn-exportar btn-csv" (click)="exportarCSV()">Exportar-CSV</button>
+    </div>
+  </div>
+
+</div>

@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatToolbarModule } from '@angular/material/toolbar';
@@ -8,7 +8,7 @@ import { Inicio } from './sections/inicio/inicio';
 import { Usuarios } from './sections/usuarios/usuarios';
 import { Cursos } from './sections/cursos/cursos';
 import { GestionCursos } from './sections/gestion-cursos/gestion-cursos';
-import { Reportes } from './sections/reportes/reportes';
+import { ReportesComponent as Reportes } from './sections/reportes/reportes';
 import { Configuracion } from './sections/configuracion/configuracion';
 import { GestionModulos } from "./sections/gestion-modulos/gestion-modulos";
 
@@ -30,9 +30,9 @@ import { GestionModulos } from "./sections/gestion-modulos/gestion-modulos";
     GestionModulos
 ],
   templateUrl: './dashboard.html',
-  styleUrl: './dashboard.scss',
+  styleUrls: ['./dashboard.scss'],
 })
-export class Dashboard {
+export class Dashboard implements OnInit {
   user = 'Administrador';
   section: string = 'inicio';
   cursos: any[] = [];

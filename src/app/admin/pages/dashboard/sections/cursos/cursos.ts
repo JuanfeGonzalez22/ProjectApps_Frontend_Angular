@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
+import { Router } from '@angular/router'; 
 import { MatIconModule } from '@angular/material/icon';
 import { MatTableModule } from '@angular/material/table';
 import { MatCardModule } from '@angular/material/card';
@@ -31,7 +32,9 @@ export class Cursos {
 
   cursos: CourseData[] = [];
 
-  constructor(private courseService: CourseService) {}
+  constructor(private courseService: CourseService,
+    private router: Router 
+  ) {}
 
   ngOnInit() {
     this.cargarCursos();
@@ -46,6 +49,9 @@ export class Cursos {
     error: (err) => console.error('Error cargando cursos:', err)
   });
 }
+
+
+  
 
   abrirFormulario() {
     this.vista = 'form';

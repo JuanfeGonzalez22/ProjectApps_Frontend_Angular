@@ -1,0 +1,58 @@
+.form-wrapper {
+  display: flex;
+  justify-content: center;
+  padding: 2rem;
+}
+
+.form-card {
+  width: 100%;
+  max-width: 500px;
+  padding: 2rem;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+
+  h2 {
+    margin-bottom: 0.5rem;
+    color: #333;
+    text-align: center;
+  }
+
+  .modulo-id {
+    text-align: center;
+    color: #666;
+    margin-bottom: 1.5rem;
+    font-style: italic;
+  }
+}
+
+.row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+mat-form-field {
+  width: 100%;
+  margin-bottom: 1rem;
+}
+
+.buttons {
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+  margin-top: 1.5rem;
+
+  button {
+    min-width: 100px;
+  }
+
+  .cancelar {
+    color: #666;
+  }
+
+  .guardar {
+    background-color: #2e7be7;
+    color: white;
+  }
+}

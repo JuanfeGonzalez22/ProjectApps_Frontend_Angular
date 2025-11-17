@@ -1,0 +1,59 @@
+<div class="form-wrapper">
+  <div class="form-card">
+    <h2>Crear Módulo</h2>
+
+    <form [formGroup]="moduloForm">
+      <!-- ✅ CAMBIO: Select en lugar de input -->
+      <mat-form-field appearance="outline">
+        <mat-label>Seleccionar Curso</mat-label>
+        <mat-select formControlName="courseId">
+          <mat-option *ngFor="let curso of cursos" [value]="curso.id">
+            {{ curso.title }} (ID: {{ curso.id }})
+          </mat-option>
+        </mat-select>
+        <mat-error *ngIf="moduloForm.get('courseId')?.hasError('required')">
+          Debes seleccionar un curso
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Título del módulo</mat-label>
+        <input matInput formControlName="title" />
+        <mat-error *ngIf="moduloForm.get('title')?.hasError('required')">
+          El título es requerido
+        </mat-error>
+      </mat-form-field>
+
+      <div class="row">
+        <mat-form-field appearance="outline">
+          <mat-label>Tipo</mat-label>
+          <mat-select formControlName="type">
+            <mat-option *ngFor="let tipo of tipos" [value]="tipo">
+              {{ tipo }}
+            </mat-option>
+          </mat-select>
+          <mat-error *ngIf="moduloForm.get('type')?.hasError('required')">
+            El tipo es requerido
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Orden</mat-label>
+          <input matInput type="number" formControlName="order" />
+          <mat-error *ngIf="moduloForm.get('order')?.hasError('required')">
+            El orden es requerido
+          </mat-error>
+        </mat-form-field>
+      </div>
+
+      <div class="buttons">
+        <button mat-button class="cancelar" (click)="cancelar()" type="button">
+          Cancelar
+        </button>
+        <button mat-raised-button class="guardar" (click)="guardar()" type="button">
+          Guardar
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
