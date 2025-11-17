@@ -81,3 +81,21 @@ tr:hover {
 }
 
 
+// Agrega al final del archivo
+.resultados-info {
+  margin-bottom: 1rem;
+  color: #666;
+  font-style: italic;
+}
+
+.no-resultados {
+  text-align: center;
+  padding: 2rem;
+  color: #666;
+  
+  p {
+    margin-bottom: 1rem;
+  }
+}
+
+// Asegúrate de tener FormsModule importado en usuarios.ts

@@ -1,0 +1,48 @@
+<div class="form-wrapper">
+  <div class="form-card">
+    <h2>Crear Nuevo Usuario</h2>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Nombre completo *</mat-label>
+      <input matInput [(ngModel)]="fullName" required />
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Email *</mat-label>
+      <input matInput type="email" [(ngModel)]="email" required />
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Contraseña *</mat-label>
+      <input matInput type="password" [(ngModel)]="password" required />
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Departamento</mat-label>
+      <mat-select [(ngModel)]="department">
+        <mat-option *ngFor="let dep of departamentos" [value]="dep">
+          {{ dep }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <div class="tipo-usuario">
+      <label>Rol:</label>
+      <mat-radio-group [(ngModel)]="role">
+        <mat-radio-button value="USER">Aprendiz</mat-radio-button>
+        <mat-radio-button value="ADMIN">Admin</mat-radio-button>
+        <mat-radio-button value="INSTRUCTOR">Instructor</mat-radio-button>
+      </mat-radio-group>
+    </div>
+
+    <div class="buttons">
+      <button mat-raised-button class="cancelar" (click)="cancelar.emit()">
+        Cancelar
+      </button>
+
+      <button mat-raised-button class="guardar" (click)="guardar()">
+        Crear Usuario
+      </button>
+    </div>
+  </div>
+</div>

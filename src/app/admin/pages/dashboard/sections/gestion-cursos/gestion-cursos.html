@@ -60,6 +60,7 @@
       mat-raised-button 
       color="warn"
       class="eliminar"
+      [disabled]="!cursoSeleccionado"
       (click)="eliminarCurso()">
       Eliminar
     </button>
@@ -68,24 +69,29 @@
       mat-raised-button 
       color="primary" 
       class="editar"
+      [disabled]="!cursoSeleccionado"
       (click)="editarCurso()">
       Editar
     </button>
 
+      <!-- ✅ BOTÓN MODIFICADO: SIN DISABLED -->
     <button 
       mat-raised-button 
       color="accent" 
       class="modulos" 
-      (click)="setSection('gestion-modulos')">
-      Gestionar módulos
+      (click)="gestionarModulosCurso()">
+      <mat-icon>list_alt</mat-icon>
+      Gestionar Módulos
     </button>
 
+
+
     <button 
-      mat-raised-button 
-      class="volver" 
-      (click)="setSection('cursos')">
-      Volver
-    </button>
+  mat-raised-button 
+  class="volver" 
+  (click)="volver()"> <!-- ✅ Asegúrate que llame a volver() -->
+  Volver
+</button>
   </div>
 </div>
 
@@ -97,4 +103,3 @@
     (cursoActualizado)="onCursoActualizado($event)">
   </app-editar-curso>
 </div>
-
