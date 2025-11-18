@@ -1,3 +1,5 @@
+<!-- src/app/student/pages/student-dashboard/student-dashboard.component.html -->
+
 <mat-sidenav-container class="student-container">
   <!-- Sidebar -->
   <mat-sidenav mode="side" opened class="student-sidenav">
@@ -75,6 +77,10 @@
           <span>Cerrar Sesión</span>
         </button>
       </mat-menu>
+
+      <button mat-icon-button (click)="logout()" matTooltip="Cerrar sesión">
+        <mat-icon>logout</mat-icon>
+      </button>
     </mat-toolbar>
 
     <div class="student-content">

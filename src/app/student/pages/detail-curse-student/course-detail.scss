@@ -1,10 +1,10 @@
-// course-detail.scss - Tema Claro
+// src/app/student/pages/course-detail/course-detail.component.scss
 
 .course-detail-container {
   padding: 2rem;
   max-width: 1400px;
   margin: 0 auto;
-  background-color: #fafafa;
+  background-color: #f4f5fa;
   min-height: 100vh;
 
   // Loading state
@@ -12,12 +12,12 @@
     text-align: center;
     padding: 3rem;
     background: white;
-    border-radius: 12px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    border-radius: 10px;
+    box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.10);
 
     p {
       margin-top: 1rem;
-      color: #7f8c8d;
+      color: #666;
       font-size: 1rem;
     }
   }
@@ -27,8 +27,8 @@
     text-align: center;
     padding: 3rem;
     background: white;
-    border-radius: 12px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    border-radius: 10px;
+    box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.10);
 
     mat-icon {
       font-size: 4rem;
@@ -39,7 +39,7 @@
 
     p {
       margin: 1rem 0;
-      color: #7f8c8d;
+      color: #666;
       font-size: 1.1rem;
     }
   }
@@ -61,29 +61,33 @@
     .material-card,
     .evaluations-card {
       background: white;
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-      border-radius: 12px;
+      box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.10);
+      border-radius: 10px;
+      border: 1px solid #e0e0e0;
 
       mat-card-header {
-        background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
-        padding: 1rem;
-        border-radius: 12px 12px 0 0;
+        background: #4a73ff; // ✅ Azul brillante
+        padding: 1.2rem 1.5rem;
+        border-radius: 10px 10px 0 0;
 
         mat-card-title {
           color: white;
           font-weight: 600;
+          font-size: 1.1rem;
           display: flex;
           align-items: center;
           gap: 0.5rem;
 
           mat-icon {
             color: white;
+            font-size: 1.3rem;
           }
         }
       }
 
       mat-card-content {
         padding: 1.5rem;
+        background: white; // ✅ Fondo blanco
       }
     }
 
@@ -91,35 +95,35 @@
       mat-card-content {
         .detail-item {
           padding: 1rem 0;
-          border-bottom: 1px solid #ecf0f1;
+          border-bottom: 1px solid #e0e0e0;
           display: flex;
           justify-content: space-between;
           align-items: center;
-          background: white;
+          background: white; // ✅ Fondo blanco
 
           &:last-child {
             border-bottom: none;
           }
 
           strong {
-            color: #2c3e50;
+            color: #2e7be7;
             font-weight: 600;
             font-size: 0.95rem;
           }
 
           span {
-            color: #7f8c8d;
+            color: #666;
             font-size: 0.95rem;
           }
 
           .progress-percentage {
-            color: #27ae60;
+            color: #4caf50;
             font-weight: 700;
             font-size: 1.2rem;
           }
 
           .certificado-disponible {
-            color: #27ae60;
+            color: #4caf50;
             font-weight: 600;
           }
         }
@@ -128,60 +132,61 @@
 
     .modules-card {
       mat-card-content {
-        background: white;
+        background: white; // ✅ Fondo blanco
 
         .empty-modules {
           text-align: center;
           padding: 2rem;
-          color: #7f8c8d;
+          color: #666;
           font-style: italic;
         }
 
         .modules-table {
           width: 100%;
           border-collapse: collapse;
-          background: white;
+          background: white; // ✅ Fondo blanco
 
           thead {
-            background: #e3f2fd;
+            background: #f4f5fa;
 
             th {
               padding: 1rem;
               text-align: left;
               font-weight: 600;
-              color: #1976d2;
-              border-bottom: 2px solid #90caf9;
+              color: #2e7be7;
+              border-bottom: 2px solid #e0e0e0;
             }
           }
 
           tbody {
-            background: white;
+            background: white; // ✅ Fondo blanco
 
             tr {
-              border-bottom: 1px solid #ecf0f1;
+              border-bottom: 1px solid #e0e0e0;
               transition: background 0.2s;
+              background: white; // ✅ Fondo blanco
 
               &:hover {
-                background: #f8f9fa;
+                background: #f0f4ff; // ✅ Azul clarito al hover
               }
 
               td {
                 padding: 1rem;
-                color: #7f8c8d;
+                color: #666;
 
                 &:first-child {
                   font-weight: 600;
-                  color: #3498db;
+                  color: #2e7be7;
                 }
 
                 &:nth-child(2) {
-                  color: #2c3e50;
+                  color: #4a73ff;
                   font-weight: 500;
                 }
 
                 mat-chip {
                   background-color: #e3f2fd;
-                  color: #1976d2;
+                  color: #2e7be7;
                   display: inline-flex;
                   align-items: center;
                   gap: 0.25rem;
@@ -202,6 +207,10 @@
     .material-card {
       margin-bottom: 1.5rem;
 
+      mat-card-content {
+        background: white; // ✅ Fondo blanco
+      }
+
       .material-list {
         display: flex;
         flex-direction: column;
@@ -212,20 +221,20 @@
           align-items: center;
           gap: 1rem;
           padding: 1.25rem;
-          background: white;
+          background: white; // ✅ Fondo blanco
           border-radius: 8px;
-          border: 2px solid #e3f2fd;
+          border: 1px solid #e0e0e0;
           transition: all 0.2s;
 
           &:hover {
-            background: #f8f9fa;
-            border-color: #3498db;
+            background: #f0f4ff; // ✅ Azul clarito
+            border-color: #4a73ff;
             transform: translateX(4px);
-            box-shadow: 0 2px 8px rgba(52, 152, 219, 0.15);
+            box-shadow: 0 2px 8px rgba(74, 115, 255, 0.15);
           }
 
           mat-icon {
-            color: #3498db;
+            color: #4a73ff;
             font-size: 28px;
             width: 28px;
             height: 28px;
@@ -233,12 +242,16 @@
 
           .material-titulo {
             flex: 1;
-            color: #2c3e50;
+            color: #2e7be7;
             font-weight: 500;
             font-size: 1rem;
           }
 
           button {
+            background: #4a73ff !important;
+            color: white !important;
+            font-weight: 600;
+
             mat-icon {
               font-size: 18px;
               width: 18px;
@@ -252,10 +265,14 @@
     .evaluations-card {
       margin-bottom: 1.5rem;
 
+      mat-card-content {
+        background: white; // ✅ Fondo blanco
+      }
+
       .empty-evaluations {
         text-align: center;
         padding: 2rem;
-        color: #7f8c8d;
+        color: #666;
         font-style: italic;
       }
 
@@ -269,16 +286,16 @@
           justify-content: space-between;
           align-items: center;
           padding: 1.5rem;
-          background: white;
+          background: white; // ✅ Fondo blanco
           border-radius: 8px;
-          border: 2px solid #f3e5f5;
+          border: 1px solid #e0e0e0;
           transition: all 0.2s;
 
           &:hover {
-            background: #f8f9fa;
-            border-color: #9b59b6;
+            background: #f0f4ff; // ✅ Azul clarito
+            border-color: #4a73ff;
             transform: translateX(4px);
-            box-shadow: 0 2px 8px rgba(155, 89, 182, 0.15);
+            box-shadow: 0 2px 8px rgba(74, 115, 255, 0.15);
           }
 
           .quiz-info {
@@ -288,12 +305,12 @@
             gap: 0.5rem;
 
             strong {
-              color: #2c3e50;
+              color: #2e7be7;
               font-size: 1.1rem;
             }
 
             .quiz-details {
-              color: #7f8c8d;
+              color: #666;
               font-size: 0.9rem;
             }
           }
@@ -310,11 +327,15 @@
               font-size: 0.9rem;
 
               &.estado-completado {
-                color: #27ae60;
+                color: #4caf50;
               }
             }
 
             button {
+              background: #4a73ff !important;
+              color: white !important;
+              font-weight: 600;
+
               mat-icon {
                 font-size: 18px;
                 width: 18px;
@@ -335,6 +356,19 @@
       button {
         min-width: 150px;
         padding: 0.75rem 1.5rem;
+        font-weight: 600;
+        border-radius: 6px;
+        text-transform: none;
+
+        &[color="primary"] {
+          background: #4a73ff !important;
+          color: white !important;
+        }
+
+        &:not([color]) {
+          background: #d6d6d6 !important;
+          color: #666 !important;
+        }
       }
     }
   }
