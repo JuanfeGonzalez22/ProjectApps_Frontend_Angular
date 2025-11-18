@@ -36,8 +36,7 @@ export class GestionModulos implements OnInit {
   modulosFiltrados: ModuleData[] = [];
   searchTerm: string = '';
   moduloSeleccionado: ModuleData | null = null;
-  
-  // ✅ NUEVA PROPIEDAD PARA CONTROLAR VISTAS
+
   vista: 'lista' | 'crear' | 'editar' = 'lista';
 
   constructor(
@@ -73,11 +72,13 @@ export class GestionModulos implements OnInit {
       return;
     }
 
+    // ✅ CORREGIDO: Eliminado 'type', cambiado a 'orden'
     this.modulosFiltrados = this.modulos.filter(modulo =>
       modulo.title?.toLowerCase().includes(termino) ||
-      modulo.type?.toLowerCase().includes(termino) ||
+      modulo.description?.toLowerCase().includes(termino) ||
       modulo.id?.toString().includes(termino) ||
-      modulo.courseId?.toString().includes(termino)
+      modulo.courseId?.toString().includes(termino) ||
+      modulo.orden?.toString().includes(termino)
     );
 
     console.log(`Búsqueda: "${termino}" - Resultados: ${this.modulosFiltrados.length}`);
@@ -111,7 +112,7 @@ export class GestionModulos implements OnInit {
     if (!confirmado) return;
 
     const id = this.moduloSeleccionado.id!;
-    
+
     this.moduleService.delete(id).subscribe({
       next: () => {
         console.log('✅ Módulo eliminado:', id);
@@ -136,7 +137,6 @@ export class GestionModulos implements OnInit {
     console.log('✅ Módulo seleccionado:', modulo);
   }
 
-  // ✅ NUEVOS MÉTODOS PARA GESTIONAR VISTAS
   onModuloCreado(nuevoModulo: ModuleData): void {
     this.modulos = [...this.modulos, nuevoModulo];
     this.modulosFiltrados = [...this.modulos];
@@ -145,7 +145,7 @@ export class GestionModulos implements OnInit {
   }
 
   onModuloActualizado(moduloActualizado: ModuleData): void {
-    this.modulos = this.modulos.map(m => 
+    this.modulos = this.modulos.map(m =>
       m.id === moduloActualizado.id ? moduloActualizado : m
     );
     this.modulosFiltrados = [...this.modulos];

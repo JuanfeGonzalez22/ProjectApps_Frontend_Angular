@@ -1,0 +1,118 @@
+<!-- src/app/admin/pages/dashboard/sections/gestion-evaluaciones/editar-evaluacion/editar-evaluacion.html -->
+
+<div class="form-wrapper">
+  <div class="form-card">
+
+    <h2>Editar Evaluación</h2>
+
+    <form #evaluacionForm="ngForm" (ngSubmit)="onSubmit()">
+
+      <!-- ID (solo lectura) -->
+      <mat-form-field appearance="outline">
+        <mat-label>ID de la evaluación</mat-label>
+        <input
+          matInput
+          [value]="evaluacionLocal.id"
+          readonly>
+      </mat-form-field>
+
+      <!-- Título -->
+      <mat-form-field appearance="outline">
+        <mat-label>Título de la evaluación</mat-label>
+        <input
+          matInput
+          [(ngModel)]="evaluacionLocal.title"
+          name="title"
+          placeholder="Ej: Examen Final de Angular"
+          required
+          maxlength="200">
+      </mat-form-field>
+
+      <!-- Módulo -->
+      <mat-form-field appearance="outline">
+        <mat-label>Módulo</mat-label>
+        <mat-select
+          [(ngModel)]="evaluacionLocal.moduleId"
+          name="moduleId"
+          required>
+          <mat-option [value]="0" disabled>Selecciona un módulo</mat-option>
+          <mat-option *ngFor="let modulo of modulos" [value]="modulo.id">
+            {{ modulo.title }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <!-- Fila: Tipo y Puntuación -->
+      <div class="row">
+        <mat-form-field appearance="outline">
+          <mat-label>Tipo de evaluación</mat-label>
+          <mat-select
+            [(ngModel)]="evaluacionLocal.type"
+            name="type"
+            required>
+            <mat-option value="">Selecciona un tipo</mat-option>
+            <mat-option *ngFor="let tipo of tiposEvaluacion" [value]="tipo">
+              {{ tipo }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Puntuación máxima</mat-label>
+          <input
+            matInput
+            type="number"
+            [(ngModel)]="evaluacionLocal.maxScore"
+            name="maxScore"
+            placeholder="100"
+            min="1"
+            required>
+        </mat-form-field>
+      </div>
+
+      <!-- Descripción -->
+      <mat-form-field appearance="outline">
+        <mat-label>Descripción (opcional)</mat-label>
+        <textarea
+          matInput
+          [(ngModel)]="evaluacionLocal.description"
+          name="descripcion"
+          placeholder="Describe el contenido de la evaluación..."
+          rows="4"
+          maxlength="500"></textarea>
+        <mat-hint align="end">{{ (evaluacionLocal.description || '').length }} / 500</mat-hint>
+      </mat-form-field>
+
+      <!-- Fecha de Entrega -->
+      <mat-form-field appearance="outline">
+        <mat-label>Fecha de entrega (opcional)</mat-label>
+        <input
+          matInput
+          type="datetime-local"
+          [(ngModel)]="evaluacionLocal.dueDate"
+          name="dueDate">
+      </mat-form-field>
+
+      <!-- Botones -->
+      <div class="buttons">
+        <button
+          mat-button
+          class="cancelar"
+          type="button"
+          (click)="onCancelar()"
+          [disabled]="cargando">
+          Cancelar
+        </button>
+        <button
+          mat-raised-button
+          class="guardar"
+          type="submit"
+          [disabled]="!evaluacionForm.valid || cargando">
+          {{ cargando ? 'Guardando...' : 'Guardar Cambios' }}
+        </button>
+      </div>
+
+    </form>
+
+  </div>
+</div>

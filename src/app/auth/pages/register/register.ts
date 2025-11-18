@@ -6,7 +6,8 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatSelectModule } from '@angular/material/select';
 import { MatRadioModule } from '@angular/material/radio';
 import { FormsModule } from '@angular/forms';
-import { AuthService } from '../../services/auth';
+import { AuthService, RegisterRequest } from '../../services/auth';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-register',
@@ -25,7 +26,7 @@ import { AuthService } from '../../services/auth';
 })
 export class Register {
   @Output() cerrarRegistro = new EventEmitter<void>();
-  
+
   departamentos: string[] = [
     'Amazonas', 'Antioquia', 'Arauca', 'Atlántico', 'Bolívar', 'Boyacá',
     'Caldas', 'Caquetá', 'Casanare', 'Cauca', 'Cesar', 'Chocó', 'Córdoba',
@@ -40,32 +41,67 @@ export class Register {
   password = '';
   role = '';
   selectedDepto = '';
+  errorMsg = '';
 
-  constructor(private authService: AuthService) {}
+  constructor(
+    private authService: AuthService,
+    private router: Router
+  ) {}
 
   registrar() {
-  const userData = {
-    name: this.nombre,
-    email: this.email,
-    password: this.password,
-    department: this.selectedDepto,
-    role: this.role
-  };
+    // ✅ Validación básica
+    if (!this.nombre || !this.email || !this.password || !this.role || !this.selectedDepto) {
+      this.errorMsg = 'Por favor completa todos los campos';
+      return;
+    }
 
-
-
+    const userData: RegisterRequest = {
+      name: this.nombre,
+      email: this.email,
+      password: this.password,
+      department: this.selectedDepto,
+      role: this.role
+    };
 
     console.log('📤 Enviando datos de registro:', userData);
-  this.authService.register(userData).subscribe({
-    next: (response) => {
-      console.log('✅ Registro exitoso:', response);
-      alert('Usuario registrado correctamente.');
-      this.cerrarRegistro.emit();
-    },
-    error: (err) => {
-      console.error('❌ Error al registrar:', err);
-      alert('Error al registrar el usuario. Revisa los datos.');
-    }
-  });
+
+    this.authService.register(userData).subscribe({
+      next: (response) => {
+        console.log('✅ Registro exitoso:', response);
+        alert('Usuario registrado correctamente. Ahora puedes iniciar sesión.');
+
+        // Opción 1: Cerrar el modal de registro y volver al login
+        this.cerrarRegistro.emit();
+
+        // Opción 2: Redirigir automáticamente al dashboard según el rol
+        // if (response.user) {
+        //   switch (response.user.role?.toUpperCase()) {
+        //     case 'ADMIN':
+        //       this.router.navigate(['/admin']);
+        //       break;
+        //     case 'INSTRUCTOR':
+        //       this.router.navigate(['/teacher']);
+        //       break;
+        //     case 'STUDENT':
+        //     case 'APRENDIZ':
+        //       this.router.navigate(['/student']);
+        //       break;
+        //   }
+        // }
+      },
+      error: (err) => {
+        console.error('❌ Error al registrar:', err);
+
+        if (err.error && err.error.message) {
+          this.errorMsg = err.error.message;
+        } else if (err.error && typeof err.error === 'string') {
+          this.errorMsg = err.error;
+        } else {
+          this.errorMsg = 'Error al registrar el usuario. Revisa los datos.';
+        }
+
+        alert(this.errorMsg);
+      }
+    });
   }
 }

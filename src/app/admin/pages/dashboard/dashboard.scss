@@ -13,11 +13,11 @@
   padding: 1rem 0;
 
   .logo {
-  text-align: center;
-  color: #2e7be7; /* azul corporativo */
-  font-weight: 500;
-  font-size: 1rem;
-  margin-bottom: 2rem;
+    text-align: center;
+    color: #2e7be7;
+    font-weight: 500;
+    font-size: 1rem;
+    margin-bottom: 2rem;
 
     h2 {
       margin: 0;
@@ -25,27 +25,47 @@
   }
 
   .menu {
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    flex: 1; /* ✅ Permite que el menú crezca */
 
-  .menu-item {
-    justify-content: flex-start;
-    color: #000; /* negro */
-    font-weight: 500;
-    text-transform: none;
-    padding-left: 1.5rem;
-
-    mat-icon {
-      margin-right: 0.75rem;
+    .menu-item {
+      justify-content: flex-start;
       color: #000;
+      font-weight: 500;
+      text-transform: none;
+      padding-left: 1.5rem;
+
+      mat-icon {
+        margin-right: 0.75rem;
+        color: #000;
+      }
+
+      &:hover {
+        background-color: rgba(46, 123, 231, 0.08);
+      }
     }
 
-    &:hover {
-      background-color: rgba(46, 123, 231, 0.08);
+    /* ✅ ESTILO PARA LA SECCIÓN DE LOGOUT */
+    .logout-section {
+      margin-top: auto; /* Empuja el botón hacia abajo */
+      padding-top: 1rem;
+      border-top: 1px solid #e0e0e0;
+
+      .logout-button {
+        color: #d32f2f; /* Rojo para indicar acción de salida */
+
+        mat-icon {
+          color: #d32f2f;
+        }
+
+        &:hover {
+          background-color: rgba(211, 47, 47, 0.08);
+        }
+      }
     }
   }
-}
 }
 
 /* Header */
@@ -63,6 +83,13 @@
 
   .spacer {
     flex: 1 1 auto;
+  }
+
+  /* ✅ Estilo para el botón de logout en el header */
+  button[matTooltip] {
+    &:hover {
+      background-color: rgba(255, 255, 255, 0.1);
+    }
   }
 }
 

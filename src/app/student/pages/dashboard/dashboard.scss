@@ -1,0 +1,139 @@
+// src/app/student/pages/student-dashboard/student-dashboard.component.scss
+
+.student-container {
+  height: 100vh;
+  background-color: #f4f5fa; // ✅ Mismo fondo que admin
+}
+
+/* Sidebar - Mismo estilo que admin */
+.student-sidenav {
+  width: 240px;
+  background-color: #ffffff; // ✅ Fondo blanco como admin
+  box-shadow: 2px 0 8px rgba(0, 0, 0, 0.05);
+  display: flex;
+  flex-direction: column;
+  padding: 1rem 0;
+
+  .logo {
+    text-align: center;
+    color: #2e7be7; // ✅ Mismo color azul que admin
+    font-weight: 500;
+    font-size: 1rem;
+    margin-bottom: 2rem;
+
+    h2 {
+      margin: 0;
+      font-size: 1.5rem;
+      font-weight: 700;
+    }
+
+    .subtitle {
+      margin: 0.25rem 0 0 0;
+      font-size: 0.875rem;
+      opacity: 0.8;
+      color: #666;
+    }
+  }
+
+  .menu {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    flex: 1;
+
+    .menu-item {
+      justify-content: flex-start;
+      color: #000; // ✅ Texto negro como admin
+      font-weight: 500;
+      text-transform: none;
+      padding-left: 1.5rem;
+
+      mat-icon {
+        margin-right: 0.75rem;
+        color: #000; // ✅ Iconos negros como admin
+      }
+
+      &:hover {
+        background-color: rgba(46, 123, 231, 0.08); // ✅ Mismo hover que admin
+      }
+
+      &.active {
+        background-color: rgba(46, 123, 231, 0.12);
+        color: #2e7be7;
+        font-weight: 600;
+
+        mat-icon {
+          color: #2e7be7;
+        }
+      }
+    }
+
+    .logout-section {
+      margin-top: auto;
+      padding-top: 1rem;
+      border-top: 1px solid #e0e0e0;
+
+      .logout-button {
+        color: #d32f2f; // ✅ Rojo como admin
+
+        mat-icon {
+          color: #d32f2f;
+        }
+
+        &:hover {
+          background-color: rgba(211, 47, 47, 0.08);
+        }
+      }
+    }
+  }
+}
+
+/* Header - Mismo estilo que admin */
+.student-header {
+  background-color: #2e7be7; // ✅ Mismo azul que admin
+  color: #fff;
+  padding: 0 1.5rem;
+  display: flex;
+  align-items: center;
+
+  .welcome {
+    font-size: 1.1rem;
+    font-weight: 600;
+  }
+
+  .spacer {
+    flex: 1 1 auto;
+  }
+
+  .streak-badge {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+    background-color: rgba(255, 255, 255, 0.2);
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    margin-right: 1rem;
+
+    mat-icon {
+      color: #ffa500;
+      font-size: 1.5rem;
+      height: 1.5rem;
+      width: 1.5rem;
+    }
+
+    span {
+      font-weight: 600;
+      font-size: 0.95rem;
+    }
+  }
+
+  button[mat-icon-button] {
+    &:hover {
+      background-color: rgba(255, 255, 255, 0.1);
+    }
+  }
+}
+
+.student-content {
+  padding: 2rem;
+}

@@ -1,180 +1,125 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders, HttpErrorResponse } from '@angular/common/http';
-import { Observable, tap, catchError, throwError } from 'rxjs';
+import { HttpClient } from '@angular/common/http';
+import { Router } from '@angular/router';
+import { Observable, BehaviorSubject } from 'rxjs';
+import { tap } from 'rxjs/operators';
 
+// ✅ Interfaces actualizadas
 export interface LoginRequest {
   email: string;
   password: string;
 }
 
 export interface RegisterRequest {
-  name: string;
+  name: string;          // ← Cambiado de fullName a name
   email: string;
   password: string;
+  department: string;    // ← Agregado
   role: string;
-  department?: string;
 }
 
-export interface UserResponse {
+export interface User {
   id: number;
-  fullName: string;
+  fullName?: string;     // ← Opcional
+  name?: string;         // ← Opcional (por si el backend usa "name")
   email: string;
   role: string;
-  department?: string;
+  department?: string;   // ← Opcional
 }
 
 export interface AuthResponse {
   token: string;
-  user: UserResponse;
-  message: string;
+  user: User;
+  message?: string;      // ← Opcional
 }
 
-@Injectable({ 
-  providedIn: 'root' 
+@Injectable({
+  providedIn: 'root'
 })
 export class AuthService {
-  private apiUrl = 'http://localhost:8089/project/api/v1/auth';
+  private apiUrl = 'http://localhost:8080/api/v1/auth';
+  private currentUserSubject = new BehaviorSubject<User | null>(null);
+  public currentUser$ = this.currentUserSubject.asObservable();
 
-  constructor(private http: HttpClient) {}
-
-  // Headers explícitos para evitar problemas de CORS
-  private getHeaders(): HttpHeaders {
-    return new HttpHeaders({
-      'Content-Type': 'application/json',
-      'Accept': 'application/json'
-    });
+  constructor(
+    private http: HttpClient,
+    private router: Router
+  ) {
+    const storedUser = this.getStoredUser();
+    if (storedUser) {
+      this.currentUserSubject.next(storedUser);
+    }
   }
 
-  login(credentials: LoginRequest): Observable<AuthResponse> {
-    console.log('🌐 [AuthService] URL de login:', `${this.apiUrl}/login`);
-    console.log('📦 [AuthService] Datos enviados:', credentials);
-    
-    return this.http.post<AuthResponse>(
-      `${this.apiUrl}/login`, 
-      credentials,
-      { 
-        headers: this.getHeaders(),
-        withCredentials: true // Importante para CORS
-      }
-    ).pipe(
-      tap(response => {
-        console.log('✅ [AuthService] Login exitoso - Respuesta:', response);
-        
+  // ✅ LOGIN - Acepta objeto o dos parámetros
+  login(emailOrRequest: string | LoginRequest, password?: string): Observable<AuthResponse> {
+    let loginData: LoginRequest;
+
+    if (typeof emailOrRequest === 'string') {
+      loginData = { email: emailOrRequest, password: password! };
+    } else {
+      loginData = emailOrRequest;
+    }
+
+    console.log('📤 [AuthService] Enviando login:', loginData);
+
+    return this.http.post<AuthResponse>(`${this.apiUrl}/login`, loginData).pipe(
+      tap((response: AuthResponse) => {
+        console.log('✅ [AuthService] Respuesta recibida:', response);
+
         if (response.token && response.user) {
           localStorage.setItem('token', response.token);
           localStorage.setItem('user', JSON.stringify(response.user));
-          console.log('💾 [AuthService] Token y usuario guardados en localStorage');
-          console.log('🔐 [AuthService] Token:', response.token.substring(0, 20) + '...');
-          console.log('👤 [AuthService] Usuario:', response.user.email);
-        } else {
-          console.error('❌ [AuthService] Respuesta incompleta - Sin token o usuario');
+          this.currentUserSubject.next(response.user);
+          console.log('💾 [AuthService] Datos guardados en localStorage');
         }
-      }),
-      catchError(this.handleError('login'))
+      })
     );
   }
 
+  // ✅ REGISTER - Acepta la estructura correcta
   register(userData: RegisterRequest): Observable<AuthResponse> {
-    console.log('🌐 [AuthService] URL de registro:', `${this.apiUrl}/register`);
-    console.log('📦 [AuthService] Datos enviados:', userData);
-    
-    return this.http.post<AuthResponse>(
-      `${this.apiUrl}/register`, 
-      userData,
-      { 
-        headers: this.getHeaders(),
-        withCredentials: true
-      }
-    ).pipe(
-      tap(response => {
-        console.log('✅ [AuthService] Registro exitoso - Respuesta:', response);
-        
+    console.log('📤 [AuthService] Enviando registro:', userData);
+
+    return this.http.post<AuthResponse>(`${this.apiUrl}/register`, userData).pipe(
+      tap((response: AuthResponse) => {
+        console.log('✅ [AuthService] Registro exitoso:', response);
+
         if (response.token && response.user) {
           localStorage.setItem('token', response.token);
           localStorage.setItem('user', JSON.stringify(response.user));
-          console.log('💾 [AuthService] Token y usuario guardados en localStorage');
-          console.log('👤 [AuthService] Usuario registrado:', response.user.email);
+          this.currentUserSubject.next(response.user);
+          console.log('💾 [AuthService] Usuario registrado y guardado');
         }
-      }),
-      catchError(this.handleError('register'))
+      })
     );
   }
 
+  // ✅ LOGOUT
   logout(): void {
+    console.log('🚪 [AuthService] Cerrando sesión...');
     localStorage.removeItem('token');
     localStorage.removeItem('user');
-    console.log('🚪 [AuthService] Sesión cerrada - Datos eliminados');
+    this.currentUserSubject.next(null);
   }
 
+  // ✅ OBTENER USUARIO ACTUAL
+  getCurrentUser(): User | null {
+    return this.currentUserSubject.value || this.getStoredUser();
+  }
+
+  // ✅ OBTENER TOKEN
   getToken(): string | null {
-    const token = localStorage.getItem('token');
-    console.log('🔍 [AuthService] Token obtenido:', token ? token.substring(0, 20) + '...' : 'null');
-    return token;
+    return localStorage.getItem('token');
   }
 
-  getUser(): UserResponse | null {
+  // ✅ VERIFICAR SI ESTÁ AUTENTICADO
+  isAuthenticated(): boolean {
+    return !!this.getToken();
+  }
+
+  private getStoredUser(): User | null {
     const userStr = localStorage.getItem('user');
-    const user = userStr ? JSON.parse(userStr) : null;
-    console.log('🔍 [AuthService] Usuario obtenido:', user?.email || 'null');
-    return user;
-  }
-
-  isLoggedIn(): boolean {
-    const isLogged = !!this.getToken();
-    console.log('🔐 [AuthService] Usuario autenticado:', isLogged);
-    return isLogged;
-  }
-
-  // Manejo centralizado de errores
-  private handleError(operation: string) {
-    return (error: HttpErrorResponse): Observable<never> => {
-      console.error(`❌ [AuthService] Error en ${operation}:`, error);
-      
-      let errorMessage = 'Error desconocido';
-      
-      if (error.error instanceof ErrorEvent) {
-        // Error del lado del cliente
-        errorMessage = `Error: ${error.error.message}`;
-      } else {
-        // Error del lado del servidor
-        errorMessage = `Error ${error.status}: ${error.message}`;
-        
-        // Mensajes específicos por código de error
-        switch (error.status) {
-          case 0:
-            errorMessage = 'No se pudo conectar con el servidor';
-            break;
-          case 403:
-            errorMessage = 'Acceso denegado - Problema de CORS o permisos';
-            break;
-          case 404:
-            errorMessage = 'Endpoint no encontrado';
-            break;
-          case 500:
-            errorMessage = 'Error interno del servidor';
-            break;
-        }
-        
-        // Si el backend envía un mensaje de error específico
-        if (error.error && error.error.message) {
-          errorMessage += ` - ${error.error.message}`;
-        }
-      }
-      
-      console.error(`❌ [AuthService] Mensaje de error para el usuario: ${errorMessage}`);
-      return throwError(() => new Error(errorMessage));
-    };
-  }
-
-  // Método para verificar la conexión con el backend
-  checkBackendConnection(): Observable<any> {
-    console.log('🔌 [AuthService] Verificando conexión con el backend...');
-    return this.http.get(`${this.apiUrl}/health`, { 
-      headers: this.getHeaders(),
-      withCredentials: true 
-    }).pipe(
-      tap(() => console.log('✅ [AuthService] Backend conectado correctamente')),
-      catchError(this.handleError('health check'))
-    );
+    return userStr ? JSON.parse(userStr) : null;
   }
 }

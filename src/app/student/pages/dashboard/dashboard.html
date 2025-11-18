@@ -1,4 +1,123 @@
-<div class="dashboard-container">
-  <h1>🎓 Bienvenido, Estudiante</h1>
-  <p>Esta es la vista del panel del estudiante.</p>
-</div>
+<!-- src/app/student/pages/student-dashboard/student-dashboard.component.html -->
+
+<mat-sidenav-container class="student-container">
+  <!-- Sidebar -->
+  <mat-sidenav mode="side" opened class="student-sidenav">
+    <div class="logo">
+      <h2>LevelUpCorp</h2>
+      <p class="subtitle">Aprendiz</p>
+    </div>
+
+    <nav class="menu">
+      <button mat-button class="menu-item" [class.active]="section === 'inicio'" (click)="setSection('inicio')">
+        <mat-icon>home</mat-icon> Inicio
+      </button>
+      <button mat-button class="menu-item" [class.active]="section === 'mis-cursos'" (click)="setSection('mis-cursos')">
+        <mat-icon>school</mat-icon> Mis Cursos
+      </button>
+      <button mat-button class="menu-item" [class.active]="section === 'explorar'" (click)="setSection('explorar')">
+        <mat-icon>explore</mat-icon> Explorar Cursos
+      </button>
+      <button mat-button class="menu-item" [class.active]="section === 'progreso'" (click)="setSection('progreso')">
+        <mat-icon>trending_up</mat-icon> Mi Progreso
+      </button>
+      <button mat-button class="menu-item" [class.active]="section === 'certificados'" (click)="setSection('certificados')">
+        <mat-icon>workspace_premium</mat-icon> Certificados
+      </button>
+      <button mat-button class="menu-item" [class.active]="section === 'mensajes'" (click)="setSection('mensajes')">
+        <mat-icon>mail</mat-icon> Mensajes
+      </button>
+      <button mat-button class="menu-item" [class.active]="section === 'perfil'" (click)="setSection('perfil')">
+        <mat-icon>person</mat-icon> Mi Perfil
+      </button>
+
+      <div class="logout-section">
+        <button mat-button class="menu-item logout-button" (click)="logout()">
+          <mat-icon>logout</mat-icon> Cerrar Sesión
+        </button>
+      </div>
+    </nav>
+  </mat-sidenav>
+
+  <!-- Main content -->
+  <mat-sidenav-content>
+    <mat-toolbar class="student-header">
+      <span class="welcome">¡Hola, {{ userName }}! 👋</span>
+      <span class="spacer"></span>
+
+      <div class="streak-badge">
+        <mat-icon>local_fire_department</mat-icon>
+        <span>{{ studyStreak }} días</span>
+      </div>
+
+      <button mat-icon-button [matMenuTriggerFor]="notificationsMenu">
+        <mat-icon [matBadge]="notificationCount" matBadgeColor="warn">notifications</mat-icon>
+      </button>
+      <mat-menu #notificationsMenu="matMenu">
+        <button mat-menu-item>
+          <mat-icon>assignment</mat-icon>
+          <span>Nueva tarea en "Angular Avanzado"</span>
+        </button>
+        <button mat-menu-item>
+          <mat-icon>star</mat-icon>
+          <span>¡Obtuviste un nuevo logro!</span>
+        </button>
+      </mat-menu>
+
+      <button mat-icon-button [matMenuTriggerFor]="userMenu">
+        <mat-icon>account_circle</mat-icon>
+      </button>
+      <mat-menu #userMenu="matMenu">
+        <button mat-menu-item (click)="setSection('perfil')">
+          <mat-icon>person</mat-icon>
+          <span>Mi Perfil</span>
+        </button>
+        <button mat-menu-item (click)="logout()">
+          <mat-icon>logout</mat-icon>
+          <span>Cerrar Sesión</span>
+        </button>
+      </mat-menu>
+
+      <button mat-icon-button (click)="logout()" matTooltip="Cerrar sesión">
+        <mat-icon>logout</mat-icon>
+      </button>
+    </mat-toolbar>
+
+    <div class="student-content">
+      <!-- Sección de Inicio -->
+      <div *ngIf="section === 'inicio'">
+        <h2>Bienvenido al Dashboard</h2>
+        <p>Selecciona una opción del menú lateral para comenzar.</p>
+      </div>
+
+      <!-- Sección de Mis Cursos -->
+      <app-courses-student *ngIf="section === 'mis-cursos'"></app-courses-student>
+
+      <!-- Otras secciones -->
+      <div *ngIf="section === 'explorar'">
+        <h2>Explorar Cursos</h2>
+        <p>Contenido en construcción...</p>
+      </div>
+
+      <div *ngIf="section === 'progreso'">
+        <h2>Mi Progreso</h2>
+        <p>Contenido en construcción...</p>
+      </div>
+
+      <div *ngIf="section === 'certificados'">
+        <h2>Certificados</h2>
+        <p>Contenido en construcción...</p>
+      </div>
+
+      <div *ngIf="section === 'mensajes'">
+        <h2>Mensajes</h2>
+        <p>Contenido en construcción...</p>
+      </div>
+
+      <div *ngIf="section === 'perfil'">
+        <h2>Mi Perfil</h2>
+        <p>Contenido en construcción...</p>
+      </div>
+    </div>
+  </mat-sidenav-content>
+</mat-sidenav-container>

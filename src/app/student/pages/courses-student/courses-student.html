@@ -1,0 +1,95 @@
+<div class="courses-student-container">
+  <!-- Vista de lista de cursos -->
+  <div *ngIf="!showDetail">
+    <div class="header">
+      <h1>
+        <mat-icon>school</mat-icon>
+        Mis Cursos
+      </h1>
+      <p class="subtitle">Explora y continúa con tu aprendizaje</p>
+    </div>
+
+    <!-- Loading state -->
+    <div *ngIf="loading" class="loading-state">
+      <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+      <p>Cargando cursos...</p>
+    </div>
+
+    <!-- Error state -->
+    <div *ngIf="error && !loading" class="error-state">
+      <mat-icon>error_outline</mat-icon>
+      <p>{{ error }}</p>
+      <button mat-raised-button color="primary" (click)="cargarCursos()">
+        Reintentar
+      </button>
+    </div>
+
+    <!-- Empty state -->
+    <div *ngIf="!loading && !error && cursos.length === 0" class="empty-state">
+      <mat-icon>school</mat-icon>
+      <h3>No hay cursos disponibles</h3>
+      <p>Por el momento no tienes cursos asignados</p>
+    </div>
+
+    <!-- Courses grid -->
+    <div *ngIf="!loading && !error && cursos.length > 0" class="cursos-grid">
+      <mat-card *ngFor="let curso of cursos" class="curso-card">
+        <div class="card-header">
+          <div class="curso-icon">
+            <mat-icon>book</mat-icon>
+          </div>
+          <mat-chip [color]="getNivelColor(curso.level)" selected>
+            {{ getNivelTexto(curso.level) }}
+          </mat-chip>
+        </div>
+
+        <mat-card-header>
+          <mat-card-title>{{ curso.title }}</mat-card-title>
+        </mat-card-header>
+
+        <mat-card-content>
+          <p class="descripcion">{{ curso.description }}</p>
+
+          <div class="curso-info">
+            <div class="info-item">
+              <mat-icon>access_time</mat-icon>
+              <span>{{ formatDuration(curso.estimatedDuration) }}</span>
+            </div>
+            <div class="info-item">
+              <mat-icon>signal_cellular_alt</mat-icon>
+              <span>{{ getNivelTexto(curso.level) }}</span>
+            </div>
+          </div>
+
+          <!-- Barra de progreso -->
+          <div class="progreso-section">
+            <div class="progreso-header">
+              <span class="progreso-label">Progreso</span>
+              <span class="progreso-porcentaje">0%</span>
+            </div>
+            <mat-progress-bar mode="determinate" [value]="0"></mat-progress-bar>
+          </div>
+        </mat-card-content>
+
+        <mat-card-actions>
+          <button mat-raised-button color="primary" (click)="verCurso(curso)">
+            <mat-icon>play_arrow</mat-icon>
+            Continuar
+          </button>
+          <button mat-button (click)="verCurso(curso)">
+            <mat-icon>info</mat-icon>
+            Detalles
+          </button>
+        </mat-card-actions>
+      </mat-card>
+    </div>
+  </div>
+
+  <!-- ✅ Vista de detalle del curso -->
+  <div *ngIf="showDetail && selectedCourseId">
+    <app-course-detail
+      [courseId]="selectedCourseId"
+      (volver)="volverALista()">
+    </app-course-detail>
+  </div>
+</div>

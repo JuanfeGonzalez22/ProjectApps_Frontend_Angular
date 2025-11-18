@@ -1,14 +1,20 @@
+// src/app/core/models/module.model.ts
+
 export interface ModuleData {
   id?: number;
-  courseId: number;
   title: string;
-  type: string;
-  order: number;
+  description?: string;
+  orden: number;      // ✅ Se mantiene en español
+  tipo?: string;      // ✅ AGREGADO: para type (video, texto, quiz, etc)
+  courseId: number;
+  createdAt?: string;
+  updatedAt?: string;
 }
 
 export interface ModuleDTO {
-  courseId: number;
   title: string;
-  type: string;
-  order: number;
+  description?: string;
+  orden: number;
+  tipo?: string;
+  courseId: number;
 }
