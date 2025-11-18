@@ -44,25 +44,25 @@
   font-size: 12px;
   font-weight: 500;
   text-transform: capitalize;
-  
-  &.video { 
-    background: #ffebee; 
-    color: #c62828; 
+
+  &.video {
+    background: #ffebee;
+    color: #c62828;
     border: 1px solid #ffcdd2;
   }
-  &.texto { 
-    background: #e8f5e8; 
-    color: #2e7d32; 
+  &.texto {
+    background: #e8f5e8;
+    color: #2e7d32;
     border: 1px solid #c8e6c9;
   }
-  &.quiz { 
-    background: #e3f2fd; 
-    color: #1565c0; 
+  &.quiz {
+    background: #e3f2fd;
+    color: #1565c0;
     border: 1px solid #bbdefb;
   }
-  &.practica { 
-    background: #fff3e0; 
-    color: #ef6c00; 
+  &.practica {
+    background: #fff3e0;
+    color: #ef6c00;
     border: 1px solid #ffe0b2;
   }
 }
@@ -90,12 +90,12 @@
     border-radius: 8px;
     color: #fff !important;
     transition: background-color 0.3s ease;
-    
+
     // Estilos para botones deshabilitados
     &[disabled] {
       opacity: 0.5;
       cursor: not-allowed;
-      
+
       &:hover {
         background-color: inherit !important;
       }
@@ -143,18 +143,18 @@ h1 {
   .search-bar {
     width: 100%;
   }
-  
+
   .bottom-action {
     flex-direction: column;
-    
+
     button {
       width: 100%;
     }
   }
-  
+
   .module-table {
     font-size: 14px;
-    
+
     th, td {
       padding: 0.5rem;
     }

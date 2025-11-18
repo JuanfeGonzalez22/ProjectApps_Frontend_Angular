@@ -1,0 +1,116 @@
+// src/app/admin/pages/dashboard/sections/gestion-evaluaciones/agregar-evaluacion/agregar-evaluacion.scss
+
+.agregar-evaluacion-container {
+  padding: 20px;
+  max-width: 800px;
+  margin: 0 auto;
+  background-color: #fafafa;
+  min-height: 100vh;
+
+  mat-card {
+    background: white;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    border-radius: 12px;
+
+    mat-card-header {
+      margin-bottom: 20px;
+      background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
+      padding: 1.5rem;
+      border-radius: 12px 12px 0 0;
+
+      mat-card-title {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        font-size: 24px;
+        font-weight: 600;
+        color: white;
+
+        mat-icon {
+          font-size: 28px;
+          width: 28px;
+          height: 28px;
+          color: white;
+        }
+      }
+    }
+
+    mat-card-content {
+      padding: 1.5rem;
+      background: white;
+
+      form {
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+
+        .full-width {
+          width: 100%;
+        }
+
+        mat-form-field {
+          background: white;
+
+          mat-label {
+            color: #2c3e50;
+          }
+
+          input,
+          textarea,
+          mat-select {
+            color: #2c3e50;
+            background: white;
+          }
+
+          .mat-mdc-form-field-focus-overlay {
+            background-color: transparent;
+          }
+
+          mat-icon {
+            color: #3498db;
+          }
+
+          mat-hint {
+            color: #7f8c8d;
+          }
+        }
+
+        .button-group {
+          display: flex;
+          gap: 12px;
+          margin-top: 20px;
+          justify-content: flex-end;
+
+          button {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 24px;
+            font-weight: 500;
+
+            mat-icon {
+              font-size: 20px;
+              width: 20px;
+              height: 20px;
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+// Estilos responsive
+@media (max-width: 768px) {
+  .agregar-evaluacion-container {
+    padding: 10px;
+
+    .button-group {
+      flex-direction: column;
+
+      button {
+        width: 100%;
+      }
+    }
+  }
+}

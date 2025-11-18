@@ -1,0 +1,154 @@
+<div class="course-detail-container">
+  <!-- Loading state -->
+  <div *ngIf="loading" class="loading-state">
+    <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+    <p>Cargando detalles del curso...</p>
+  </div>
+
+  <!-- Error state -->
+  <div *ngIf="error && !loading" class="error-state">
+    <mat-icon>error_outline</mat-icon>
+    <p>{{ error }}</p>
+    <button mat-raised-button color="primary" (click)="cargarDetalleCurso()">
+      Reintentar
+    </button>
+  </div>
+
+  <!-- Course Detail -->
+  <div *ngIf="!loading && !error && curso" class="detail-content">
+    <div class="detail-grid">
+      <!-- Columna Izquierda: Detalles del curso -->
+      <mat-card class="details-card">
+        <mat-card-header>
+          <mat-card-title>Detalles del curso</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <div class="detail-item">
+            <strong>Curso:</strong>
+            <span>{{ curso.title }}</span>
+          </div>
+
+
+          <div class="detail-item">
+            <strong>Progreso total:</strong>
+            <span class="progress-percentage">{{ getProgresoTotal() }}%</span>
+          </div>
+          <div class="detail-item">
+            <strong>Certificado:</strong>
+            <span [class.certificado-disponible]="getProgresoTotal() === 100">
+              {{ getProgresoTotal() === 100 ? 'Disponible' : 'No disponible' }}
+            </span>
+          </div>
+        </mat-card-content>
+      </mat-card>
+
+      <!-- Columna Derecha: Módulos -->
+      <mat-card class="modules-card">
+        <mat-card-header>
+          <mat-card-title>Módulos</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <div *ngIf="modulos.length === 0" class="empty-modules">
+            <p>No hay módulos disponibles</p>
+          </div>
+
+          <table class="modules-table" *ngIf="modulos.length > 0">
+            <thead>
+              <tr>
+                <th>Orden</th>
+                <th>Título</th>
+                <th>Tipo</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let modulo of modulos">
+                <td>{{ modulo.orden }}</td>
+                <td>{{ modulo.title }}</td>
+                <td>
+                  <mat-chip [class]="getTipoClase(modulo.tipo)">
+                    <mat-icon>{{ getTipoIcono(modulo.tipo) }}</mat-icon>
+                    {{ modulo.tipo || 'N/A' }}
+                  </mat-chip>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </mat-card-content>
+      </mat-card>
+    </div>
+
+    <!-- Material del curso -->
+    <mat-card class="material-card">
+      <mat-card-header>
+        <mat-card-title>
+          <mat-icon>folder</mat-icon>
+          Material del curso
+        </mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <div class="material-list">
+          <div *ngFor="let material of materiales" class="material-item" [class]="material.clase">
+            <mat-icon>{{ material.icono }}</mat-icon>
+            <span class="material-titulo">{{ material.titulo }}</span>
+            <button
+              mat-raised-button
+              color="primary"
+              size="small"
+              (click)="material.tipo === 'link' ? verLink(material) : descargarMaterial(material)">
+              {{ material.tipo === 'link' ? 'Ver' : 'Descargar' }}
+            </button>
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <!-- Evaluaciones / Quizzes -->
+    <mat-card class="evaluations-card">
+      <mat-card-header>
+        <mat-card-title>
+          <mat-icon>quiz</mat-icon>
+          Evaluaciones / Quizzes
+        </mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <div *ngIf="evaluaciones.length === 0" class="empty-evaluations">
+          <p>No hay evaluaciones disponibles para este curso</p>
+        </div>
+
+        <div *ngIf="evaluaciones.length > 0" class="evaluation-list">
+          <div *ngFor="let evaluation of evaluaciones; let i = index" class="evaluation-item">
+            <div class="quiz-info">
+              <strong>{{ evaluation.title }}</strong>
+              <span class="quiz-details">
+                Módulo: {{ getModuleName(evaluation.moduleId) }} |
+                Tipo: {{ evaluation.type }} |
+                Puntaje máximo: {{ evaluation.maxScore }}
+              </span>
+            </div>
+            <div class="quiz-estado">
+              <span [class.estado-completado]="isEvaluacionCompletada(evaluation)">
+                Estado: {{ getEstadoEvaluacion(evaluation) }}
+              </span>
+              <button
+                mat-raised-button
+                [color]="isEvaluacionCompletada(evaluation) ? 'accent' : 'primary'"
+                (click)="isEvaluacionCompletada(evaluation) ? verResultado(evaluation) : realizarQuiz(evaluation)">
+                {{ isEvaluacionCompletada(evaluation) ? 'Ver resultado' : 'Realizar' }}
+              </button>
+            </div>
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <!-- Botones de acción -->
+    <div class="action-buttons">
+      <button mat-raised-button color="primary" (click)="verProgreso()">
+        Ver progreso
+      </button>
+      <button mat-raised-button (click)="volverALista()">
+        Volver
+      </button>
+    </div>
+  </div>
+</div>

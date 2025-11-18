@@ -33,32 +33,31 @@ export class EditarModuloComponent implements OnInit {
 
   moduloForm: FormGroup;
   tipos = ['video', 'texto', 'quiz', 'practica'];
-  cursos: CourseData[] = []; // ✅ Lista de cursos
+  cursos: CourseData[] = [];
 
   constructor(
     private fb: FormBuilder,
     private moduleService: ModuleService,
-    private courseService: CourseService // ✅ Servicio de cursos
+    private courseService: CourseService
   ) {
     this.moduloForm = this.fb.group({
-      courseId: ['', Validators.required], // ✅ Ahora es select
+      courseId: ['', Validators.required],
       title: ['', Validators.required],
-      type: ['', Validators.required],
-      order: ['', [Validators.required, Validators.min(1)]]
+      tipo: ['', Validators.required],      // ✅ CORREGIDO: 'tipo' en lugar de 'type'
+      orden: ['', [Validators.required, Validators.min(1)]] // ✅ CORREGIDO: 'orden' en lugar de 'order'
     });
   }
 
   ngOnInit(): void {
     this.cargarCursos();
-    
+
     if (this.modulo) {
-      // Esperar a que los cursos se carguen para setear el valor
       setTimeout(() => {
         this.moduloForm.patchValue({
           courseId: this.modulo.courseId,
           title: this.modulo.title,
-          type: this.modulo.type,
-          order: this.modulo.order
+          tipo: this.modulo.tipo,      // ✅ CORREGIDO
+          orden: this.modulo.orden     // ✅ CORREGIDO
         });
       }, 100);
     }

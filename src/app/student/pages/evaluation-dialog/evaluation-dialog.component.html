@@ -1,0 +1,106 @@
+<div class="evaluation-dialog">
+  <div class="dialog-header">
+    <h2>{{ viewMode ? 'Resultado de evaluación' : 'Responder evaluación' }}</h2>
+    <button mat-icon-button (click)="cancelar()">
+      <mat-icon>close</mat-icon>
+    </button>
+  </div>
+
+  <div class="dialog-content">
+    <!-- Información de la evaluación -->
+    <div class="evaluation-info">
+      <div class="info-item">
+        <strong>Nombre de evaluación:</strong>
+        <span>{{ evaluation.title }}</span>
+      </div>
+
+      <div class="info-item">
+        <strong>Fecha de entrega:</strong>
+        <span>Hasta {{ getDueDate() }}</span>
+      </div>
+
+      <div class="info-item">
+        <strong>Descripción:</strong>
+        <p>{{ getDescription() }}</p>
+      </div>
+
+      <div class="info-item" *ngIf="viewMode">
+        <strong>Puntaje obtenido:</strong>
+        <span class="score">8 / {{ evaluation.maxScore }}</span>
+      </div>
+
+      <div class="info-item" *ngIf="viewMode">
+        <strong>Retroalimentación:</strong>
+        <p class="feedback">Buen trabajo. Revisa el tema de condicionales.</p>
+      </div>
+    </div>
+
+    <!-- Área de carga de archivo (solo en modo envío) -->
+    <div class="upload-area" *ngIf="!viewMode">
+      <div class="upload-box" (click)="triggerFileInput()" *ngIf="!selectedFile">
+        <mat-icon>cloud_upload</mat-icon>
+        <p>Aquí agrega tu archivo</p>
+        <span class="file-hint">Haz clic para seleccionar un archivo PDF</span>
+      </div>
+
+      <div class="file-selected" *ngIf="selectedFile">
+        <div class="file-info">
+          <mat-icon>picture_as_pdf</mat-icon>
+          <span>{{ fileName }}</span>
+        </div>
+        <button mat-icon-button (click)="removeFile()" [disabled]="uploading">
+          <mat-icon>close</mat-icon>
+        </button>
+      </div>
+
+      <input
+        type="file"
+        id="fileInput"
+        style="display: none"
+        accept=".pdf"
+        (change)="onFileSelected($event)"
+        [disabled]="uploading">
+
+      <div class="upload-error" *ngIf="uploadError">
+        <mat-icon>error</mat-icon>
+        <span>{{ uploadError }}</span>
+      </div>
+
+      <div class="uploading-spinner" *ngIf="uploading">
+        <mat-spinner diameter="40"></mat-spinner>
+        <p>Enviando evaluación...</p>
+      </div>
+    </div>
+
+    <!-- Archivo enviado (solo en modo ver resultado) -->
+    <div class="submitted-file" *ngIf="viewMode">
+      <div class="file-info">
+        <mat-icon>picture_as_pdf</mat-icon>
+        <span>mi_respuesta.pdf</span>
+      </div>
+      <button mat-raised-button color="primary">
+        <mat-icon>download</mat-icon>
+        Descargar
+      </button>
+    </div>
+  </div>
+
+  <div class="dialog-actions">
+    <button
+      mat-button
+      class="cancelar"
+      (click)="cancelar()"
+      [disabled]="uploading">
+      {{ viewMode ? 'Cerrar' : 'Cancelar' }}
+    </button>
+    <button
+      *ngIf="!viewMode"
+      mat-raised-button
+      color="primary"
+      class="enviar"
+      (click)="enviarRespuesta()"
+      [disabled]="!selectedFile || uploading">
+      Enviar respuesta
+    </button>
+  </div>
+</div>
