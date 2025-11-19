@@ -60,7 +60,7 @@ export class EditarEvaluacionComponent implements OnInit {
 
     if (this.evaluacion) {
       this.evaluacionLocal = { ...this.evaluacion };
-      console.log('📝 Editando evaluación:', this.evaluacionLocal);
+      console.log('Editando evaluación:', this.evaluacionLocal);
     }
   }
 
@@ -68,10 +68,10 @@ export class EditarEvaluacionComponent implements OnInit {
     this.moduleService.getAll().subscribe({
       next: (data: ModuleData[]) => {
         this.modulos = data;
-        console.log('✅ Módulos cargados:', data);
+        console.log(' Módulos cargados:', data);
       },
       error: (err: any) => {
-        console.error('❌ Error cargando módulos:', err);
+        console.error('Error cargando módulos:', err);
         alert('Error al cargar los módulos disponibles.');
       }
     });
@@ -105,17 +105,17 @@ export class EditarEvaluacionComponent implements OnInit {
 
     this.cargando = true;
 
-    console.log('📤 Actualizando evaluación:', this.evaluacionLocal);
+    console.log(' Actualizando evaluación:', this.evaluacionLocal);
 
     this.evaluationService.update(this.evaluacionLocal.id, this.evaluacionLocal).subscribe({
       next: (evaluacionActualizada: EvaluationData) => {
-        console.log('✅ Evaluación actualizada:', evaluacionActualizada);
+        console.log('Evaluación actualizada:', evaluacionActualizada);
         alert('Evaluación actualizada exitosamente');
         this.evaluacionActualizada.emit(evaluacionActualizada);
         this.cargando = false;
       },
       error: (err: any) => {
-        console.error('❌ Error actualizando evaluación:', err);
+        console.error(' Error actualizando evaluación:', err);
         alert('Error al actualizar la evaluación. Revisa los datos e intenta nuevamente.');
         this.cargando = false;
       }

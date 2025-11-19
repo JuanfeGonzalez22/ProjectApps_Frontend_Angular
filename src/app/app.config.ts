@@ -22,7 +22,7 @@ export const appConfig: ApplicationConfig = {
     provideAnimations(),
     provideRouter(routes),
     provideHttpClient(
-      withInterceptors([authInterceptor]) // ← CORREGIDO: Agrega el interceptor aquí
+      withInterceptors([authInterceptor])
     )
   ]
 };

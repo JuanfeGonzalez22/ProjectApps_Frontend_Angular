@@ -65,11 +65,11 @@ export class CourseDetail implements OnInit {
     this.courseService.getById(this.courseId).subscribe({
       next: (curso) => {
         this.curso = curso;
-        console.log('✅ Curso cargado:', curso);
+        console.log('Curso cargado:', curso);
         this.cargarModulos();
       },
       error: (err) => {
-        console.error('❌ Error cargando curso:', err);
+        console.error('Error cargando curso:', err);
         this.error = 'No se pudo cargar el curso';
         this.loading = false;
       }
@@ -77,27 +77,27 @@ export class CourseDetail implements OnInit {
   }
 
   cargarModulos() {
-    // Cargar módulos del curso
+
     this.moduleService.getAll().subscribe({
       next: (modulos) => {
-        // Filtrar solo los módulos de este curso
+
         this.modulos = modulos
           .filter(m => m.courseId === this.courseId)
           .sort((a, b) => a.orden - b.orden);
-        console.log('✅ Módulos cargados:', this.modulos);
+        console.log('Módulos cargados:', this.modulos);
 
-        // Cargar evaluaciones de todos los módulos
+
         this.cargarEvaluaciones();
       },
       error: (err) => {
-        console.error('❌ Error cargando módulos:', err);
+        console.error(' Error cargando módulos:', err);
         this.loading = false;
       }
     });
   }
 
   cargarEvaluaciones() {
-    // Obtener evaluaciones de todos los módulos del curso
+
     const evaluacionesPromises = this.modulos.map(modulo =>
       this.evaluationService.getByModuleId(modulo.id!).toPromise()
     );
@@ -107,10 +107,10 @@ export class CourseDetail implements OnInit {
         .filter(result => result !== undefined)
         .flat() as EvaluationData[];
 
-      console.log('✅ Evaluaciones cargadas:', this.evaluaciones);
+      console.log(' Evaluaciones cargadas:', this.evaluaciones);
       this.loading = false;
     }).catch(err => {
-      console.error('❌ Error cargando evaluaciones:', err);
+      console.error(' Error cargando evaluaciones:', err);
       this.loading = false;
     });
   }
@@ -134,22 +134,22 @@ export class CourseDetail implements OnInit {
   }
 
   verProgreso() {
-    console.log('📊 Ver progreso del curso:', this.courseId);
-    // Aquí puedes navegar a una vista de progreso detallado
+    console.log(' Ver progreso del curso:', this.courseId);
+
   }
 
   descargarMaterial(material: any) {
-    console.log('📥 Descargar material:', material);
-    // Implementar descarga
+    console.log(' Descargar material:', material);
+
   }
 
   verLink(material: any) {
-    console.log('🔗 Abrir link:', material);
-    // Implementar apertura de link
+    console.log(' Abrir link:', material);
+
   }
 
   realizarQuiz(evaluation: EvaluationData) {
-    console.log('📝 Realizar evaluación:', evaluation);
+    console.log(' Realizar evaluación:', evaluation);
 
     const dialogRef = this.dialog.open(EvaluationDialogComponent, {
       width: '800px',
@@ -158,16 +158,16 @@ export class CourseDetail implements OnInit {
 
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
-        console.log('✅ Evaluación enviada:', result);
-        // Recargar evaluaciones para actualizar el estado
+        console.log(' Evaluación enviada:', result);
+
         this.cargarEvaluaciones();
       }
     });
   }
 
   verResultado(evaluation: EvaluationData) {
-    console.log('📊 Ver resultado:', evaluation);
-    // Abrir dialog con los resultados
+    console.log(' Ver resultado:', evaluation);
+  
     this.dialog.open(EvaluationDialogComponent, {
       width: '800px',
       data: { evaluation, viewMode: true }
@@ -175,8 +175,6 @@ export class CourseDetail implements OnInit {
   }
 
   getEstadoEvaluacion(evaluation: EvaluationData): string {
-    // Por ahora retornamos 'Pendiente', esto se debe obtener del backend
-    // consultando los attempts del estudiante
     return 'Pendiente';
   }
 
@@ -185,7 +183,6 @@ export class CourseDetail implements OnInit {
   }
 
   getProgresoTotal(): number {
-    // Calcular progreso basado en evaluaciones completadas
     if (this.evaluaciones.length === 0) return 0;
     const completados = this.evaluaciones.filter(e =>
       this.getEstadoEvaluacion(e) === 'Completado'

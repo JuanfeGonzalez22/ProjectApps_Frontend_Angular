@@ -30,7 +30,7 @@ export class ModuleService {
     });
   }
 
-  // ✅ NUEVO: Obtener módulos por curso
+
   getByCourseId(courseId: number): Observable<ModuleData[]> {
     return this.http.get<ModuleData[]>(`${this.apiUrl}/course/${courseId}`, {
       headers: this.getHeaders()

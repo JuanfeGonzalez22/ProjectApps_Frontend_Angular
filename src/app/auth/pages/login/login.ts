@@ -30,12 +30,12 @@ export class LoginComponent {
 
   abrirRegistro(){
     this.mostrarRegistro = true;
-    console.log("✅ Registro abierto");
+    console.log("Registro abierto");
   }
 
   cerrarRegistro(){
     this.mostrarRegistro = false;
-    console.log("❌ Registro cerrado");
+    console.log("Registro cerrado");
   }
 
   onSubmit(): void {
@@ -44,51 +44,51 @@ export class LoginComponent {
       return;
     }
 
-    console.log('📤 Enviando login:', this.loginForm.value);
+    console.log(' Enviando login:', this.loginForm.value);
 
     this.auth.login(this.loginForm.value).subscribe({
       next: (response) => {
-        console.log('✅ Respuesta completa del backend:', response);
+        console.log('Respuesta completa del backend:', response);
 
         const user = response.user;
         const token = response.token;
 
-        console.log('👤 Usuario:', user);
-        console.log('🔐 Token:', token);
+        console.log(' Usuario:', user);
+        console.log('Token:', token);
 
         if (user && token) {
           console.log('💾 Datos guardados en localStorage');
           console.log('Role del usuario:', user.role);
 
-          // Redirigir según el rol
+
           switch (user.role?.toUpperCase()) {
             case 'ADMIN':
-              console.log('🎯 Redirigiendo a ADMIN');
+              console.log(' Redirigiendo a ADMIN');
               this.router.navigate(['/admin']);
               break;
             case 'INSTRUCTOR':
             case 'TEACHER':
-              console.log('🎯 Redirigiendo a TEACHER');
+              console.log(' Redirigiendo a TEACHER');
               this.router.navigate(['/teacher']);
               break;
             case 'STUDENT':
             case 'APRENDIZ':
             case 'USER':
-              console.log('🎯 Redirigiendo a STUDENT');
+              console.log(' Redirigiendo a STUDENT');
               this.router.navigate(['/student']);
               break;
             default:
-              console.log('⚠️ Rol no reconocido:', user.role);
+              console.log(' Rol no reconocido:', user.role);
               this.router.navigate(['/']);
               break;
           }
         } else {
-          console.error('❌ Respuesta incompleta:', response);
+          console.error(' Respuesta incompleta:', response);
           this.errorMsg = 'Error en la respuesta del servidor';
         }
       },
       error: (err) => {
-        console.error('❌ Error de login:', err);
+        console.error('Error de login:', err);
         this.errorMsg = 'Credenciales inválidas o usuario no encontrado.';
 
         if (err.error?.message) {

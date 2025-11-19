@@ -1,7 +1,7 @@
 <div class="form-wrapper">
   <div class="form-card">
     <h2>Editar Módulo</h2>
-    <p class="modulo-id">ID: {{ modulo.id }}</p> <!-- ✅ CORREGIDO: Sin '?.' -->
+    <p class="modulo-id">ID: {{ modulo.id }}</p>
 
     <form [formGroup]="moduloForm">
       <mat-form-field appearance="outline">
@@ -27,7 +27,7 @@
       <div class="row">
         <mat-form-field appearance="outline">
           <mat-label>Tipo</mat-label>
-          <mat-select formControlName="tipo"> <!-- ✅ CORREGIDO: 'tipo' en lugar de 'type' -->
+          <mat-select formControlName="tipo">
             <mat-option *ngFor="let tipo of tipos" [value]="tipo">
               {{ tipo }}
             </mat-option>
@@ -39,7 +39,7 @@
 
         <mat-form-field appearance="outline">
           <mat-label>Orden</mat-label>
-          <input matInput type="number" formControlName="orden" /> <!-- ✅ CORREGIDO: 'orden' en lugar de 'order' -->
+          <input matInput type="number" formControlName="orden" />
           <mat-error *ngIf="moduloForm.get('orden')?.hasError('required')">
             El orden es requerido
           </mat-error>

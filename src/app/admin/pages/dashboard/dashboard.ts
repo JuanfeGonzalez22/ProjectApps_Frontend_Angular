@@ -17,7 +17,7 @@ import { GestionCursos } from './sections/gestion-cursos/gestion-cursos';
 import { ReportesComponent as Reportes } from './sections/reportes/reportes';
 import { Configuracion } from './sections/configuracion/configuracion';
 import { GestionModulos } from "./sections/gestion-modulos/gestion-modulos";
-import { GestionEvaluaciones } from "./sections/gestion-evaluaciones/gestion-evaluaciones"; // ✅ AGREGADO
+import { GestionEvaluaciones } from "./sections/gestion-evaluaciones/gestion-evaluaciones";
 import { AuthService } from '../../../auth/services/auth';
 
 @Component({
@@ -39,7 +39,7 @@ import { AuthService } from '../../../auth/services/auth';
     Reportes,
     Configuracion,
     GestionModulos,
-    GestionEvaluaciones // ✅ AGREGADO
+    GestionEvaluaciones 
   ],
   templateUrl: './dashboard.html',
   styleUrls: ['./dashboard.scss'],

@@ -66,7 +66,7 @@
       border: 1px solid #e0e0e0;
 
       mat-card-header {
-        background: #4a73ff; // ✅ Azul brillante
+        background: #4a73ff;
         padding: 1.2rem 1.5rem;
         border-radius: 10px 10px 0 0;
 
@@ -87,7 +87,7 @@
 
       mat-card-content {
         padding: 1.5rem;
-        background: white; // ✅ Fondo blanco
+        background: white;
       }
     }
 
@@ -99,7 +99,7 @@
           display: flex;
           justify-content: space-between;
           align-items: center;
-          background: white; // ✅ Fondo blanco
+          background: white;
 
           &:last-child {
             border-bottom: none;
@@ -132,7 +132,7 @@
 
     .modules-card {
       mat-card-content {
-        background: white; // ✅ Fondo blanco
+        background: white;
 
         .empty-modules {
           text-align: center;
@@ -144,7 +144,7 @@
         .modules-table {
           width: 100%;
           border-collapse: collapse;
-          background: white; // ✅ Fondo blanco
+          background: white;
 
           thead {
             background: #f4f5fa;
@@ -159,15 +159,15 @@
           }
 
           tbody {
-            background: white; // ✅ Fondo blanco
+            background: white;
 
             tr {
               border-bottom: 1px solid #e0e0e0;
               transition: background 0.2s;
-              background: white; // ✅ Fondo blanco
+              background: white;
 
               &:hover {
-                background: #f0f4ff; // ✅ Azul clarito al hover
+                background: #f0f4ff;
               }
 
               td {
@@ -208,7 +208,7 @@
       margin-bottom: 1.5rem;
 
       mat-card-content {
-        background: white; // ✅ Fondo blanco
+        background: white;
       }
 
       .material-list {
@@ -221,13 +221,13 @@
           align-items: center;
           gap: 1rem;
           padding: 1.25rem;
-          background: white; // ✅ Fondo blanco
+          background: white;
           border-radius: 8px;
           border: 1px solid #e0e0e0;
           transition: all 0.2s;
 
           &:hover {
-            background: #f0f4ff; // ✅ Azul clarito
+            background: #f0f4ff;
             border-color: #4a73ff;
             transform: translateX(4px);
             box-shadow: 0 2px 8px rgba(74, 115, 255, 0.15);
@@ -266,7 +266,7 @@
       margin-bottom: 1.5rem;
 
       mat-card-content {
-        background: white; // ✅ Fondo blanco
+        background: white;
       }
 
       .empty-evaluations {
@@ -286,13 +286,13 @@
           justify-content: space-between;
           align-items: center;
           padding: 1.5rem;
-          background: white; // ✅ Fondo blanco
+          background: white;
           border-radius: 8px;
           border: 1px solid #e0e0e0;
           transition: all 0.2s;
 
           &:hover {
-            background: #f0f4ff; // ✅ Azul clarito
+            background: #f0f4ff;
             border-color: #4a73ff;
             transform: translateX(4px);
             box-shadow: 0 2px 8px rgba(74, 115, 255, 0.15);

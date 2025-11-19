@@ -45,10 +45,10 @@ export class CoursesStudent implements OnInit {
       next: (data) => {
         this.cursos = data;
         this.loading = false;
-        console.log('✅ Cursos cargados:', data);
+        console.log('Cursos cargados:', data);
       },
       error: (err) => {
-        console.error('❌ Error cargando cursos:', err);
+        console.error('Error cargando cursos:', err);
         this.error = 'No se pudieron cargar los cursos';
         this.loading = false;
       }
@@ -57,7 +57,7 @@ export class CoursesStudent implements OnInit {
 
   verCurso(curso: CourseData) {
     console.log('📖 Ver curso:', curso);
-    this.selectedCourseId = curso.id || null; // ✅ Corregido
+    this.selectedCourseId = curso.id || null;
     this.showDetail = true;
   }
 
@@ -66,8 +66,8 @@ export class CoursesStudent implements OnInit {
     this.selectedCourseId = null;
   }
 
-  getNivelColor(level: number): string { // ✅ Cambiado a number
-    const niveles: { [key: number]: string } = { // ✅ key es number
+  getNivelColor(level: number): string {
+    const niveles: { [key: number]: string } = {
       1: 'primary',
       2: 'accent',
       3: 'warn'
@@ -75,8 +75,8 @@ export class CoursesStudent implements OnInit {
     return niveles[level] || 'primary';
   }
 
-  getNivelTexto(level: number): string { // ✅ Cambiado a number
-    const niveles: { [key: number]: string } = { // ✅ key es number
+  getNivelTexto(level: number): string {
+    const niveles: { [key: number]: string } = {
       1: 'Básico',
       2: 'Intermedio',
       3: 'Avanzado'

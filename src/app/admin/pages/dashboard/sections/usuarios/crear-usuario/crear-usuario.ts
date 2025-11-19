@@ -68,7 +68,7 @@ export class CrearUsuarioComponent {
         this.usuarioCreado.emit(usuarioCreado);
       },
       error: (err: any) => {
-        console.error('❌ Error al crear usuario:', err);
+        console.error(' Error al crear usuario:', err);
         alert('Error al crear usuario: ' + (err.error?.message || err.message));
       }
     });

@@ -42,13 +42,10 @@
   <!-- Main content -->
   <mat-sidenav-content>
     <mat-toolbar class="student-header">
-      <span class="welcome">¡Hola, {{ userName }}! 👋</span>
+      <span class="welcome">¡Hola, {{ userName }}!</span>
       <span class="spacer"></span>
 
-      <div class="streak-badge">
-        <mat-icon>local_fire_department</mat-icon>
-        <span>{{ studyStreak }} días</span>
-      </div>
+
 
       <button mat-icon-button [matMenuTriggerFor]="notificationsMenu">
         <mat-icon [matBadge]="notificationCount" matBadgeColor="warn">notifications</mat-icon>

@@ -62,10 +62,10 @@ export class AgregarEvaluacionComponent implements OnInit {
     this.moduleService.getAll().subscribe({
       next: (data: ModuleData[]) => {
         this.modulos = data;
-        console.log('✅ Módulos cargados:', data);
+        console.log('Módulos cargados:', data);
       },
       error: (err: any) => {
-        console.error('❌ Error cargando módulos:', err);
+        console.error('Error cargando módulos:', err);
         alert('Error al cargar los módulos disponibles.');
       }
     });
@@ -112,7 +112,7 @@ export class AgregarEvaluacionComponent implements OnInit {
 
     this.evaluationService.create(evaluacionCompleta).subscribe({
       next: (nuevaEvaluacion: EvaluationData) => {
-        console.log('✅ Evaluación creada:', nuevaEvaluacion);
+        console.log(' Evaluación creada:', nuevaEvaluacion);
         alert('Evaluación creada exitosamente');
         this.evaluacionCreada.emit(nuevaEvaluacion);
         this.resetForm();

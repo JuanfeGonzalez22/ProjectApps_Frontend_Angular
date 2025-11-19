@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
-import { Router } from '@angular/router'; 
+import { Router } from '@angular/router';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTableModule } from '@angular/material/table';
 import { MatCardModule } from '@angular/material/card';
@@ -33,7 +33,7 @@ export class Cursos {
   cursos: CourseData[] = [];
 
   constructor(private courseService: CourseService,
-    private router: Router 
+    private router: Router
   ) {}
 
   ngOnInit() {
@@ -50,9 +50,6 @@ export class Cursos {
   });
 }
 
-
-  
-
   abrirFormulario() {
     this.vista = 'form';
   }
@@ -61,7 +58,7 @@ export class Cursos {
     this.vista = 'grid';
   }
 
-  // 👇 aquí NO armamos un literal con {nombre,...}, usamos el objeto tal cual del backend
+
   agregarCursoALista(curso: CourseData) {
     this.cursos = [...this.cursos, curso];
     this.vista = 'grid';

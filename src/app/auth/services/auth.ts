@@ -4,33 +4,33 @@ import { Router } from '@angular/router';
 import { Observable, BehaviorSubject } from 'rxjs';
 import { tap } from 'rxjs/operators';
 
-// ✅ Interfaces actualizadas
+
 export interface LoginRequest {
   email: string;
   password: string;
 }
 
 export interface RegisterRequest {
-  name: string;          // ← Cambiado de fullName a name
+  name: string;
   email: string;
   password: string;
-  department: string;    // ← Agregado
+  department: string;
   role: string;
 }
 
 export interface User {
   id: number;
-  fullName?: string;     // ← Opcional
-  name?: string;         // ← Opcional (por si el backend usa "name")
+  fullName?: string;
+  name?: string;
   email: string;
   role: string;
-  department?: string;   // ← Opcional
+  department?: string;
 }
 
 export interface AuthResponse {
   token: string;
   user: User;
-  message?: string;      // ← Opcional
+  message?: string;
 }
 
 @Injectable({
@@ -51,7 +51,7 @@ export class AuthService {
     }
   }
 
-  // ✅ LOGIN - Acepta objeto o dos parámetros
+
   login(emailOrRequest: string | LoginRequest, password?: string): Observable<AuthResponse> {
     let loginData: LoginRequest;
 
@@ -61,59 +61,59 @@ export class AuthService {
       loginData = emailOrRequest;
     }
 
-    console.log('📤 [AuthService] Enviando login:', loginData);
+    console.log(' [AuthService] Enviando login:', loginData);
 
     return this.http.post<AuthResponse>(`${this.apiUrl}/login`, loginData).pipe(
       tap((response: AuthResponse) => {
-        console.log('✅ [AuthService] Respuesta recibida:', response);
+        console.log('[AuthService] Respuesta recibida:', response);
 
         if (response.token && response.user) {
           localStorage.setItem('token', response.token);
           localStorage.setItem('user', JSON.stringify(response.user));
           this.currentUserSubject.next(response.user);
-          console.log('💾 [AuthService] Datos guardados en localStorage');
+          console.log(' [AuthService] Datos guardados en localStorage');
         }
       })
     );
   }
 
-  // ✅ REGISTER - Acepta la estructura correcta
+
   register(userData: RegisterRequest): Observable<AuthResponse> {
-    console.log('📤 [AuthService] Enviando registro:', userData);
+    console.log(' [AuthService] Enviando registro:', userData);
 
     return this.http.post<AuthResponse>(`${this.apiUrl}/register`, userData).pipe(
       tap((response: AuthResponse) => {
-        console.log('✅ [AuthService] Registro exitoso:', response);
+        console.log(' [AuthService] Registro exitoso:', response);
 
         if (response.token && response.user) {
           localStorage.setItem('token', response.token);
           localStorage.setItem('user', JSON.stringify(response.user));
           this.currentUserSubject.next(response.user);
-          console.log('💾 [AuthService] Usuario registrado y guardado');
+          console.log(' [AuthService] Usuario registrado y guardado');
         }
       })
     );
   }
 
-  // ✅ LOGOUT
+
   logout(): void {
-    console.log('🚪 [AuthService] Cerrando sesión...');
+    console.log(' [AuthService] Cerrando sesión...');
     localStorage.removeItem('token');
     localStorage.removeItem('user');
     this.currentUserSubject.next(null);
   }
 
-  // ✅ OBTENER USUARIO ACTUAL
+
   getCurrentUser(): User | null {
     return this.currentUserSubject.value || this.getStoredUser();
   }
 
-  // ✅ OBTENER TOKEN
+
   getToken(): string | null {
     return localStorage.getItem('token');
   }
 
-  // ✅ VERIFICAR SI ESTÁ AUTENTICADO
+
   isAuthenticated(): boolean {
     return !!this.getToken();
   }

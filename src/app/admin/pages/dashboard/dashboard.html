@@ -3,6 +3,7 @@
   <mat-sidenav mode="side" opened class="admin-sidenav">
     <div class="logo">
       <h2>LevelUpCorp</h2>
+      <p class="subtitle">Administrador</p>
     </div>
 
     <nav class="menu">
@@ -21,7 +22,7 @@
       <button mat-button class="menu-item" (click)="setSection('gestion-modulos')">
         <mat-icon>view_module</mat-icon> Gestión de módulos
       </button>
-      <!-- ✅ NUEVO: Gestión de Evaluaciones -->
+
       <button mat-button class="menu-item" (click)="setSection('gestion-evaluaciones')">
         <mat-icon>quiz</mat-icon> Gestión de evaluaciones
       </button>
@@ -43,7 +44,7 @@
   <!-- Main content -->
   <mat-sidenav-content>
     <mat-toolbar class="admin-header">
-      <span class="welcome">Bienvenido, {{ user }} 👋</span>
+      <span class="welcome">Bienvenido, {{ user }}</span>
       <span class="spacer"></span>
       <button mat-icon-button><mat-icon>notifications</mat-icon></button>
       <button mat-icon-button><mat-icon>account_circle</mat-icon></button>
@@ -58,7 +59,7 @@
       <app-cursos *ngIf="section === 'cursos'"></app-cursos>
       <app-gestion-modulos *ngIf="section === 'gestion-modulos'"></app-gestion-modulos>
       <app-gestion-cursos *ngIf="section === 'gestion-cursos'"></app-gestion-cursos>
-      <!-- ✅ NUEVO: Componente de Gestión de Evaluaciones -->
+
       <app-gestion-evaluaciones *ngIf="section === 'gestion-evaluaciones'"></app-gestion-evaluaciones>
       <app-reportes *ngIf="section === 'reportes'"></app-reportes>
       <app-configuracion *ngIf="section === 'configuracion'"></app-configuracion>

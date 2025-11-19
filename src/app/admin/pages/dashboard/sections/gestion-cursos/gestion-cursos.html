@@ -74,7 +74,7 @@
       Editar
     </button>
 
-      <!-- ✅ BOTÓN MODIFICADO: SIN DISABLED -->
+   
     <button 
       mat-raised-button 
       color="accent" 
@@ -89,13 +89,12 @@
     <button 
   mat-raised-button 
   class="volver" 
-  (click)="volver()"> <!-- ✅ Asegúrate que llame a volver() -->
+  (click)="volver()"> 
   Volver
 </button>
   </div>
 </div>
 
-<!-- VISTA FORMULARIO DE EDICIÓN -->
 <div *ngIf="vista === 'editar'" class="form-container">
   <app-editar-curso
     [curso]="$any(cursoSeleccionado)"

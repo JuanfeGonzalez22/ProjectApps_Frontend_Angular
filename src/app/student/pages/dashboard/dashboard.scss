@@ -2,13 +2,13 @@
 
 .student-container {
   height: 100vh;
-  background-color: #f4f5fa; // ✅ Mismo fondo que admin
+  background-color: #f4f5fa;
 }
 
-/* Sidebar - Mismo estilo que admin */
+
 .student-sidenav {
   width: 240px;
-  background-color: #ffffff; // ✅ Fondo blanco como admin
+  background-color: #ffffff;
   box-shadow: 2px 0 8px rgba(0, 0, 0, 0.05);
   display: flex;
   flex-direction: column;
@@ -16,7 +16,7 @@
 
   .logo {
     text-align: center;
-    color: #2e7be7; // ✅ Mismo color azul que admin
+    color: #2e7be7;
     font-weight: 500;
     font-size: 1rem;
     margin-bottom: 2rem;
@@ -43,18 +43,18 @@
 
     .menu-item {
       justify-content: flex-start;
-      color: #000; // ✅ Texto negro como admin
+      color: #000;
       font-weight: 500;
       text-transform: none;
       padding-left: 1.5rem;
 
       mat-icon {
         margin-right: 0.75rem;
-        color: #000; // ✅ Iconos negros como admin
+        color: #000;
       }
 
       &:hover {
-        background-color: rgba(46, 123, 231, 0.08); // ✅ Mismo hover que admin
+        background-color: rgba(46, 123, 231, 0.08);
       }
 
       &.active {
@@ -74,7 +74,7 @@
       border-top: 1px solid #e0e0e0;
 
       .logout-button {
-        color: #d32f2f; // ✅ Rojo como admin
+        color: #d32f2f;
 
         mat-icon {
           color: #d32f2f;
@@ -88,9 +88,9 @@
   }
 }
 
-/* Header - Mismo estilo que admin */
+
 .student-header {
-  background-color: #2e7be7; // ✅ Mismo azul que admin
+  background-color: #2e7be7;
   color: #fff;
   padding: 0 1.5rem;
   display: flex;
