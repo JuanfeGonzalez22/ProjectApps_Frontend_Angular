@@ -42,7 +42,7 @@
     </thead>
 
     <tbody>
-      <tr 
+      <tr
         *ngFor="let m of modulosFiltrados"
         (click)="seleccionarModulo(m)"
         [class.seleccionado]="moduloSeleccionado?.id === m.id"
@@ -51,11 +51,11 @@
         <td>{{ m.courseId }}</td>
         <td>{{ m.title }}</td>
         <td>
-          <span class="badge-type {{ m.type }}">
-            {{ m.type }}
+          <span class="badge-type {{ m.tipo }}"> <!-- ✅ CORREGIDO: 'tipo' en lugar de 'type' -->
+            {{ m.tipo }} <!-- ✅ CORREGIDO: 'tipo' en lugar de 'type' -->
           </span>
         </td>
-        <td>{{ m.order }}</td>
+        <td>{{ m.orden }}</td> <!-- ✅ CORREGIDO: 'orden' en lugar de 'order' -->
       </tr>
     </tbody>
   </table>
@@ -66,13 +66,13 @@
   </div>
 
   <div class="bottom-action">
-    <button mat-raised-button color="warn" class="eliminar" 
+    <button mat-raised-button color="warn" class="eliminar"
             [disabled]="!moduloSeleccionado"
             (click)="eliminarModulo()">
       Eliminar
     </button>
     <button mat-raised-button color="primary" class="editar"
-            [disabled]="!moduloSeleccionado" 
+            [disabled]="!moduloSeleccionado"
             (click)="editarModulo()">
       Editar
     </button>

@@ -1,9 +1,15 @@
+// src/app/admin/pages/dashboard/dashboard.ts
+
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Router } from '@angular/router';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatMenuModule } from '@angular/material/menu';
+import { MatBadgeModule } from '@angular/material/badge';
 import { Inicio } from './sections/inicio/inicio';
 import { Usuarios } from './sections/usuarios/usuarios';
 import { Cursos } from './sections/cursos/cursos';
@@ -11,7 +17,12 @@ import { GestionCursos } from './sections/gestion-cursos/gestion-cursos';
 import { ReportesComponent as Reportes } from './sections/reportes/reportes';
 import { Configuracion } from './sections/configuracion/configuracion';
 import { GestionModulos } from "./sections/gestion-modulos/gestion-modulos";
+<<<<<<< HEAD
 import { Evaluaciones } from './sections/evaluaciones/evaluaciones';
+=======
+import { GestionEvaluaciones } from "./sections/gestion-evaluaciones/gestion-evaluaciones"; // ✅ AGREGADO
+import { AuthService } from '../../../auth/services/auth';
+>>>>>>> 23319b5e20272b93a5d2c415cacc35697ab7e466
 
 @Component({
   selector: 'app-dashboard',
@@ -22,6 +33,9 @@ import { Evaluaciones } from './sections/evaluaciones/evaluaciones';
     MatToolbarModule,
     MatIconModule,
     MatButtonModule,
+    MatTooltipModule,
+    MatMenuModule,
+    MatBadgeModule,
     Inicio,
     Usuarios,
     Cursos,
@@ -29,8 +43,13 @@ import { Evaluaciones } from './sections/evaluaciones/evaluaciones';
     Reportes,
     Configuracion,
     GestionModulos,
+<<<<<<< HEAD
     Evaluaciones
 ],
+=======
+    GestionEvaluaciones // ✅ AGREGADO
+  ],
+>>>>>>> 23319b5e20272b93a5d2c415cacc35697ab7e466
   templateUrl: './dashboard.html',
   styleUrls: ['./dashboard.scss'],
 })
@@ -40,7 +59,17 @@ export class Dashboard implements OnInit {
   cursos: any[] = [];
   usuarios: any[] = [];
 
-  ngOnInit(){
+  constructor(
+    private authService: AuthService,
+    private router: Router
+  ) {}
+
+  ngOnInit() {
+    const currentUser = this.authService.getCurrentUser();
+    if (currentUser) {
+      this.user = currentUser.fullName || 'Administrador';
+    }
+
     window.addEventListener('changeSection', (event: any) => {
       this.section = event.detail;
     });
@@ -52,5 +81,12 @@ export class Dashboard implements OnInit {
 
   agregarCurso() {
     alert('Abrir formulario para crear un nuevo curso');
+  }
+
+  logout() {
+    if (confirm('¿Estás seguro que deseas cerrar sesión?')) {
+      this.authService.logout();
+      this.router.navigate(['/login']);
+    }
   }
 }
