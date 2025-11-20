@@ -1,0 +1,93 @@
+<!-- src/app/admin/pages/dashboard/sections/gamificacion/agregar-gamificacion/agregar-gamificacion.component.html -->
+<div class="form-wrapper">
+  <div class="form-card">
+    <h2>Crear Insignia</h2>
+
+    <form [formGroup]="formulario">
+      <!-- Nombre de la Insignia -->
+      <mat-form-field appearance="outline">
+        <mat-label>Nombre de la Insignia</mat-label>
+        <input 
+          matInput 
+          formControlName="name" 
+          placeholder="Ej: Mejor Desempeño"
+        />
+        <mat-error *ngIf="formulario.get('name')?.hasError('required')">
+          El nombre es requerido
+        </mat-error>
+        <mat-error *ngIf="formulario.get('name')?.hasError('minlength')">
+          Mínimo 3 caracteres
+        </mat-error>
+      </mat-form-field>
+
+      <!-- Criterio para Obtenerla -->
+      <mat-form-field appearance="outline">
+        <mat-label>Criterio para Obtenerla</mat-label>
+        <textarea 
+          matInput 
+          formControlName="criterion" 
+          placeholder="Ej: Completar 3 cursos con calificación superior al 90%"
+          rows="3"
+        ></textarea>
+        <mat-error *ngIf="formulario.get('criterion')?.hasError('required')">
+          El criterio es requerido
+        </mat-error>
+        <mat-error *ngIf="formulario.get('criterion')?.hasError('minlength')">
+          Mínimo 5 caracteres
+        </mat-error>
+      </mat-form-field>
+
+      <div class="row">
+        <!-- Ícono -->
+        <mat-form-field appearance="outline">
+          <mat-label>Ícono</mat-label>
+          <mat-select formControlName="icono">
+            <mat-option *ngFor="let icono of opcionesIconos" [value]="icono.value">
+              <span style="margin-right: 8px;">{{icono.value}}</span> {{icono.label}}
+            </mat-option>
+          </mat-select>
+          <mat-error *ngIf="formulario.get('icono')?.hasError('required')">
+            El ícono es requerido
+          </mat-error>
+        </mat-form-field>
+
+        <!-- Código Único CON AUTOCOMPLETE -->
+        <mat-form-field appearance="outline">
+          <mat-label>Código Único</mat-label>
+          <input 
+            matInput 
+            formControlName="code" 
+            placeholder="Ej: MEJOR_DESEMPENO_001"
+            style="text-transform: uppercase; font-family: monospace;"
+            [matAutocomplete]="auto"
+          />
+          <mat-autocomplete #auto="matAutocomplete">
+            <mat-option *ngFor="let tipo of tiposLogros" [value]="tipo">
+              {{tipo}}
+            </mat-option>
+          </mat-autocomplete>
+          <mat-error *ngIf="formulario.get('code')?.hasError('required')">
+            El código es requerido
+          </mat-error>
+          <mat-error *ngIf="formulario.get('code')?.hasError('pattern')">
+            Solo mayúsculas, números, _ y -
+          </mat-error>
+          <mat-hint>Puede usar códigos predefinidos del sistema</mat-hint>
+        </mat-form-field>
+      </div>
+
+      <!-- Vista previa del ícono -->
+      <div class="icon-preview" *ngIf="formulario.get('icono')?.value">
+        <strong>Vista previa:</strong> 
+        <span class="preview-icon">{{formulario.get('icono')?.value}}</span>
+        {{getIconLabel(formulario.get('icono')?.value)}}
+      </div>
+
+      <!-- Botones -->
+      <div class="buttons">
+        <button mat-button class="cancelar" (click)="cancelar()" type="button">Cancelar</button>
+        <button mat-raised-button class="guardar" (click)="guardar()" type="button">Crear Insignia</button>
+      </div>
+    </form>
+  </div>
+</div>
