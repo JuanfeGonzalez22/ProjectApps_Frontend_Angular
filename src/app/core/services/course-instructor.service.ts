@@ -24,8 +24,8 @@ export interface CourseDetails {
   providedIn: 'root'
 })
 export class CourseInstructorService {
-  private apiUrl = 'http://localhost:8080/api/v1/course-instructors';
-  private coursesUrl = 'http://localhost:8080/api/v1/courses';
+  private apiUrl = 'http://localhost:8089/api/v1/course-instructors';
+  private coursesUrl = 'http://localhost:8089/api/v1/courses';
 
   constructor(private http: HttpClient) {}
 

@@ -8,7 +8,7 @@ import { ReportStaticsDTO, ReportDTO, CourseReport } from '../models/report-stat
   providedIn: 'root'
 })
 export class ReportService {
-  private apiUrl = 'http://localhost:8080/api/v1/reports';
+  private apiUrl = 'http://localhost:8089/api/v1/reports';
 
   constructor(private http: HttpClient) { }
 

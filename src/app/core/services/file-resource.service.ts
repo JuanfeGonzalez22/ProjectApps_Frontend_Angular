@@ -17,7 +17,7 @@ export interface FileResourceDTO {
   providedIn: 'root'
 })
 export class FileResourceService {
-  private apiUrl = 'http://localhost:8080/api/v1/file-resources';
+  private apiUrl = 'http://localhost:8089/api/v1/file-resources';
 
   constructor(private http: HttpClient) {}
 

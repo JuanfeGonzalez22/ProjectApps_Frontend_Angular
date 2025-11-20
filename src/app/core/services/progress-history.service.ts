@@ -9,7 +9,7 @@ import { ProgressHistory } from '../models/progress-history.model';
   providedIn: 'root'
 })
 export class ProgressHistoryService {
-  private apiUrl = 'http://localhost:8080/api/v1/progress';
+  private apiUrl = 'http://localhost:8089/api/v1/progress';
 
   constructor(private http: HttpClient) {}
 
