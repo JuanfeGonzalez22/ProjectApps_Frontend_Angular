@@ -1,0 +1,112 @@
+.form-wrapper {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  margin-top: 40px;
+}
+
+.form-card {
+  background: #ffffff;
+  width: 700px;
+  padding: 35px;
+  border-radius: 10px;
+  box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.10);
+  border: 1px solid #e0e0e0;
+
+  h2 {
+    font-size: 24px;
+    font-weight: 600;
+    margin-bottom: 25px;
+    color: #333;
+    text-align: center;
+  }
+
+  .selection-preview {
+    background: #e8f5e8;
+    padding: 15px;
+    border-radius: 8px;
+    margin-bottom: 25px;
+    border-left: 4px solid #4caf50;
+
+    h4 {
+      margin: 0 0 10px 0;
+      color: #2e7d32;
+      font-size: 16px;
+    }
+
+    .preview-item {
+      margin: 5px 0;
+      color: #555;
+      
+      strong {
+        color: #333;
+      }
+    }
+  }
+
+  mat-form-field {
+    width: 100%;
+    margin-bottom: 20px;
+  }
+
+  .instructor-option, .course-option {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    
+    .instructor-name, .course-title {
+      font-weight: 500;
+    }
+    
+    .instructor-email, .course-level {
+      color: #666;
+      font-size: 0.9em;
+    }
+  }
+
+  .no-data-hint {
+    color: #f44336 !important;
+  }
+
+  .buttons {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 30px;
+
+    button {
+      height: 45px;
+      font-weight: 600;
+      border-radius: 8px;
+      font-size: 16px;
+      
+      mat-icon {
+        margin-right: 8px;
+      }
+    }
+
+    .cancelar {
+      background: #d6d6d6;
+      color: #333;
+      width: 45%;
+      
+      &:hover {
+        background: #c0c0c0;
+      }
+    }
+
+    .guardar {
+      background: #4caf50;
+      color: white;
+      width: 45%;
+      
+      &:hover:not([disabled]) {
+        background: #388e3c;
+      }
+      
+      &:disabled {
+        background: #cccccc;
+        color: #666666;
+      }
+    }
+  }
+}

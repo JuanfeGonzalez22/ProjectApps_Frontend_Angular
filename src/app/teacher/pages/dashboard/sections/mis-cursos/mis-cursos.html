@@ -1,0 +1,96 @@
+<div class="cursos-container">
+  <div class="header">
+    <h1>Mis Cursos</h1>
+    <p class="subtitle">Explora y gestiona tus cursos asignados</p>
+  </div>
+
+  <!-- Loading -->
+  <div *ngIf="loading" class="loading">
+    <p>Cargando tus cursos...</p>
+  </div>
+
+  <!-- Error -->
+  <div *ngIf="error && !loading" class="error">
+    <p>{{ error }}</p>
+  </div>
+
+  <!-- Cursos -->
+  <div *ngIf="!loading && !error" class="cursos-grid">
+    <mat-card *ngFor="let curso of cursos" class="curso-card">
+      <mat-card-header>
+        <mat-card-title>{{curso.nombre}}</mat-card-title>
+        <mat-card-subtitle>{{curso.categoria}}</mat-card-subtitle>
+      </mat-card-header>
+      
+      <mat-card-content>
+        <p class="curso-descripcion">{{curso.descripcion}}</p>
+        
+        <div class="curso-meta">
+          <div class="meta-item">
+            <mat-icon>schedule</mat-icon>
+            <span>{{curso.duracion || 'Duración no especificada'}}</span>
+          </div>
+          <div class="meta-item">
+            <mat-icon>school</mat-icon>
+            <span [class]="'nivel ' + (curso.nivel?.toLowerCase() || 'basico')">
+              {{curso.nivel || 'Básico'}}
+            </span>
+          </div>
+        </div>
+        
+        <div class="curso-stats">
+          <div class="stat">
+            <mat-icon>group</mat-icon>
+            <span>{{curso.estudiantes}} estudiantes</span>
+          </div>
+          <div class="stat">
+            <mat-icon>assignment</mat-icon>
+            <span>{{curso.modulos}} módulos</span>
+          </div>
+          <div class="stat">
+            <mat-icon>quiz</mat-icon>
+            <span>{{curso.evaluaciones}} evaluaciones</span>
+          </div>
+        </div>
+
+        <div class="progress-section">
+          <label>Progreso del curso</label>
+          <mat-progress-bar 
+            mode="determinate" 
+            [value]="curso.progreso"
+            color="primary">
+          </mat-progress-bar>
+          <span class="progress-text">{{curso.progreso}}%</span>
+        </div>
+      </mat-card-content>
+
+      <mat-card-actions>
+        <button mat-button color="primary" (click)="verDetallesCurso(curso)">
+          <mat-icon>visibility</mat-icon>
+          Ver Detalles
+        </button>
+        <button mat-button color="accent" (click)="editarCurso(curso)">
+          <mat-icon>edit</mat-icon>
+          Gestionar
+        </button>
+        <button mat-button (click)="verReportesCurso(curso)">
+          <mat-icon>bar_chart</mat-icon>
+          Reportes
+        </button>
+      </mat-card-actions>
+    </mat-card>
+  </div>
+
+  <!-- Sin cursos -->
+  <div *ngIf="!loading && !error && cursos.length === 0" class="no-courses">
+    <mat-card>
+      <mat-card-content>
+        <div class="no-courses-content">
+          <mat-icon>menu_book</mat-icon>
+          <h3>No tienes cursos asignados</h3>
+          <p>Contacta al administrador para que te asigne cursos.</p>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div>

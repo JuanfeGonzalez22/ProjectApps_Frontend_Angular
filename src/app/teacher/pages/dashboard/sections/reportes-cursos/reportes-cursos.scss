@@ -1,0 +1,124 @@
+.reportes-container {
+  padding: 1rem;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.controls {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+}
+
+.metrics-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.metric-card {
+  text-align: center;
+}
+
+.metric {
+  margin: 1rem 0;
+}
+
+.metric-value {
+  display: block;
+  font-size: 2.5rem;
+  font-weight: bold;
+  color: #2e7be7;
+}
+
+.metric-label {
+  color: #666;
+  font-size: 0.9rem;
+}
+
+.detailed-reports {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+}
+
+.modulo-progress {
+  margin: 1rem 0;
+}
+
+.modulo-info {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 0.5rem;
+}
+
+.modulo-name {
+  font-weight: 500;
+}
+
+.modulo-percent {
+  color: #2e7be7;
+  font-weight: bold;
+}
+
+.grades-distribution {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.grade-range {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.range-label {
+  min-width: 80px;
+  font-size: 0.9rem;
+}
+
+.range-bar {
+  flex: 1;
+  height: 8px;
+  background-color: #e0e0e0;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.range-fill {
+  height: 100%;
+  background-color: #2e7be7;
+  transition: width 0.3s ease;
+}
+
+.range-percent {
+  min-width: 40px;
+  text-align: right;
+  font-size: 0.9rem;
+  color: #666;
+}
+
+@media (max-width: 768px) {
+  .detailed-reports {
+    grid-template-columns: 1fr;
+  }
+  
+  .header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  
+  .controls {
+    flex-direction: column;
+    width: 100%;
+  }
+}

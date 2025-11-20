@@ -7,7 +7,7 @@ import { CourseData, CourseDTO } from '../models/course.model';
   providedIn: 'root'
 })
 export class CourseService {
-  private apiUrl = 'http://localhost:8080/api/v1/courses';
+  private apiUrl = 'http://localhost:8089/api/v1/courses';
 
   constructor(private http: HttpClient) {}
 
@@ -56,4 +56,11 @@ export class CourseService {
       headers: this.getHeaders()
     });
   }
+
+  getAllCourses(): Observable<any[]> {
+  return this.http.get<any[]>(this.apiUrl, {
+    headers: this.getHeaders()
+  });
+}
+
 }

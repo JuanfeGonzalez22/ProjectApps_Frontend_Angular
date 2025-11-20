@@ -1,0 +1,154 @@
+<!-- VISTA TABLA -->
+<div *ngIf="vista === 'tabla'">
+  <h1>🎯 Gestión de Instructores por Curso</h1>
+
+  <!-- BARRA DE BÚSQUEDA -->
+  <mat-form-field appearance="outline" class="search-bar">
+    <mat-label>Buscar asignaciones</mat-label>
+    <input
+      matInput
+      placeholder="Ejemplo: Spring Boot, Juan Pérez, 123"
+      [(ngModel)]="searchTerm"
+      (input)="filtrarAsignaciones()"
+    />
+    <button mat-icon-button matSuffix (click)="filtrarAsignaciones()">
+      <mat-icon>search</mat-icon>
+    </button>
+    <button
+      mat-icon-button
+      matSuffix
+      *ngIf="searchTerm"
+      (click)="limpiarBusqueda()"
+      matTooltip="Limpiar búsqueda"
+    >
+      <mat-icon>close</mat-icon>
+    </button>
+  </mat-form-field>
+<!-- 
+  ESTADÍSTICAS RÁPIDAS
+  <div class="stats-container" *ngIf="asignaciones.length > 0">
+    <mat-card class="stat-card">
+      <mat-card-content>
+        <div class="stat-number">{{ asignaciones.length }}</div>
+        <div class="stat-label">Asignaciones Totales</div>
+      </mat-card-content>
+    </mat-card>
+    
+    <mat-card class="stat-card">
+      <mat-card-content>
+        <div class="stat-number">{{ instructores.length }}</div>
+        <div class="stat-label">Instructores</div>
+      </mat-card-content>
+    </mat-card>
+    
+    <mat-card class="stat-card">
+      <mat-card-content>
+        <div class="stat-number">{{ cursosDisponibles.length }}</div>
+        <div class="stat-label">Cursos Disponibles</div>
+      </mat-card-content>
+    </mat-card>
+  </div> -->
+
+  <!-- MENSAJES DE ESTADO -->
+  <div *ngIf="asignacionesFiltradas.length === 0 && searchTerm" class="no-results">
+    <p>❌ No se encontraron asignaciones que coincidan con "{{ searchTerm }}"</p>
+    <p class="suggestions">
+      <small>Prueba buscar por: nombre del curso, instructor o ID</small>
+    </p>
+  </div>
+
+  <div *ngIf="asignacionesFiltradas.length === 0 && !searchTerm && asignaciones.length === 0" class="no-data">
+    <p>📭 No hay asignaciones de instructores registradas</p>
+    <button mat-raised-button color="primary" (click)="nuevaAsignacion()">
+      <mat-icon>person_add</mat-icon>
+      Crear Primera Asignación
+    </button>
+  </div>
+
+  <!-- TABLA DE ASIGNACIONES -->
+  <table class="assignment-table" *ngIf="asignacionesFiltradas.length > 0">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Curso</th>
+        <th>Instructor</th>
+        <th>Fecha Asignación</th>
+        <th>Acciones</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <tr
+        *ngFor="let asignacion of asignacionesFiltradas"
+        (click)="seleccionarAsignacion(asignacion)"
+        [class.seleccionado]="asignacionSeleccionada?.id === asignacion.id"
+      >
+        <td>{{ asignacion.id }}</td>
+        <td>
+          <strong>{{ asignacion.courseName }}</strong>
+        </td>
+        <td>
+          <div class="instructor-info">
+            <span class="instructor-name">{{ asignacion.instructorName }}</span>
+            <span class="instructor-id">ID: {{ asignacion.instructorId }}</span>
+          </div>
+        </td>
+        <td>{{ formatearFecha(asignacion.assignedAt) }}</td>
+        <td>
+          <button 
+            mat-icon-button 
+            color="warn"
+            (click)="desasignarInstructor($event, asignacion)"
+            matTooltip="Desasignar instructor"
+          >
+            <mat-icon>person_remove</mat-icon>
+          </button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- BOTONES DE ACCIÓN -->
+  <div class="bottom-action">
+    <button 
+      mat-raised-button 
+      color="warn"
+      class="desasignar"
+      [disabled]="!asignacionSeleccionada"
+      (click)="desasignarInstructor($event, asignacionSeleccionada!)"
+      matTooltip="Desasignar instructor seleccionado"
+    >
+      <mat-icon>person_remove</mat-icon>
+      Desasignar
+    </button>
+
+    <button 
+      mat-raised-button 
+      color="accent" 
+      class="nueva"
+      (click)="nuevaAsignacion()"
+    >
+      <mat-icon>person_add</mat-icon>
+      Asignar Instructor
+    </button>
+
+    <button 
+      mat-raised-button 
+      class="volver" 
+      (click)="volver()"
+    >
+      <mat-icon>arrow_back</mat-icon>
+      Volver
+    </button>
+  </div>
+</div>
+
+<!-- MODAL ASIGNAR INSTRUCTOR -->
+<div *ngIf="vista === 'asignar'">
+  <app-asignar-instructor
+    [instructores]="instructores"
+    [cursosDisponibles]="cursosDisponibles"
+    (volver)="volverATabla()"
+    (asignacionCreada)="onAsignacionCreada($event)">
+  </app-asignar-instructor>
+</div>

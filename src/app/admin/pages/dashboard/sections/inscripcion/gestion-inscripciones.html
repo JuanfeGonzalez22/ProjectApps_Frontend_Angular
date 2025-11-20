@@ -1,0 +1,132 @@
+<!-- VISTA TABLA -->
+<div *ngIf="vista === 'tabla'">
+  <h1>Gestión de Inscripciones</h1>
+
+  <mat-form-field appearance="outline" class="search-bar">
+    <mat-label>Buscar inscripción</mat-label>
+    <input
+      matInput
+      placeholder="Ejemplo: Juan Pérez, Spring Boot, ACTIVO"
+      [(ngModel)]="searchTerm"
+      (input)="filtrarInscripciones()"
+    />
+    <button mat-icon-button matSuffix (click)="filtrarInscripciones()">
+      <mat-icon>search</mat-icon>
+    </button>
+    <button
+      mat-icon-button
+      matSuffix
+      *ngIf="searchTerm"
+      (click)="limpiarBusqueda()"
+      matTooltip="Limpiar búsqueda"
+    >
+      <mat-icon>close</mat-icon>
+    </button>
+  </mat-form-field>
+
+  <!-- Mostrar si no hay resultados -->
+<!-- En gestion-inscripciones.html - mejora el mensaje -->
+<div *ngIf="inscripcionesFiltradas.length === 0 && searchTerm" class="no-results">
+  <p> No se encontraron inscripciones que coincidan con "{{ searchTerm }}"</p>
+  <p class="suggestions">
+    <small>Prueba buscar por: ID, nombre de usuario, email, curso o estado</small>
+  </p>
+</div>
+
+  <!-- Mostrar si no hay datos -->
+  <div *ngIf="inscripcionesFiltradas.length === 0 && !searchTerm" class="no-data">
+    <p>📭 No hay inscripciones registradas</p>
+    <button mat-raised-button color="primary" (click)="nuevaInscripcion()">
+      <mat-icon>add</mat-icon>
+      Crear Primera Inscripción
+    </button>
+  </div>
+
+  <table class="inscription-table" *ngIf="inscripcionesFiltradas.length > 0">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Usuario</th>
+        <th>Email</th>
+        <th>Curso</th>
+        <th>Progreso</th>
+        <th>Fecha Inscripción</th>
+        <th>Estado</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <tr
+        *ngFor="let inscripcion of inscripcionesFiltradas"
+        (click)="seleccionarInscripcion(inscripcion)"
+        [class.seleccionado]="inscripcionSeleccionada?.id === inscripcion.id"
+      >
+        <td>{{ inscripcion.id }}</td>
+        <td>{{ inscripcion.userName }}</td>
+        <td>{{ inscripcion.userEmail }}</td>
+        <td>{{ inscripcion.courseTitle }}</td>
+        <td>{{ formatearProgreso(inscripcion.progress) }}</td>
+        <td>{{ formatearFecha(inscripcion.enrollmentDate) }}</td>
+        <td>
+          <span [class]="'status-' + inscripcion.status.toLowerCase()">
+            {{ inscripcion.status }}
+          </span>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- BOTONES DE ACCIÓN -->
+  <div class="bottom-action">
+    <button 
+      mat-raised-button 
+      color="warn"
+      class="eliminar"
+      [disabled]="!inscripcionSeleccionada"
+      (click)="eliminarInscripcion()">
+      Eliminar
+    </button>
+
+    <button 
+      mat-raised-button 
+      color="primary" 
+      class="editar"
+      [disabled]="!inscripcionSeleccionada"
+      (click)="editarInscripcion()">
+      Editar
+    </button>
+
+    <button 
+      mat-raised-button 
+      color="accent" 
+      class="nueva"
+      (click)="nuevaInscripcion()">
+      <mat-icon>add</mat-icon>
+      Nueva Inscripción
+    </button>
+
+    <button 
+      mat-raised-button 
+      class="volver" 
+      (click)="volver()">
+      Volver
+    </button>
+  </div>
+</div>
+
+<!-- ✅ MODAL AGREGAR INSCRIPCIÓN -->
+<div *ngIf="vista === 'agregar'">
+  <app-agregar-inscripcion
+    (volver)="volverATabla()"
+    (inscripcionCreada)="onInscripcionCreada($event)">
+  </app-agregar-inscripcion>
+</div>
+
+<!-- ✅ MODAL EDITAR INSCRIPCIÓN -->
+<div *ngIf="vista === 'editar'">
+  <app-editar-inscripcion
+    [inscripcion]="inscripcionSeleccionada!"
+    (cancelar)="volverATabla()"
+    (inscripcionActualizada)="onInscripcionActualizada($event)">
+  </app-editar-inscripcion>
+</div>
