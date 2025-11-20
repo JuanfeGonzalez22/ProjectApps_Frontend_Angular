@@ -37,7 +37,7 @@ export interface AuthResponse {
   providedIn: 'root'
 })
 export class AuthService {
-  private apiUrl = 'http://localhost:8080/api/v1/auth';
+  private apiUrl = 'http://localhost:8089/api/v1/auth';
   private currentUserSubject = new BehaviorSubject<User | null>(null);
   public currentUser$ = this.currentUserSubject.asObservable();
 
@@ -122,4 +122,30 @@ export class AuthService {
     const userStr = localStorage.getItem('user');
     return userStr ? JSON.parse(userStr) : null;
   }
+
+  // Agrega estos métodos en tu auth.service.ts
+
+// ✅ VERIFICAR ROLES
+isAdmin(): boolean {
+  const user = this.getCurrentUser();
+  return user?.role === 'ADMIN'; // Ajusta según tus roles
+}
+
+isTeacher(): boolean {
+  const user = this.getCurrentUser();
+  return user?.role === 'TEACHER'; // Ajusta según tus roles
+}
+
+isStudent(): boolean {
+  const user = this.getCurrentUser();
+  return user?.role === 'STUDENT'; // Ajusta según tus roles
+}
+
+// ✅ VERIFICAR MÚLTIPLES ROLES
+hasAnyRole(roles: string[]): boolean {
+  const user = this.getCurrentUser();
+  return user?.role ? roles.includes(user.role) : false;
+}
+
+
 }

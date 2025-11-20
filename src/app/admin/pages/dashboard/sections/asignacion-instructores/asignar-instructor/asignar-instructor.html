@@ -1,0 +1,94 @@
+<!-- src/app/admin/pages/dashboard/sections/asignacion-instructores/asignar-instructor/asignar-instructor.html -->
+<div class="form-wrapper">
+  <div class="form-card">
+
+    <h2>Asignar Instructor a Curso</h2>
+
+    <!-- RESUMEN DE SELECCIONES -->
+    <div class="selection-preview" *ngIf="instructorSeleccionado || cursoSeleccionado">
+      <h4>Resumen de la asignación:</h4>
+      <div class="preview-item" *ngIf="instructorSeleccionado">
+        <strong>Instructor:</strong> {{ instructorSeleccionado }}
+      </div>
+      <div class="preview-item" *ngIf="cursoSeleccionado">
+        <strong>Curso:</strong> {{ cursoSeleccionado }}
+      </div>
+    </div>
+
+    <form [formGroup]="asignacionForm">
+
+      <!-- COMBO INSTRUCTORES -->
+      <mat-form-field appearance="outline">
+        <mat-label>Seleccionar Instructor</mat-label>
+        <mat-select formControlName="instructorId">
+          <mat-option value="">Selecciona un instructor</mat-option>
+          <mat-option 
+            *ngFor="let instructor of instructores" 
+            [value]="instructor.id">
+            <div class="instructor-option">
+              <span class="instructor-name">{{ instructor.name || instructor.fullName }}</span>
+              <span class="instructor-email"> - {{ instructor.email }}</span>
+            </div>
+          </mat-option>
+        </mat-select>
+        <mat-error *ngIf="asignacionForm.get('instructorId')?.hasError('required')">
+          Debes seleccionar un instructor
+        </mat-error>
+        
+        <!-- CONTADOR DE INSTRUCTORES -->
+        <mat-hint *ngIf="instructores.length > 0">
+          {{ instructores.length }} instructores disponibles
+        </mat-hint>
+        <mat-hint *ngIf="instructores.length === 0" class="no-data-hint">
+          No hay instructores disponibles
+        </mat-hint>
+      </mat-form-field>
+
+      <!-- COMBO CURSOS DISPONIBLES -->
+      <mat-form-field appearance="outline">
+        <mat-label>Seleccionar Curso</mat-label>
+        <mat-select formControlName="courseId">
+          <mat-option value="">Selecciona un curso</mat-option>
+          <mat-option 
+            *ngFor="let curso of cursosDisponibles" 
+            [value]="curso.id">
+            <div class="course-option">
+              <span class="course-title">{{ curso.title }}</span>
+              <span class="course-level"> - Nivel {{ curso.level }}</span>
+            </div>
+          </mat-option>
+        </mat-select>
+        <mat-error *ngIf="asignacionForm.get('courseId')?.hasError('required')">
+          Debes seleccionar un curso
+        </mat-error>
+        
+        <!-- CONTADOR DE CURSOS -->
+        <mat-hint *ngIf="cursosDisponibles.length > 0">
+          {{ cursosDisponibles.length }} cursos disponibles
+        </mat-hint>
+        <mat-hint *ngIf="cursosDisponibles.length === 0" class="no-data-hint">
+          No hay cursos disponibles (todos tienen instructor asignado)
+        </mat-hint>
+      </mat-form-field>
+
+      <!-- BOTONES -->
+      <div class="buttons">
+        <button mat-button class="cancelar" (click)="cancelar()">
+          <mat-icon>arrow_back</mat-icon>
+          Cancelar
+        </button>
+        <button 
+          mat-raised-button 
+          class="guardar" 
+          (click)="guardar()"
+          [disabled]="!asignacionForm.valid || instructores.length === 0 || cursosDisponibles.length === 0"
+        >
+          <mat-icon>person_add</mat-icon>
+          Asignar Instructor
+        </button>
+      </div>
+
+    </form>
+
+  </div>
+</div>

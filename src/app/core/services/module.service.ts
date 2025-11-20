@@ -7,7 +7,7 @@ import { ModuleData, ModuleDTO } from '../models/module.model';
   providedIn: 'root'
 })
 export class ModuleService {
-  private apiUrl = 'http://localhost:8080/api/v1/modules';
+  private apiUrl = 'http://localhost:8089/api/v1/modules';
 
   constructor(private http: HttpClient) {}
 

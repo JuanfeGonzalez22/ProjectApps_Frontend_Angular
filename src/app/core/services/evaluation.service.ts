@@ -9,8 +9,8 @@ import { EvaluationData, EvaluationDTO, EvaluationAttempt } from '../models/eval
   providedIn: 'root'
 })
 export class EvaluationService {
-  private apiUrl = 'http://localhost:8080/api/v1/evaluaciones';
-  private attemptsUrl = 'http://localhost:8080/api/v1/evaluation-attempts';
+  private apiUrl = 'http://localhost:8089/api/v1/evaluaciones';
+  private attemptsUrl = 'http://localhost:8089/api/v1/evaluation-attempts';
 
   constructor(private http: HttpClient) {}
 

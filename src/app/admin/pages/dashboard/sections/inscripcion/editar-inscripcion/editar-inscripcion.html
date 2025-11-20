@@ -1,0 +1,65 @@
+<!-- src/app/admin/pages/dashboard/sections/inscripciones/editar-inscripcion/editar-inscripcion.html -->
+<div class="form-wrapper">
+  <div class="form-card">
+
+    <h2>Editar Inscripción</h2>
+    
+    <div class="info-actual" *ngIf="inscripcion">
+      <p><strong>Usuario actual:</strong> {{ inscripcion.userName }} ({{ inscripcion.userEmail }})</p>
+      <p><strong>Curso actual:</strong> {{ inscripcion.courseTitle }}</p>
+      <p><strong>Progreso:</strong> {{ inscripcion.progress }}%</p>
+      <p><strong>Fecha de inscripción:</strong> {{ inscripcion.enrollmentDate }}</p>
+    </div>
+
+    <form [formGroup]="inscripcionForm">
+
+      <!-- ✅ CAMBIO: Combo para Usuario -->
+      <mat-form-field appearance="outline">
+        <mat-label>Usuario</mat-label>
+        <mat-select formControlName="userId">
+          <mat-option value="">Selecciona un usuario</mat-option>
+          <mat-option 
+            *ngFor="let usuario of usuarios" 
+            [value]="usuario.id">
+            {{ usuario.name || usuario.fullName }} - {{ usuario.email }}
+          </mat-option>
+        </mat-select>
+        <mat-error *ngIf="inscripcionForm.get('userId')?.hasError('required')">
+          Debes seleccionar un usuario
+        </mat-error>
+      </mat-form-field>
+
+      <!-- ✅ CAMBIO: Combo para Curso -->
+      <mat-form-field appearance="outline">
+        <mat-label>Curso</mat-label>
+        <mat-select formControlName="courseId">
+          <mat-option value="">Selecciona un curso</mat-option>
+          <mat-option 
+            *ngFor="let curso of cursos" 
+            [value]="curso.id">
+            {{ curso.title }} - Nivel {{ curso.level }}
+          </mat-option>
+        </mat-select>
+        <mat-error *ngIf="inscripcionForm.get('courseId')?.hasError('required')">
+          Debes seleccionar un curso
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Estado</mat-label>
+        <mat-select formControlName="status">
+          <mat-option *ngFor="let estado of estados" [value]="estado">
+            {{ estado }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <div class="buttons">
+        <button mat-button class="cancelar" (click)="onCancelar()">Cancelar</button>
+        <button mat-raised-button class="guardar" (click)="guardar()">Actualizar</button>
+      </div>
+
+    </form>
+
+  </div>
+</div>

@@ -4,7 +4,7 @@ import { provideRouter, Routes } from '@angular/router';
 import { provideHttpClient, withInterceptors } from '@angular/common/http';
 import { provideAnimations } from '@angular/platform-browser/animations';
 import { LoginComponent } from './auth/pages/login/login';
-import { authInterceptor } from './auth/interceptors/auth.interceptor'; 
+import { authInterceptor } from './core/interceptors/jwt.interceptor';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'auth/login', pathMatch: 'full' },

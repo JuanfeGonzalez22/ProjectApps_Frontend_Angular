@@ -1,0 +1,70 @@
+<div class="inicio-container">
+  <h1>Dashboard del Instructor</h1>
+  
+  <div class="stats-grid">
+    <mat-card class="stat-card">
+      <mat-card-content>
+        <div class="stat-content">
+          <mat-icon class="stat-icon">menu_book</mat-icon>
+          <div class="stat-info">
+            <h3>{{stats.cursosActivos}}</h3>
+            <p>Cursos Activos</p>
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <mat-card class="stat-card">
+      <mat-card-content>
+        <div class="stat-content">
+          <mat-icon class="stat-icon">assignment</mat-icon>
+          <div class="stat-info">
+            <h3>{{stats.evaluacionesPendientes}}</h3>
+            <p>Evaluaciones Pendientes</p>
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <mat-card class="stat-card">
+      <mat-card-content>
+        <div class="stat-content">
+          <mat-icon class="stat-icon">group</mat-icon>
+          <div class="stat-info">
+            <h3>{{stats.estudiantesActivos}}</h3>
+            <p>Estudiantes Activos</p>
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <mat-card class="stat-card">
+      <mat-card-content>
+        <div class="stat-content">
+          <mat-icon class="stat-icon">trending_up</mat-icon>
+          <div class="stat-info">
+            <h3>{{stats.completacionPromedio}}%</h3>
+            <p>Completación Promedio</p>
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </div>
+
+  <div class="recent-activity">
+    <mat-card>
+      <mat-card-header>
+        <mat-card-title>Actividad Reciente</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <div class="activity-list">
+          <div *ngFor="let actividad of actividadReciente" class="activity-item">
+            <mat-icon>{{actividad.icono}}</mat-icon>
+            <span>{{actividad.descripcion}}</span>
+            <span class="time">{{actividad.tiempo}}</span>
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div>
