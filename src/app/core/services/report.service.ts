@@ -1,6 +1,6 @@
-// src/app/core/services/repor.service.ts
+// src/app/core/services/report.service.ts
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { ReportStaticsDTO, ReportDTO, CourseReport } from '../models/report-statics.dto';
 
@@ -8,43 +8,66 @@ import { ReportStaticsDTO, ReportDTO, CourseReport } from '../models/report-stat
   providedIn: 'root'
 })
 export class ReportService {
-  private apiUrl = 'http://localhost:8080/api/v1/reports';
-
+  private apiUrl = 'http://localhost:8089/api/v1/reports';
 
   constructor(private http: HttpClient) { }
 
-  // Crear nuevo reporte
+  // ✅ AGREGA ESTE MÉTODO (igual que los otros servicios)
+  private getHeaders(): HttpHeaders {
+    const token = localStorage.getItem('token');
+
+    if (token) {
+      return new HttpHeaders({
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json'
+      });
+    }
+
+    return new HttpHeaders({
+      'Content-Type': 'application/json'
+    });
+  }
+
+  // ✅ ACTUALIZA TODOS LOS MÉTODOS CON HEADERS
   createReport(report: ReportDTO): Observable<ReportStaticsDTO> {
-    return this.http.post<ReportStaticsDTO>(this.apiUrl, report);
+    return this.http.post<ReportStaticsDTO>(this.apiUrl, report, {
+      headers: this.getHeaders()
+    });
   }
 
-  // Obtener todos los reportes
   getAllReports(): Observable<ReportStaticsDTO[]> {
-    return this.http.get<ReportStaticsDTO[]>(this.apiUrl);
+    return this.http.get<ReportStaticsDTO[]>(this.apiUrl, {
+      headers: this.getHeaders()
+    });
   }
 
-  // Obtener reporte por ID
   getReportById(id: number): Observable<ReportStaticsDTO> {
-    return this.http.get<ReportStaticsDTO>(`${this.apiUrl}/${id}`);
+    return this.http.get<ReportStaticsDTO>(`${this.apiUrl}/${id}`, {
+      headers: this.getHeaders()
+    });
   }
 
-  // Actualizar reporte
   updateReport(id: number, report: ReportDTO): Observable<ReportStaticsDTO> {
-    return this.http.put<ReportStaticsDTO>(`${this.apiUrl}/${id}`, report);
+    return this.http.put<ReportStaticsDTO>(`${this.apiUrl}/${id}`, report, {
+      headers: this.getHeaders()
+    });
   }
 
-  // Eliminar reporte
   deleteReport(id: number): Observable<void> {
-    return this.http.delete<void>(`${this.apiUrl}/${id}`);
+    return this.http.delete<void>(`${this.apiUrl}/${id}`, {
+      headers: this.getHeaders()
+    });
   }
 
-  // Generar reporte de instructor
   generateInstructorReport(instructorId: number): Observable<any> {
-    return this.http.get<any>(`${this.apiUrl}/instructor/${instructorId}`);
+    return this.http.get<any>(`${this.apiUrl}/instructor/${instructorId}`, {
+      headers: this.getHeaders()
+    });
   }
 
-  // Obtener reportes de cursos (si tienes este endpoint)
   getCourseReports(): Observable<CourseReport[]> {
-    return this.http.get<CourseReport[]>(`${this.apiUrl}/courses`);
+    return this.http.get<CourseReport[]>(`${this.apiUrl}/courses`, {
+      headers: this.getHeaders()
+    });
   }
 }

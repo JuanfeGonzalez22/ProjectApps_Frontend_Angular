@@ -1,0 +1,115 @@
+<div class="calificar-container">
+  <div class="header">
+    <h1>Calificar Evaluaciones</h1>
+    <p class="subtitle">Revisa y califica las respuestas de los estudiantes</p>
+  </div>
+
+  <!-- Filtros -->
+  <div class="filters">
+    <div class="filter-group">
+      <button mat-button [matMenuTriggerFor]="statusMenu" class="filter-btn">
+        <mat-icon>filter_list</mat-icon>
+        Estado: {{filtroEstado === 'pendientes' ? 'Pendientes' : 'Calificados'}}
+      </button>
+      <mat-menu #statusMenu="matMenu">
+        <button mat-menu-item (click)="filtroEstado = 'pendientes'; aplicarFiltros()">
+          <mat-icon>schedule</mat-icon>
+          Pendientes
+        </button>
+        <button mat-menu-item (click)="filtroEstado = 'calificados'; aplicarFiltros()">
+          <mat-icon>check_circle</mat-icon>
+          Calificados
+        </button>
+      </mat-menu>
+    </div>
+
+    <div class="stats">
+      <span class="stat-item">
+  <mat-icon>assignment</mat-icon>
+  Total: {{cantidadTotal}}
+</span>
+<span class="stat-item">
+  <mat-icon>schedule</mat-icon>
+  Pendientes: {{cantidadPendientes}}
+</span>
+    </div>
+  </div>
+
+  <!-- Loading -->
+  <div *ngIf="loading" class="loading">
+    <mat-spinner diameter="40"></mat-spinner>
+    <p>Cargando evaluaciones pendientes...</p>
+  </div>
+
+  <!-- Error -->
+  <div *ngIf="error && !loading" class="error">
+    <mat-icon>error_outline</mat-icon>
+    <p>{{ error }}</p>
+  </div>
+
+  <!-- Lista de Respuestas -->
+  <div *ngIf="!loading && !error" class="respuestas-list">
+    <mat-card *ngFor="let respuesta of respuestasFiltradas" class="respuesta-card">
+      <mat-card-header>
+        <mat-card-title>Evaluación #{{respuesta.evaluationId}}</mat-card-title>
+        <mat-card-subtitle>
+          Estudiante ID: {{respuesta.userId}} • 
+          Enviado: {{formatearFecha(respuesta.date)}}
+        </mat-card-subtitle>
+        <div class="spacer"></div>
+        <mat-chip [color]="getColorEstado(respuesta)" selected>
+          {{getEstadoRespuesta(respuesta)}}
+        </mat-chip>
+      </mat-card-header>
+      
+      <mat-card-content>
+        <div class="respuesta-info">
+          <div class="info-item">
+            <strong>ID Respuesta:</strong> {{respuesta.id}}
+          </div>
+          <div class="info-item">
+            <strong>ID Evaluación:</strong> {{respuesta.evaluationId}}
+          </div>
+          <div class="info-item" *ngIf="respuesta.score !== null">
+            <strong>Calificación:</strong> 
+            <span class="score">{{respuesta.score}}/100</span>
+          </div>
+        </div>
+        
+        <div class="acciones">
+          <button mat-raised-button color="primary" 
+                  (click)="calificarRespuesta(respuesta)"
+                  *ngIf="respuesta.score === null">
+            <mat-icon>grade</mat-icon>
+            Calificar
+          </button>
+          <button mat-button color="accent" (click)="verEntrega(respuesta)">
+            <mat-icon>visibility</mat-icon>
+            Ver Entrega
+          </button>
+          <button mat-button (click)="descargarArchivos(respuesta)">
+            <mat-icon>download</mat-icon>
+            Descargar
+          </button>
+          <button mat-button *ngIf="respuesta.score !== null" disabled>
+            <mat-icon>check_circle</mat-icon>
+            Calificado
+          </button>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </div>
+
+  <!-- Sin respuestas -->
+  <div *ngIf="!loading && !error && respuestasFiltradas.length === 0" class="no-respuestas">
+    <mat-card>
+      <mat-card-content>
+        <div class="no-respuestas-content">
+          <mat-icon>assignment_turned_in</mat-icon>
+          <h3>No hay evaluaciones pendientes</h3>
+          <p>Todas las evaluaciones han sido calificadas.</p>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div>

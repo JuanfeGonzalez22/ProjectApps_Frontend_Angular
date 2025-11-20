@@ -17,6 +17,9 @@ import { Configuracion } from './sections/configuracion/configuracion';
 import { GestionModulos } from "./sections/gestion-modulos/gestion-modulos";
 import { GestionEvaluaciones } from "./sections/gestion-evaluaciones/gestion-evaluaciones"; // ✅ AGREGADO
 import { AuthService } from '../../../auth/services/auth';
+import { GestionInscripciones } from "./sections/inscripcion/gestion-inscripciones";
+import { GestionAsignacionInstructores } from "./sections/asignacion-instructores/gestion-asignacion-instructores"; 
+
 
 @Component({
   selector: 'app-dashboard',
@@ -37,7 +40,9 @@ import { AuthService } from '../../../auth/services/auth';
     Reportes,
     Configuracion,
     GestionModulos,
-    GestionEvaluaciones // ✅ AGREGADO
+    GestionEvaluaciones,
+    GestionInscripciones,
+    GestionAsignacionInstructores
   ],
   templateUrl: './dashboard.html',
   styleUrls: ['./dashboard.scss'],
