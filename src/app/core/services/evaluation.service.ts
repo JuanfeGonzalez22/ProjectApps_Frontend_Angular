@@ -93,7 +93,7 @@ export class EvaluationService {
     );
   }
 
- 
+
   getLatestAttempt(evaluationId: number): Observable<EvaluationAttempt> {
     return this.http.get<EvaluationAttempt>(
       `${this.attemptsUrl}/latest/${evaluationId}`,

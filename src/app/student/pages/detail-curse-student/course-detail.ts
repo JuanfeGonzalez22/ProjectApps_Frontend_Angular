@@ -9,10 +9,13 @@ import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatDialogModule, MatDialog } from '@angular/material/dialog';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatTooltipModule } from '@angular/material/tooltip';
 import { CourseService } from '../../../core/services/course.service';
 import { ModuleService } from '../../../core/services/module.service';
 import { EvaluationService } from '../../../core/services/evaluation.service';
 import { ProgressHistoryService } from '../../../core/services/progress-history.service';
+import { RegistrationService } from '../../../core/services/registration.service';
+import { AuthService } from '../../../auth/services/auth';
 import { CourseData } from '../../../core/models/course.model';
 import { ModuleData } from '../../../core/models/module.model';
 import { EvaluationData } from '../../../core/models/evaluation.model';
@@ -30,14 +33,14 @@ import { EvaluationDialogComponent } from '../evaluation-dialog/evaluation-dialo
     MatProgressBarModule,
     MatChipsModule,
     MatDialogModule,
-    MatSnackBarModule
+    MatSnackBarModule,
+    MatTooltipModule
   ],
   templateUrl: './course-detail.html',
   styleUrls: ['./course-detail.scss']
 })
 export class CourseDetail implements OnInit {
   @Input() courseId!: number;
-  @Input() registrationId!: number; // IMPORTANTE: Necesitas pasar esto desde el componente padre
   @Output() volver = new EventEmitter<void>();
 
   curso: CourseData | null = null;
@@ -46,7 +49,9 @@ export class CourseDetail implements OnInit {
   loading = true;
   error = '';
 
-  // Tracking de progreso
+  // NUEVO: Variables de progreso
+  registrationId: number | null = null;
+  userId: number | null = null;
   modulosCompletados = new Set<number>();
   progressHistory: ProgressHistory[] = [];
   currentProgress: ProgressHistory | null = null;
@@ -65,13 +70,21 @@ export class CourseDetail implements OnInit {
     private moduleService: ModuleService,
     private evaluationService: EvaluationService,
     private progressService: ProgressHistoryService,
+    private registrationService: RegistrationService,
+    private authService: AuthService,
     private dialog: MatDialog,
     private snackBar: MatSnackBar
   ) {}
 
   ngOnInit() {
-    this.cargarDetalleCurso();
+    // Obtener usuario actual
+    const currentUser = this.authService.getCurrentUser();
+    if (currentUser && currentUser.id) {
+      this.userId = currentUser.id;
+    }
+
     this.iniciarSeguimientoTiempo();
+    this.cargarDetalleCurso();
   }
 
   iniciarSeguimientoTiempo() {
@@ -85,13 +98,81 @@ export class CourseDetail implements OnInit {
     this.courseService.getById(this.courseId).subscribe({
       next: (curso) => {
         this.curso = curso;
-        console.log('Curso cargado:', curso);
+        console.log('📚 Curso cargado:', curso);
+
+        // NUEVO: Obtener el registrationId
+        this.obtenerRegistration();
+      },
+      error: (err) => {
+        console.error('❌ Error cargando curso:', err);
+        this.error = 'No se pudo cargar el curso';
+        this.loading = false;
+      }
+    });
+  }
+
+  /**
+   * NUEVO: Obtiene el registration del usuario para este curso
+   */
+  obtenerRegistration() {
+    if (!this.userId) {
+      console.error('❌ No hay userId disponible');
+      this.cargarModulos(); // Continuar sin progreso
+      return;
+    }
+
+    console.log('🔍 Buscando registration para userId:', this.userId, 'courseId:', this.courseId);
+
+    // Obtener todas las registrations y filtrar por usuario y curso
+    this.registrationService.getAll().subscribe({
+      next: (registrations) => {
+        console.log('📋 Registrations encontradas:', registrations);
+
+        const registration = registrations.find(
+          r => r.userId === this.userId && r.courseId === this.courseId
+        );
+
+        if (registration && registration.id) {
+          this.registrationId = registration.id;
+          console.log('✅ Registration encontrada:', registration);
+          console.log('🎯 Registration ID:', this.registrationId);
+        } else {
+          console.warn('⚠️ No se encontró registration para este usuario y curso');
+          console.log('💡 Creando registration automáticamente...');
+          this.crearRegistration();
+          return;
+        }
+
         this.cargarModulos();
       },
       error: (err) => {
-        console.error('Error cargando curso:', err);
-        this.error = 'No se pudo cargar el curso';
-        this.loading = false;
+        console.error('❌ Error obteniendo registrations:', err);
+        this.cargarModulos(); // Continuar sin progreso
+      }
+    });
+  }
+
+  /**
+   * NUEVO: Crea una registration si no existe
+   */
+  crearRegistration() {
+    if (!this.userId) return;
+
+    const newRegistration = {
+      userId: this.userId,
+      courseId: this.courseId,
+      status: 'ACTIVO'
+    };
+
+    this.registrationService.create(newRegistration).subscribe({
+      next: (registration) => {
+        console.log('✅ Registration creada:', registration);
+        this.registrationId = registration.id;
+        this.cargarModulos();
+      },
+      error: (err) => {
+        console.error('❌ Error creando registration:', err);
+        this.cargarModulos();
       }
     });
   }
@@ -102,30 +183,38 @@ export class CourseDetail implements OnInit {
         this.modulos = modulos
           .filter(m => m.courseId === this.courseId)
           .sort((a, b) => a.orden - b.orden);
-        console.log('Módulos cargados:', this.modulos);
+        console.log('📦 Módulos cargados:', this.modulos);
 
-        // Cargar estado de progreso de cada módulo
-        this.cargarEstadoProgreso();
+        // NUEVO: Cargar estado de progreso
+        if (this.registrationId) {
+          this.cargarEstadoProgreso();
+        }
+
         this.cargarEvaluaciones();
       },
       error: (err) => {
-        console.error('Error cargando módulos:', err);
+        console.error('❌ Error cargando módulos:', err);
         this.loading = false;
       }
     });
   }
 
+  /**
+   * NUEVO: Carga el estado de progreso de todos los módulos
+   */
   cargarEstadoProgreso() {
     if (!this.registrationId) {
       console.warn('⚠️ No hay registrationId, no se puede cargar progreso');
       return;
     }
 
+    console.log('📊 Cargando estado de progreso para registrationId:', this.registrationId);
+
     // Cargar progreso actual
     this.progressService.getCurrentProgress(this.registrationId).subscribe({
       next: (progress) => {
         this.currentProgress = progress;
-        console.log('📊 Progreso actual:', progress);
+        console.log('✅ Progreso actual:', progress);
       },
       error: (err) => {
         console.log('ℹ️ No hay progreso previo registrado');
@@ -135,14 +224,15 @@ export class CourseDetail implements OnInit {
     // Verificar qué módulos están completados
     this.modulos.forEach(modulo => {
       if (modulo.id) {
-        this.progressService.isModuleCompleted(this.registrationId, modulo.id).subscribe({
+        this.progressService.isModuleCompleted(this.registrationId!, modulo.id).subscribe({
           next: (isCompleted) => {
             if (isCompleted && modulo.id) {
               this.modulosCompletados.add(modulo.id);
+              console.log(`✅ Módulo ${modulo.id} completado`);
             }
           },
           error: (err) => {
-            console.error('Error verificando módulo:', err);
+            // Es normal que algunos módulos no estén completados
           }
         });
       }
@@ -159,20 +249,26 @@ export class CourseDetail implements OnInit {
         .filter(result => result !== undefined)
         .flat() as EvaluationData[];
 
-      console.log('Evaluaciones cargadas:', this.evaluaciones);
+      console.log('📝 Evaluaciones cargadas:', this.evaluaciones);
       this.loading = false;
     }).catch(err => {
-      console.error('Error cargando evaluaciones:', err);
+      console.error('❌ Error cargando evaluaciones:', err);
       this.loading = false;
     });
   }
 
   /**
-   * NUEVA FUNCIONALIDAD: Marcar módulo como completado
+   * NUEVO: Marcar módulo como completado
    */
   marcarModuloCompletado(modulo: ModuleData) {
-    if (!modulo.id || !this.registrationId) {
-      this.snackBar.open('❌ Error: Datos incompletos', 'Cerrar', { duration: 3000 });
+    if (!modulo.id) {
+      this.snackBar.open('❌ Error: ID de módulo inválido', 'Cerrar', { duration: 3000 });
+      return;
+    }
+
+    if (!this.registrationId) {
+      this.snackBar.open('❌ Error: No hay registro de inscripción', 'Cerrar', { duration: 3000 });
+      console.error('❌ No hay registrationId disponible');
       return;
     }
 
@@ -184,10 +280,11 @@ export class CourseDetail implements OnInit {
     // Calcular tiempo dedicado
     const timeDedicated = this.progressService.calculateTimeDedicated(this.moduleStartTime);
 
-    console.log('⏱️ Marcando módulo completado:', {
+    console.log('⏱️ Marcando módulo como completado:', {
       moduleId: modulo.id,
       registrationId: this.registrationId,
-      timeDedicated
+      timeDedicated,
+      moduloTitulo: modulo.title
     });
 
     this.progressService.markModuleAsCompleted(
@@ -207,15 +304,32 @@ export class CourseDetail implements OnInit {
         // Reiniciar contador de tiempo
         this.iniciarSeguimientoTiempo();
 
-        // Mostrar notificación
+        // Mostrar notificación con animación
+        const progressPercent = progress.moduleProgress.toFixed(0);
         this.snackBar.open(
-          `🎉 ¡Módulo completado! Progreso: ${progress.moduleProgress.toFixed(0)}%`,
+          `🎉 ¡Módulo "${modulo.title}" completado! Progreso del curso: ${progressPercent}%`,
           'Cerrar',
-          { duration: 5000 }
+          {
+            duration: 5000,
+            horizontalPosition: 'center',
+            verticalPosition: 'top'
+          }
         );
 
-        // Recargar progreso
-        this.cargarEstadoProgreso();
+        // Verificar si completó el curso
+        if (progress.moduleProgress >= 100) {
+          setTimeout(() => {
+            this.snackBar.open(
+              '🎊 ¡FELICITACIONES! Has completado el curso. ¡Tu certificado está disponible!',
+              'Ver certificado',
+              {
+                duration: 8000,
+                horizontalPosition: 'center',
+                verticalPosition: 'top'
+              }
+            );
+          }, 5500);
+        }
       },
       error: (err) => {
         console.error('❌ Error al marcar módulo completado:', err);
@@ -277,23 +391,47 @@ export class CourseDetail implements OnInit {
         next: (history) => {
           console.log('📜 Historial de progreso:', history);
           this.progressHistory = history;
-          // Aquí podrías abrir un diálogo con el historial completo
+
+          // Mostrar resumen en consola
+          console.table(history.map(h => ({
+            'Módulo': h.moduleId,
+            'Progreso': `${h.moduleProgress.toFixed(1)}%`,
+            'Tiempo': h.timeDedicated,
+            'Estado': h.status
+          })));
+
+          this.snackBar.open(
+            `📊 Tienes ${history.length} registros de progreso. Revisa la consola para más detalles.`,
+            'Cerrar',
+            { duration: 5000 }
+          );
         },
         error: (err) => {
-          console.error('Error obteniendo historial:', err);
+          console.error('❌ Error obteniendo historial:', err);
+          this.snackBar.open(
+            '❌ No se pudo cargar el historial de progreso',
+            'Cerrar',
+            { duration: 3000 }
+          );
         }
       });
+    } else {
+      this.snackBar.open(
+        'ℹ️ No hay registro de progreso disponible',
+        'Cerrar',
+        { duration: 3000 }
+      );
     }
   }
 
   descargarMaterial(material: any) {
     console.log('📥 Descargar material:', material);
-    // Implementar lógica de descarga
+    this.snackBar.open('Funcionalidad de descarga en desarrollo', 'Cerrar', { duration: 2000 });
   }
 
   verLink(material: any) {
     console.log('🔗 Abrir link:', material);
-    // Implementar lógica de navegación
+    this.snackBar.open('Funcionalidad de enlaces en desarrollo', 'Cerrar', { duration: 2000 });
   }
 
   realizarQuiz(evaluation: EvaluationData) {

@@ -56,4 +56,11 @@ export class CourseService {
       headers: this.getHeaders()
     });
   }
+
+  getAllCourses(): Observable<any[]> {
+  return this.http.get<any[]>(this.apiUrl, {
+    headers: this.getHeaders()
+  });
+}
+
 }

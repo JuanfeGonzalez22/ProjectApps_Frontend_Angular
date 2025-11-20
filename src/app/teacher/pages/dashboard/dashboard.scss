@@ -1,0 +1,113 @@
+.teacher-container {
+  height: 100vh;
+  background-color: #f4f5fa;
+}
+
+/* Sidebar */
+.teacher-sidenav {
+  width: 240px;
+  background-color: #ffffff;
+  box-shadow: 2px 0 8px rgba(0, 0, 0, 0.05);
+  display: flex;
+  flex-direction: column;
+  padding: 1rem 0;
+
+  .logo {
+    text-align: center;
+    color: #2e7be7;
+    font-weight: 500;
+    font-size: 1rem;
+    margin-bottom: 2rem;
+
+    h2 {
+      margin: 0;
+    }
+  }
+
+  .menu {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    flex: 1;
+
+    .menu-item {
+      justify-content: flex-start;
+      color: #000;
+      font-weight: 500;
+      text-transform: none;
+      padding-left: 1.5rem;
+      position: relative;
+
+      mat-icon {
+        margin-right: 0.75rem;
+        color: #000;
+      }
+
+      .badge {
+        background-color: #f44336;
+        color: white;
+        border-radius: 50%;
+        width: 20px;
+        height: 20px;
+        font-size: 0.75rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: absolute;
+        right: 1rem;
+        top: 50%;
+        transform: translateY(-50%);
+      }
+
+      &:hover {
+        background-color: rgba(46, 123, 231, 0.08);
+      }
+    }
+
+    .logout-section {
+      margin-top: auto;
+      padding-top: 1rem;
+      border-top: 1px solid #e0e0e0;
+
+      .logout-button {
+        color: #d32f2f;
+
+        mat-icon {
+          color: #d32f2f;
+        }
+
+        &:hover {
+          background-color: rgba(211, 47, 47, 0.08);
+        }
+      }
+    }
+  }
+}
+
+/* Header */
+.teacher-header {
+  background-color: #2e7be7;
+  color: #fff;
+  padding: 0 1.5rem;
+  display: flex;
+  align-items: center;
+
+  .welcome {
+    font-size: 1.1rem;
+    font-weight: 600;
+  }
+
+  .spacer {
+    flex: 1 1 auto;
+  }
+
+  button[matTooltip] {
+    &:hover {
+      background-color: rgba(255, 255, 255, 0.1);
+    }
+  }
+}
+
+.teacher-content {
+  padding: 2rem;
+}

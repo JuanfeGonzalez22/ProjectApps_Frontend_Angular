@@ -1,3 +1,4 @@
+// src/app/student/pages/student-dashboard/dashboard.ts
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
@@ -10,6 +11,7 @@ import { MatMenuModule } from '@angular/material/menu';
 import { MatBadgeModule } from '@angular/material/badge';
 import { AuthService } from '../../../auth/services/auth';
 import { CoursesStudent } from '../courses-student/courses-student';
+import { CourseEnrollmentComponent } from '../courses-student/course-enrollment/course-enrollment.component';
 
 @Component({
   selector: 'app-dashboard',
@@ -23,7 +25,8 @@ import { CoursesStudent } from '../courses-student/courses-student';
     MatTooltipModule,
     MatMenuModule,
     MatBadgeModule,
-    CoursesStudent
+    CoursesStudent,
+    CourseEnrollmentComponent  // 👈 Importar el componente de inscripción
   ],
   templateUrl: './dashboard.html',
   styleUrls: ['./dashboard.scss'],
@@ -48,7 +51,7 @@ export class Dashboard implements OnInit {
 
   setSection(seccion: string) {
     this.section = seccion;
-    console.log(' Navegando a:', seccion);
+    console.log('Navegando a:', seccion);
   }
 
   logout() {

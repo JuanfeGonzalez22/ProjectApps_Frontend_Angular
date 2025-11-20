@@ -28,11 +28,16 @@
             <span>{{ curso.title }}</span>
           </div>
 
-
           <div class="detail-item">
             <strong>Progreso total:</strong>
             <span class="progress-percentage">{{ getProgresoTotal() }}%</span>
           </div>
+
+          <div class="detail-item">
+            <strong>Módulos completados:</strong>
+            <span>{{ getModulosCompletadosCount() }} / {{ modulos.length }}</span>
+          </div>
+
           <div class="detail-item">
             <strong>Certificado:</strong>
             <span [class.certificado-disponible]="getProgresoTotal() === 100">
@@ -42,10 +47,10 @@
         </mat-card-content>
       </mat-card>
 
-      <!-- Columna Derecha: Módulos -->
+      <!-- Columna Derecha: Módulos con Botón de Completar -->
       <mat-card class="modules-card">
         <mat-card-header>
-          <mat-card-title>Módulos</mat-card-title>
+          <mat-card-title>Módulos del Curso</mat-card-title>
         </mat-card-header>
         <mat-card-content>
           <div *ngIf="modulos.length === 0" class="empty-modules">
@@ -58,10 +63,12 @@
                 <th>Orden</th>
                 <th>Título</th>
                 <th>Tipo</th>
+                <th>Estado</th>
+                <th>Acción</th>
               </tr>
             </thead>
             <tbody>
-              <tr *ngFor="let modulo of modulos">
+              <tr *ngFor="let modulo of modulos" [class.completed]="isModuloCompletado(modulo.id!)">
                 <td>{{ modulo.orden }}</td>
                 <td>{{ modulo.title }}</td>
                 <td>
@@ -69,6 +76,22 @@
                     <mat-icon>{{ getTipoIcono(modulo.tipo) }}</mat-icon>
                     {{ modulo.tipo || 'N/A' }}
                   </mat-chip>
+                </td>
+                <td>
+                  <span class="status-badge" [class.completed]="isModuloCompletado(modulo.id!)">
+                    {{ isModuloCompletado(modulo.id!) ? '✅ Completado' : '⏳ Pendiente' }}
+                  </span>
+                </td>
+                <td>
+                  <button
+                    mat-raised-button
+                    [color]="isModuloCompletado(modulo.id!) ? 'accent' : 'primary'"
+                    [disabled]="isModuloCompletado(modulo.id!)"
+                    (click)="marcarModuloCompletado(modulo)"
+                    matTooltip="{{ isModuloCompletado(modulo.id!) ? 'Ya completado' : 'Marcar como completado' }}">
+                    <mat-icon>{{ isModuloCompletado(modulo.id!) ? 'check_circle' : 'radio_button_unchecked' }}</mat-icon>
+                    {{ isModuloCompletado(modulo.id!) ? 'Completado' : 'Completar' }}
+                  </button>
                 </td>
               </tr>
             </tbody>
@@ -144,9 +167,11 @@
     <!-- Botones de acción -->
     <div class="action-buttons">
       <button mat-raised-button color="primary" (click)="verProgreso()">
-        Ver progreso
+        <mat-icon>assessment</mat-icon>
+        Ver progreso detallado
       </button>
       <button mat-raised-button (click)="volverALista()">
+        <mat-icon>arrow_back</mat-icon>
         Volver
       </button>
     </div>

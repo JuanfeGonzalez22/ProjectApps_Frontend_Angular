@@ -1,17 +1,21 @@
 // src/app/student/pages/courses-student/courses-student.ts
-
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
-import { MatChipsModule } from '@angular/material/chips';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
-import { MatDialogModule } from '@angular/material/dialog';
+import { MatChipsModule } from '@angular/material/chips';
 import { CourseService } from '../../../core/services/course.service';
+import { RegistrationService } from '../../../core/services/registration.service';
 import { CourseData } from '../../../core/models/course.model';
-import { CourseDetail } from '../detail-curse-student/course-detail';
-import { AuthService } from '../../../auth/services/auth';
+import { CourseDetail } from '../detail-curse-student/course-detail';  // ⬅️ AGREGAR
+
+interface CourseWithProgress extends CourseData {
+  inscrito?: boolean;
+  progress?: number;
+  enrollmentId?: number;
+}
 
 @Component({
   selector: 'app-courses-student',
@@ -21,113 +25,177 @@ import { AuthService } from '../../../auth/services/auth';
     MatCardModule,
     MatButtonModule,
     MatIconModule,
-    MatChipsModule,
     MatProgressBarModule,
-    MatDialogModule,
-    CourseDetail
+    MatChipsModule,
+    CourseDetail  // ⬅️ AGREGAR AQUÍ
   ],
   templateUrl: './courses-student.html',
   styleUrls: ['./courses-student.scss']
 })
 export class CoursesStudent implements OnInit {
-  cursos: CourseData[] = [];
-  loading = true;
-  error = '';
-  selectedCourseId: number | null = null;
-  selectedRegistrationId: number | null = null; // NUEVO
+  cursos: CourseWithProgress[] = [];
+  isLoading = false;
+  errorMessage = '';
+  userId: number = 0;
   showDetail = false;
-  userId: number | null = null; // NUEVO
+  selectedCourseId: number | null = null;
 
   constructor(
     private courseService: CourseService,
-    private authService: AuthService // NUEVO
+    private registrationService: RegistrationService
   ) {}
 
-  ngOnInit() {
-    // Obtener el usuario actual
-    const currentUser = this.authService.getCurrentUser();
-    if (currentUser && currentUser.id) {
-      this.userId = currentUser.id;
-    }
-
-    this.cargarCursos();
+  ngOnInit(): void {
+    this.loadUserId();
+    this.loadCourses();
   }
 
-  cargarCursos() {
-    this.loading = true;
-    this.courseService.getAll().subscribe({
-      next: (data) => {
-        this.cursos = data;
-        this.loading = false;
-        console.log('Cursos cargados:', data);
+  loadUserId(): void {
+    const userStr = localStorage.getItem('user');
+    if (userStr) {
+      const user = JSON.parse(userStr);
+      this.userId = user.id;
+    }
+  }
+
+  loadCourses(): void {
+    this.isLoading = true;
+    this.errorMessage = '';
+
+    // Primero cargar las inscripciones del usuario
+    this.registrationService.getAll().subscribe({
+      next: (registrations) => {
+        // Filtrar SOLO las inscripciones del usuario actual
+        const userRegistrations = registrations.filter(
+          r => r.userId === this.userId
+        );
+
+        // Si no tiene inscripciones, mostrar vacío
+        if (userRegistrations.length === 0) {
+          this.cursos = [];
+          this.isLoading = false;
+          return;
+        }
+
+        // Obtener los IDs de los cursos inscritos
+        const enrolledCourseIds = userRegistrations.map(r => r.courseId);
+
+        // Cargar TODOS los cursos
+        this.courseService.getAll().subscribe({
+          next: (allCourses) => {
+            // ✅ FILTRAR: Solo mostrar cursos donde el estudiante ESTÁ INSCRITO
+            this.cursos = allCourses
+              .filter(course => enrolledCourseIds.includes(course.id!))
+              .map(course => {
+                const registration = userRegistrations.find(
+                  r => r.courseId === course.id
+                );
+
+                return {
+                  ...course,
+                  inscrito: true,  // Siempre true porque ya está filtrado
+                  progress: registration?.progress || 0,
+                  enrollmentId: registration?.id,
+                  name: course.title,
+                  duration: course.estimatedDuration
+                };
+              });
+
+            this.isLoading = false;
+          },
+          error: (error) => {
+            console.error('Error al cargar cursos:', error);
+            this.errorMessage = 'Error al cargar los cursos';
+            this.isLoading = false;
+          }
+        });
       },
-      error: (err) => {
-        console.error('Error cargando cursos:', err);
-        this.error = 'No se pudieron cargar los cursos';
-        this.loading = false;
+      error: (error) => {
+        console.error('Error al cargar inscripciones:', error);
+        this.errorMessage = 'Error al cargar tus inscripciones';
+        this.isLoading = false;
       }
     });
   }
 
-  verCurso(curso: CourseData) {
-    console.log('📖 Ver curso:', curso);
-
-    this.selectedCourseId = curso.id || null;
-
-    // IMPORTANTE: Aquí necesitas obtener el registrationId real
-    // Este ID viene de la inscripción del estudiante al curso
-    // Por ahora usaremos un valor temporal, pero DEBES implementar
-    // un servicio de inscripciones (registrations) que te devuelva este ID
-
-    // OPCIÓN 1: Si tienes un servicio de inscripciones
-    // this.registrationService.getRegistrationByUserAndCourse(this.userId, curso.id)
-    //   .subscribe(registration => {
-    //     this.selectedRegistrationId = registration.id;
-    //     this.showDetail = true;
-    //   });
-
-    // OPCIÓN 2: Temporal - usar el ID del curso como registrationId
-    // (esto NO es correcto para producción)
-    this.selectedRegistrationId = curso.id || 1;
-
-    console.log('⚠️ IMPORTANTE: Usando registrationId temporal:', this.selectedRegistrationId);
-    console.log('Debes implementar un servicio de Registration para obtener el ID real');
-
-    this.showDetail = true;
+  getProgresoCurso(curso: CourseWithProgress): number {
+    return curso.progress || 0;
   }
 
-  volverALista() {
-    this.showDetail = false;
-    this.selectedCourseId = null;
-    this.selectedRegistrationId = null;
+  formatDuration(duration: string): string {
+    return duration || 'No especificada';
   }
 
-  getNivelColor(level: number): string {
-    const niveles: { [key: number]: string } = {
+  getLevelText(level: number): string {
+    const levels: { [key: number]: string } = {
+      1: 'Principiante',
+      2: 'Intermedio',
+      3: 'Avanzado'
+    };
+    return levels[level] || 'No especificado';
+  }
+
+  getNivelColor(level: number): 'primary' | 'accent' | 'warn' {
+    const colors: { [key: number]: 'primary' | 'accent' | 'warn' } = {
       1: 'primary',
       2: 'accent',
       3: 'warn'
     };
-    return niveles[level] || 'primary';
+    return colors[level] || 'primary';
   }
 
   getNivelTexto(level: number): string {
-    const niveles: { [key: number]: string } = {
-      1: 'Básico',
-      2: 'Intermedio',
-      3: 'Avanzado'
-    };
-    return niveles[level] || 'Nivel ' + level;
+    return this.getLevelText(level);
   }
 
-  formatDuration(duration: string): string {
-    if (!duration) return 'N/A';
-    const parts = duration.split(':');
-    if (parts.length >= 2) {
-      const horas = parseInt(parts[0]);
-      const minutos = parseInt(parts[1]);
-      return `${horas}h ${minutos}m`;
-    }
-    return duration;
+  inscribirseACurso(curso: CourseWithProgress): void {
+    if (!curso.id || curso.inscrito) return;
+
+    this.isLoading = true;
+
+    const registration = {
+      userId: this.userId,
+      courseId: curso.id,
+      status: 'ACTIVE'
+    };
+
+    this.registrationService.create(registration).subscribe({
+      next: (response) => {
+        const index = this.cursos.findIndex(c => c.id === curso.id);
+        if (index !== -1) {
+          this.cursos[index].inscrito = true;
+          this.cursos[index].progress = 0;
+          this.cursos[index].enrollmentId = response.id;
+        }
+        this.isLoading = false;
+        alert('¡Te has inscrito exitosamente al curso!');
+      },
+      error: (error) => {
+        console.error('Error al inscribirse:', error);
+        this.isLoading = false;
+        if (error.status === 409) {
+          alert('Ya estás inscrito en este curso');
+        } else {
+          alert('Error al inscribirse al curso');
+        }
+      }
+    });
+  }
+
+  continuarCurso(curso: CourseWithProgress): void {
+    console.log('Continuando curso:', curso.title);
+    // Implementar navegación al curso
+  }
+
+  verDetalleCurso(curso: CourseWithProgress): void {
+    console.log('Ver detalles del curso:', curso.title);
+    this.selectedCourseId = curso.id || null;
+    this.showDetail = true;
+  }
+
+  volverALista(): void {
+    this.showDetail = false;
+    this.selectedCourseId = null;
+    this.loadCourses();
   }
 }

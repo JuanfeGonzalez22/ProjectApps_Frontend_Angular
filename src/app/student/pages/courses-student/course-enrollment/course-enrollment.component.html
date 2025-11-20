@@ -1,0 +1,85 @@
+<!-- src/app/student/pages/courses-student/course-enrollment/course-enrollment.component.html -->
+<div class="enrollment-container">
+  <!-- Header -->
+  <div class="enrollment-header">
+    <h1>Cursos disponibles para inscripción</h1>
+    <p>Selecciona el curso al que deseas inscribirte:</p>
+  </div>
+
+  <!-- Loading Spinner -->
+  <div *ngIf="isLoading" class="loading-container">
+    <div class="spinner"></div>
+    <p>Cargando...</p>
+  </div>
+
+  <!-- Error Message -->
+  <div *ngIf="errorMessage" class="alert alert-error">
+    <i class="fas fa-exclamation-circle"></i>
+    {{ errorMessage }}
+  </div>
+
+  <!-- Success Message -->
+  <div *ngIf="successMessage" class="alert alert-success">
+    <i class="fas fa-check-circle"></i>
+    {{ successMessage }}
+  </div>
+
+  <!-- Courses List -->
+  <div *ngIf="!isLoading && availableCourses.length > 0" class="courses-list-container">
+    <div class="courses-list-header">
+      <h2>Lista de cursos disponibles</h2>
+    </div>
+
+    <table class="courses-table">
+      <thead>
+        <tr>
+          <th>Curso</th>
+          <th>Descripción</th>
+          <th>Nivel</th>
+          <th>Duración estimada</th>
+          <th>Acción</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let course of availableCourses"
+            [class.selected]="selectedCourseId === course.id"
+            (click)="selectCourse(course.id!)">
+          <td>{{ course.title }}</td>
+          <td>{{ course.description }}</td>
+          <td>
+            <span class="level-badge" [attr.data-level]="course.level">
+              {{ getLevelText(course.level) }}
+            </span>
+          </td>
+          <td>{{ course.estimatedDuration }}</td>
+          <td>
+            <button
+              class="btn-select"
+              [class.active]="selectedCourseId === course.id"
+              (click)="selectCourse(course.id!); $event.stopPropagation()">
+              {{ selectedCourseId === course.id ? 'Seleccionado' : 'Seleccionar' }}
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <!-- Action Buttons -->
+    <div class="action-buttons">
+      <button
+        class="btn btn-primary"
+        [disabled]="!selectedCourseId || isLoading"
+        (click)="enrollInCourse()">
+        <i class="fas fa-check"></i>
+        Inscribirse
+      </button>
+    </div>
+  </div>
+
+  <!-- Empty State -->
+  <div *ngIf="!isLoading && availableCourses.length === 0" class="empty-state">
+    <i class="fas fa-inbox"></i>
+    <h3>No hay cursos disponibles</h3>
+    <p>Por el momento no hay cursos disponibles para inscripción.</p>
+  </div>
+</div>
