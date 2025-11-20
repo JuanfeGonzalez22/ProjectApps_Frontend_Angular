@@ -1,3 +1,5 @@
+// src/app/student/pages/courses-student/courses-student.ts
+
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatCardModule } from '@angular/material/card';
@@ -9,6 +11,7 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { CourseService } from '../../../core/services/course.service';
 import { CourseData } from '../../../core/models/course.model';
 import { CourseDetail } from '../detail-curse-student/course-detail';
+import { AuthService } from '../../../auth/services/auth';
 
 @Component({
   selector: 'app-courses-student',
@@ -31,11 +34,22 @@ export class CoursesStudent implements OnInit {
   loading = true;
   error = '';
   selectedCourseId: number | null = null;
+  selectedRegistrationId: number | null = null; // NUEVO
   showDetail = false;
+  userId: number | null = null; // NUEVO
 
-  constructor(private courseService: CourseService) {}
+  constructor(
+    private courseService: CourseService,
+    private authService: AuthService // NUEVO
+  ) {}
 
   ngOnInit() {
+    // Obtener el usuario actual
+    const currentUser = this.authService.getCurrentUser();
+    if (currentUser && currentUser.id) {
+      this.userId = currentUser.id;
+    }
+
     this.cargarCursos();
   }
 
@@ -57,13 +71,35 @@ export class CoursesStudent implements OnInit {
 
   verCurso(curso: CourseData) {
     console.log('📖 Ver curso:', curso);
+
     this.selectedCourseId = curso.id || null;
+
+    // IMPORTANTE: Aquí necesitas obtener el registrationId real
+    // Este ID viene de la inscripción del estudiante al curso
+    // Por ahora usaremos un valor temporal, pero DEBES implementar
+    // un servicio de inscripciones (registrations) que te devuelva este ID
+
+    // OPCIÓN 1: Si tienes un servicio de inscripciones
+    // this.registrationService.getRegistrationByUserAndCourse(this.userId, curso.id)
+    //   .subscribe(registration => {
+    //     this.selectedRegistrationId = registration.id;
+    //     this.showDetail = true;
+    //   });
+
+    // OPCIÓN 2: Temporal - usar el ID del curso como registrationId
+    // (esto NO es correcto para producción)
+    this.selectedRegistrationId = curso.id || 1;
+
+    console.log('⚠️ IMPORTANTE: Usando registrationId temporal:', this.selectedRegistrationId);
+    console.log('Debes implementar un servicio de Registration para obtener el ID real');
+
     this.showDetail = true;
   }
 
   volverALista() {
     this.showDetail = false;
     this.selectedCourseId = null;
+    this.selectedRegistrationId = null;
   }
 
   getNivelColor(level: number): string {

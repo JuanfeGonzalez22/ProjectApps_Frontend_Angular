@@ -1,3 +1,5 @@
+// src/app/student/pages/detail-curse-student/course-detail.ts
+
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatCardModule } from '@angular/material/card';
@@ -6,12 +8,15 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatDialogModule, MatDialog } from '@angular/material/dialog';
+import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { CourseService } from '../../../core/services/course.service';
 import { ModuleService } from '../../../core/services/module.service';
 import { EvaluationService } from '../../../core/services/evaluation.service';
+import { ProgressHistoryService } from '../../../core/services/progress-history.service';
 import { CourseData } from '../../../core/models/course.model';
 import { ModuleData } from '../../../core/models/module.model';
 import { EvaluationData } from '../../../core/models/evaluation.model';
+import { ProgressHistory } from '../../../core/models/progress-history.model';
 import { EvaluationDialogComponent } from '../evaluation-dialog/evaluation-dialog.component';
 
 @Component({
@@ -24,13 +29,15 @@ import { EvaluationDialogComponent } from '../evaluation-dialog/evaluation-dialo
     MatIconModule,
     MatProgressBarModule,
     MatChipsModule,
-    MatDialogModule
+    MatDialogModule,
+    MatSnackBarModule
   ],
   templateUrl: './course-detail.html',
   styleUrls: ['./course-detail.scss']
 })
 export class CourseDetail implements OnInit {
   @Input() courseId!: number;
+  @Input() registrationId!: number; // IMPORTANTE: Necesitas pasar esto desde el componente padre
   @Output() volver = new EventEmitter<void>();
 
   curso: CourseData | null = null;
@@ -38,6 +45,12 @@ export class CourseDetail implements OnInit {
   evaluaciones: EvaluationData[] = [];
   loading = true;
   error = '';
+
+  // Tracking de progreso
+  modulosCompletados = new Set<number>();
+  progressHistory: ProgressHistory[] = [];
+  currentProgress: ProgressHistory | null = null;
+  moduleStartTime: number = 0;
 
   // Datos de ejemplo para material
   materiales = [
@@ -51,11 +64,18 @@ export class CourseDetail implements OnInit {
     private courseService: CourseService,
     private moduleService: ModuleService,
     private evaluationService: EvaluationService,
-    private dialog: MatDialog
+    private progressService: ProgressHistoryService,
+    private dialog: MatDialog,
+    private snackBar: MatSnackBar
   ) {}
 
   ngOnInit() {
     this.cargarDetalleCurso();
+    this.iniciarSeguimientoTiempo();
+  }
+
+  iniciarSeguimientoTiempo() {
+    this.moduleStartTime = Date.now();
   }
 
   cargarDetalleCurso() {
@@ -77,27 +97,59 @@ export class CourseDetail implements OnInit {
   }
 
   cargarModulos() {
-
     this.moduleService.getAll().subscribe({
       next: (modulos) => {
-
         this.modulos = modulos
           .filter(m => m.courseId === this.courseId)
           .sort((a, b) => a.orden - b.orden);
         console.log('Módulos cargados:', this.modulos);
 
-
+        // Cargar estado de progreso de cada módulo
+        this.cargarEstadoProgreso();
         this.cargarEvaluaciones();
       },
       error: (err) => {
-        console.error(' Error cargando módulos:', err);
+        console.error('Error cargando módulos:', err);
         this.loading = false;
       }
     });
   }
 
-  cargarEvaluaciones() {
+  cargarEstadoProgreso() {
+    if (!this.registrationId) {
+      console.warn('⚠️ No hay registrationId, no se puede cargar progreso');
+      return;
+    }
 
+    // Cargar progreso actual
+    this.progressService.getCurrentProgress(this.registrationId).subscribe({
+      next: (progress) => {
+        this.currentProgress = progress;
+        console.log('📊 Progreso actual:', progress);
+      },
+      error: (err) => {
+        console.log('ℹ️ No hay progreso previo registrado');
+      }
+    });
+
+    // Verificar qué módulos están completados
+    this.modulos.forEach(modulo => {
+      if (modulo.id) {
+        this.progressService.isModuleCompleted(this.registrationId, modulo.id).subscribe({
+          next: (isCompleted) => {
+            if (isCompleted && modulo.id) {
+              this.modulosCompletados.add(modulo.id);
+            }
+          },
+          error: (err) => {
+            console.error('Error verificando módulo:', err);
+          }
+        });
+      }
+    });
+  }
+
+  cargarEvaluaciones() {
     const evaluacionesPromises = this.modulos.map(modulo =>
       this.evaluationService.getByModuleId(modulo.id!).toPromise()
     );
@@ -107,12 +159,96 @@ export class CourseDetail implements OnInit {
         .filter(result => result !== undefined)
         .flat() as EvaluationData[];
 
-      console.log(' Evaluaciones cargadas:', this.evaluaciones);
+      console.log('Evaluaciones cargadas:', this.evaluaciones);
       this.loading = false;
     }).catch(err => {
-      console.error(' Error cargando evaluaciones:', err);
+      console.error('Error cargando evaluaciones:', err);
       this.loading = false;
     });
+  }
+
+  /**
+   * NUEVA FUNCIONALIDAD: Marcar módulo como completado
+   */
+  marcarModuloCompletado(modulo: ModuleData) {
+    if (!modulo.id || !this.registrationId) {
+      this.snackBar.open('❌ Error: Datos incompletos', 'Cerrar', { duration: 3000 });
+      return;
+    }
+
+    if (this.isModuloCompletado(modulo.id)) {
+      this.snackBar.open('ℹ️ Este módulo ya está completado', 'Cerrar', { duration: 3000 });
+      return;
+    }
+
+    // Calcular tiempo dedicado
+    const timeDedicated = this.progressService.calculateTimeDedicated(this.moduleStartTime);
+
+    console.log('⏱️ Marcando módulo completado:', {
+      moduleId: modulo.id,
+      registrationId: this.registrationId,
+      timeDedicated
+    });
+
+    this.progressService.markModuleAsCompleted(
+      modulo.id,
+      this.registrationId,
+      timeDedicated
+    ).subscribe({
+      next: (progress) => {
+        console.log('✅ Módulo completado exitosamente:', progress);
+
+        // Actualizar estado local
+        if (modulo.id) {
+          this.modulosCompletados.add(modulo.id);
+        }
+        this.currentProgress = progress;
+
+        // Reiniciar contador de tiempo
+        this.iniciarSeguimientoTiempo();
+
+        // Mostrar notificación
+        this.snackBar.open(
+          `🎉 ¡Módulo completado! Progreso: ${progress.moduleProgress.toFixed(0)}%`,
+          'Cerrar',
+          { duration: 5000 }
+        );
+
+        // Recargar progreso
+        this.cargarEstadoProgreso();
+      },
+      error: (err) => {
+        console.error('❌ Error al marcar módulo completado:', err);
+        this.snackBar.open(
+          '❌ Error al guardar progreso. Intenta nuevamente.',
+          'Cerrar',
+          { duration: 4000 }
+        );
+      }
+    });
+  }
+
+  /**
+   * Verifica si un módulo está completado
+   */
+  isModuloCompletado(moduleId: number): boolean {
+    return this.modulosCompletados.has(moduleId);
+  }
+
+  /**
+   * Obtiene el porcentaje de progreso general del curso
+   */
+  getProgresoTotal(): number {
+    if (this.modulos.length === 0) return 0;
+    const completados = this.modulosCompletados.size;
+    return Math.round((completados / this.modulos.length) * 100);
+  }
+
+  /**
+   * Obtiene el número de módulos completados
+   */
+  getModulosCompletadosCount(): number {
+    return this.modulosCompletados.size;
   }
 
   getTipoIcono(tipo?: string): string {
@@ -134,22 +270,34 @@ export class CourseDetail implements OnInit {
   }
 
   verProgreso() {
-    console.log(' Ver progreso del curso:', this.courseId);
+    console.log('📊 Ver progreso detallado del curso:', this.courseId);
 
+    if (this.registrationId) {
+      this.progressService.getProgressHistory(this.registrationId).subscribe({
+        next: (history) => {
+          console.log('📜 Historial de progreso:', history);
+          this.progressHistory = history;
+          // Aquí podrías abrir un diálogo con el historial completo
+        },
+        error: (err) => {
+          console.error('Error obteniendo historial:', err);
+        }
+      });
+    }
   }
 
   descargarMaterial(material: any) {
-    console.log(' Descargar material:', material);
-
+    console.log('📥 Descargar material:', material);
+    // Implementar lógica de descarga
   }
 
   verLink(material: any) {
-    console.log(' Abrir link:', material);
-
+    console.log('🔗 Abrir link:', material);
+    // Implementar lógica de navegación
   }
 
   realizarQuiz(evaluation: EvaluationData) {
-    console.log(' Realizar evaluación:', evaluation);
+    console.log('📝 Realizar evaluación:', evaluation);
 
     const dialogRef = this.dialog.open(EvaluationDialogComponent, {
       width: '800px',
@@ -158,16 +306,15 @@ export class CourseDetail implements OnInit {
 
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
-        console.log(' Evaluación enviada:', result);
-
+        console.log('✅ Evaluación enviada:', result);
         this.cargarEvaluaciones();
       }
     });
   }
 
   verResultado(evaluation: EvaluationData) {
-    console.log(' Ver resultado:', evaluation);
-  
+    console.log('👁️ Ver resultado:', evaluation);
+
     this.dialog.open(EvaluationDialogComponent, {
       width: '800px',
       data: { evaluation, viewMode: true }
@@ -180,14 +327,6 @@ export class CourseDetail implements OnInit {
 
   isEvaluacionCompletada(evaluation: EvaluationData): boolean {
     return this.getEstadoEvaluacion(evaluation) === 'Completado';
-  }
-
-  getProgresoTotal(): number {
-    if (this.evaluaciones.length === 0) return 0;
-    const completados = this.evaluaciones.filter(e =>
-      this.getEstadoEvaluacion(e) === 'Completado'
-    ).length;
-    return Math.round((completados / this.evaluaciones.length) * 100);
   }
 
   getNivelTexto(level: number): string {
