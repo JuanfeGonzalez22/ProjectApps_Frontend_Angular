@@ -8,7 +8,7 @@ import { RegistrationDTO, RegistrationResponse } from '../models/registration.mo
   providedIn: 'root'
 })
 export class RegistrationService {
-  private apiUrl = 'http://localhost:8089/api/v1/registrations';
+  private apiUrl = 'http://localhost:8080/api/v1/registrations';
 
   constructor(private http: HttpClient) {}
 

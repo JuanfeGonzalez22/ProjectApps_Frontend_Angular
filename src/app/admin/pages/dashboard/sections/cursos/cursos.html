@@ -11,10 +11,7 @@
 
   <!-- Cards de cursos existentes -->
   <mat-card class="course-card" *ngFor="let curso of cursos">
-    <!-- Título del curso (del backend) -->
     <h3>{{ curso.title }}</h3>
-
-    <!-- Descripción opcional -->
     <p>{{ curso.description || 'Sin descripción' }}</p>
 
   

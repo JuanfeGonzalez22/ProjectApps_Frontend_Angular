@@ -32,7 +32,7 @@ export class Usuarios {
   usuarios: User[] = [];
   usuariosFiltrados: User[] = [];
   section: string = 'usuarios';
-  
+
   usuarioSeleccionado: User | null = null;
   vista: 'tabla' | 'editar' | 'crear' = 'tabla';
   terminoBusqueda: string = '';
@@ -49,7 +49,7 @@ export class Usuarios {
     console.log('📡 Ejecutando getAll()...');
     this.userService.getAll().subscribe({
       next: (data) => {
-        console.log('✅ Datos recibidos del backend:', data);
+        console.log('Datos recibidos del backend:', data);
         this.usuarios = data;
         this.usuariosFiltrados = data;
       },
@@ -57,8 +57,7 @@ export class Usuarios {
     });
   }
 
-  // En usuarios.ts - REEMPLAZA el método filtrarUsuarios
-// En usuarios.ts - MODIFICAR filtrarUsuarios
+
 async filtrarUsuarios() {
   if (!this.terminoBusqueda?.trim()) {
     this.usuariosFiltrados = this.usuarios;
@@ -66,18 +65,18 @@ async filtrarUsuarios() {
   }
 
   const termino = this.terminoBusqueda.trim();
-  
-  // Si es un número, buscar por ID específico
+
+
   if (!isNaN(Number(termino))) {
     const id = Number(termino);
     try {
       const usuario = await this.userService.getById(id).toPromise();
       this.usuariosFiltrados = usuario ? [usuario] : [];
     } catch (error) {
-      this.usuariosFiltrados = []; // Usuario no encontrado
+      this.usuariosFiltrados = [];
     }
   } else {
-    // Si no es número, buscar en los otros campos localmente
+
     const terminoLower = termino.toLowerCase();
     this.usuariosFiltrados = this.usuarios.filter(usuario =>
       (usuario.fullName?.toLowerCase() || '').includes(terminoLower) ||
@@ -114,7 +113,7 @@ async filtrarUsuarios() {
     this.vista = 'editar';
   }
 
-  // NUEVO MÉTODO: Para abrir creación
+
   crearUsuario() {
     this.vista = 'crear';
   }

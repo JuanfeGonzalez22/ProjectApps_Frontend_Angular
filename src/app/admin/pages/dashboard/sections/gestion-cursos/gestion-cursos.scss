@@ -29,12 +29,12 @@
   }
 
   tbody tr:hover {
-    background-color: #f1f5ff; // azul muy clarito
+    background-color: #f1f5ff; 
     transform: translateY(-1px);
   }
 
   tbody tr.seleccionado {
-    background-color: #e3f2fd; // azul clarito
+    background-color: #e3f2fd; 
     border-left: 4px solid #1e88e5;
     transform: translateY(-1px);
   }

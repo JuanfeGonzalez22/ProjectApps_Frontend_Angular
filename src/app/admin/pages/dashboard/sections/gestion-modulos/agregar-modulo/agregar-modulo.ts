@@ -32,15 +32,15 @@ export class AgregarModuloComponent implements OnInit {
 
   moduloForm: FormGroup;
   tipos = ['video', 'texto', 'quiz', 'practica'];
-  cursos: CourseData[] = []; // ✅ Lista de cursos disponibles
+  cursos: CourseData[] = [];
 
   constructor(
     private fb: FormBuilder,
     private moduleService: ModuleService,
-    private courseService: CourseService // ✅ Servicio de cursos
+    private courseService: CourseService
   ) {
     this.moduloForm = this.fb.group({
-      courseId: ['', Validators.required], // ✅ Ahora es un select, no input
+      courseId: ['', Validators.required],
       title: ['', Validators.required],
       type: ['', Validators.required],
       order: ['', [Validators.required, Validators.min(1)]]
@@ -55,10 +55,10 @@ export class AgregarModuloComponent implements OnInit {
     this.courseService.getAll().subscribe({
       next: (cursos: CourseData[]) => {
         this.cursos = cursos;
-        console.log('📚 Cursos cargados:', this.cursos);
+        console.log('Cursos cargados:', this.cursos);
       },
       error: (err) => {
-        console.error('❌ Error cargando cursos:', err);
+        console.error(' Error cargando cursos:', err);
         alert('Error al cargar la lista de cursos');
       }
     });
@@ -68,17 +68,17 @@ export class AgregarModuloComponent implements OnInit {
     if (this.moduloForm.valid) {
       const modulo: ModuleData = this.moduloForm.value;
 
-      console.log('📤 Enviando módulo al backend:', modulo);
+      console.log(' Enviando módulo al backend:', modulo);
 
       this.moduleService.create(modulo).subscribe({
         next: (nuevoModulo: ModuleData) => {
-          console.log('✅ Módulo creado:', nuevoModulo);
+          console.log(' Módulo creado:', nuevoModulo);
           this.moduloCreado.emit(nuevoModulo);
           alert('Módulo agregado correctamente');
           this.moduloForm.reset();
         },
         error: (e: any) => {
-          console.error("❌ Error creando módulo", e);
+          console.error(" Error creando módulo", e);
           alert("Error creando el módulo: " + (e.error?.message || e.message));
         }
       });

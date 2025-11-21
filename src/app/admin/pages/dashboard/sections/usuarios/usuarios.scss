@@ -76,12 +76,12 @@ tr:hover {
 }
 
 .course-table tr.seleccionado {
-  background-color: rgba(46, 123, 231, 0.15); /* Azul clarito */
+  background-color: rgba(46, 123, 231, 0.15);
   transition: background 0.2s ease-in-out;
 }
 
 
-// Agrega al final del archivo
+
 .resultados-info {
   margin-bottom: 1rem;
   color: #666;
@@ -92,10 +92,9 @@ tr:hover {
   text-align: center;
   padding: 2rem;
   color: #666;
-  
+
   p {
     margin-bottom: 1rem;
   }
 }
 
-// Asegúrate de tener FormsModule importado en usuarios.ts

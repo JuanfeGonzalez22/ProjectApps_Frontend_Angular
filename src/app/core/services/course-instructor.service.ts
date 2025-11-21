@@ -48,7 +48,7 @@ export class CourseInstructorService {
         if (currentUserStr) {
           const currentUser = JSON.parse(currentUserStr);
           // Filtrar asignaciones por el instructorId del usuario actual
-          return asignaciones.filter(asignacion => 
+          return asignaciones.filter(asignacion =>
             asignacion.instructorId === currentUser.id
           );
         }
@@ -64,5 +64,5 @@ export class CourseInstructorService {
     });
   }
 
-  
+
 }

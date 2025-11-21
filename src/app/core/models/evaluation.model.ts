@@ -1,7 +1,7 @@
 // src/app/core/models/evaluation.model.ts
 
 export interface EvaluationData {
-  id?: number;  // ✅ AGREGAR ESTE CAMPO (opcional porque al crear no lo tenemos)
+  id?: number;  
   moduleId: number;
   title: string;
   type: string;

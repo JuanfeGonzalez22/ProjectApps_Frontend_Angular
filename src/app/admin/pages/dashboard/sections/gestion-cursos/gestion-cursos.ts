@@ -28,10 +28,10 @@ import { EditarCursoComponent } from './editar-curso/editar-curso';
   styleUrls: ['./gestion-cursos.scss']
 })
 export class GestionCursos implements OnInit {
-  // ✅ USA CourseData DIRECTAMENTE
+
   cursos: CourseData[] = [];
   cursosFiltrados: CourseData[] = [];
-  
+
   searchTerm: string = '';
   section: string = 'cursos';
 
@@ -43,7 +43,7 @@ export class GestionCursos implements OnInit {
     private router: Router
   ) {}
 
-  volver() { 
+  volver() {
  this.setSection('cursos');  }
 
   setSection(seccion: string) {
@@ -62,7 +62,7 @@ export class GestionCursos implements OnInit {
   cargarCursos() {
     this.courseService.getAll().subscribe({
       next: (courses: CourseData[]) => {
-        // ✅ USA CourseData DIRECTAMENTE sin conversión
+
         this.cursos = courses;
         this.cursosFiltrados = [...this.cursos];
         console.log('Cursos cargados:', this.cursos);
@@ -76,7 +76,7 @@ export class GestionCursos implements OnInit {
   }
 
   onCursoActualizado(curso: CourseData) {
-    // ✅ ACTUALIZACIÓN SIMPLIFICADA
+
     this.cursos = this.cursos.map(c =>
       c.id === curso.id ? curso : c
     );
@@ -109,11 +109,10 @@ export class GestionCursos implements OnInit {
   formatearDuracion(duracion: any): string {
     if (!duracion) return 'No especificada';
 
-    // ✅ MANEJA DIFERENTES FORMATOS DE DURACIÓN
     let duracionStr = duracion;
-    
+
     if (typeof duracion === 'object') {
-      // Si es LocalTime o objeto similar
+
       duracionStr = duracion.toString();
     }
 
@@ -143,7 +142,7 @@ export class GestionCursos implements OnInit {
 
   seleccionarCurso(curso: CourseData): void {
     this.cursoSeleccionado = curso;
-    console.log('✅ Curso seleccionado:', curso);
+    console.log(' Curso seleccionado:', curso);
   }
 
   eliminarCurso(): void {
@@ -167,10 +166,10 @@ export class GestionCursos implements OnInit {
         );
 
         this.cursoSeleccionado = null;
-        alert('Curso eliminado correctamente ✅');
+        alert('Curso eliminado correctamente ');
       },
       error: err => {
-        console.error('❌ Error eliminando curso:', err);
+        console.error(' Error eliminando curso:', err);
         alert('Error al eliminar el curso.');
       }
     });
@@ -184,11 +183,11 @@ export class GestionCursos implements OnInit {
     this.vista = 'editar';
   }
 
-  // ✅ MÉTODO MODIFICADO: FUNCIONA SIN SELECCIONAR CURSO
+
   gestionarModulosCurso(): void {
     console.log('🎯 Navegando a Gestión de Módulos generales');
-    
-    // ✅ CAMBIO: No necesita curso seleccionado
+
+
     this.setSection('gestion-modulos');
   }
 }

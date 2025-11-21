@@ -1,92 +1,227 @@
-/* Fondo general gris */
-body, html {
-  height: 100%;
-  margin: 0;
-  background-color: #bebebe;
-  font-family: 'Inter', 'Roboto', sans-serif;
-}
+// ============================================
+// REGISTER COMPONENT SCSS
+// Colores corporativos de LevelUpCorp
+// ============================================
 
-/* Contenedor principal centrado */
-.register-container {
-  width: 420px;
-  margin: 5rem auto;
-  padding: 2rem 2.5rem;
-  background-color: #bebebe;
-  border-radius: 12px;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
-  text-align: center;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
+$primary-blue: #2e7be7;
+$primary-blue-dark: #1565c0;
+$background-gray: #f4f5fa;
+$text-dark: #333;
+$input-bg: #ffffff;
+$border-color: #e0e0e0;
 
-/* Título */
-.register-container h2 {
-  color: #000;
-  font-weight: 700;
-  margin-bottom: 1.5rem;
-}
 
-/* Campos de entrada */
-mat-form-field.input-field {
+
+.register-card {
+  background: white;
+  padding: 3rem 2.5rem;
+  border-radius: 10px;
+  box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.10);
+  border: 1px solid $border-color;
   width: 100%;
-  margin-bottom: 1rem;
-  background-color: #bebebe;
-}
+  max-width: 700px;
+  box-sizing: border-box;
 
-/* Grupo de tipo de usuario */
-.tipo-usuario {
-  width: 100%;
-  text-align: left;
-  margin-top: 1.5rem;
-  margin-bottom: 1.5rem;
-
-  label {
+  h2 {
+    text-align: left;
+    margin: 0 0 2.5rem 0;
+    font-size: 1.5rem;
     font-weight: 600;
-    margin-bottom: 0.5rem;
-    display: block;
-    color: #000;
+    color: $primary-blue;
   }
 
-  mat-radio-group {
+  form {
     display: flex;
-    justify-content: space-around;
+    flex-direction: column;
     width: 100%;
-  }
+    gap: 1.5rem;
 
-  mat-radio-button {
-    color: #000;
+    .form-row {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+
+      label {
+        min-width: 160px;
+        font-size: 1rem;
+        font-weight: 500;
+        color: $text-dark;
+        text-align: right;
+        flex-shrink: 0;
+      }
+
+      input[type="text"],
+      input[type="password"],
+      select {
+        flex: 1;
+        min-width: 0;
+        padding: 0.75rem 1rem;
+        border: 1px solid $border-color;
+        border-radius: 6px;
+        background-color: $input-bg;
+        color: $text-dark;
+        font-size: 1rem;
+        outline: none;
+        transition: all 0.3s ease;
+        box-sizing: border-box;
+
+        &:focus {
+          border-color: $primary-blue;
+          background-color: #f0f4ff;
+          box-shadow: 0 0 0 3px rgba(46, 123, 231, 0.1);
+        }
+
+        &::placeholder {
+          color: #999;
+        }
+      }
+
+      select {
+        cursor: pointer;
+        appearance: none;
+        background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23333' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+        background-repeat: no-repeat;
+        background-position: right 0.75rem center;
+        background-size: 1rem;
+        padding-right: 2.5rem;
+      }
+
+      &.tipo-usuario-row {
+        align-items: center;
+
+        .radio-group {
+          flex: 1;
+          display: flex;
+          gap: 2rem;
+          justify-content: flex-start;
+          flex-wrap: wrap;
+
+          .radio-option {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            cursor: pointer;
+
+            input[type="radio"] {
+              width: 18px;
+              height: 18px;
+              cursor: pointer;
+              accent-color: $primary-blue;
+              flex-shrink: 0;
+            }
+
+            span {
+              font-size: 1rem;
+              font-weight: 500;
+              color: $text-dark;
+              white-space: nowrap;
+            }
+          }
+        }
+      }
+    }
+
+    .button-row {
+      display: flex;
+      gap: 1.5rem;
+      margin-top: 2rem;
+      justify-content: center;
+
+      button {
+        min-width: 200px;
+        padding: 0.85rem 2rem;
+        border: none;
+        border-radius: 6px;
+        font-weight: 600;
+        font-size: 1rem;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        text-transform: none;
+
+        &.btn-primary {
+          background-color: $primary-blue;
+          color: white;
+
+          &:hover:not(:disabled) {
+            background-color: $primary-blue-dark;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(46, 123, 231, 0.3);
+          }
+        }
+
+        &.btn-secondary {
+          background-color: #d6d6d6;
+          color: #333;
+
+          &:hover {
+            background-color: #c0c0c0;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+          }
+        }
+
+        &:disabled {
+          background-color: #e0e0e0;
+          color: #999;
+          cursor: not-allowed;
+          transform: none;
+          box-shadow: none;
+        }
+      }
+    }
   }
 }
 
-/* Botones */
-.button-group {
-  display: flex;
-  justify-content: space-between;
-  width: 100%;
-  margin-top: 1.5rem;
+// RESPONSIVE
+@media (max-width: 768px) {
+  .register-card {
+    padding: 2rem 1.5rem;
 
-  button {
-    flex: 1;
-    margin: 0 0.5rem;
-    font-weight: 600;
-    border-radius: 8px;
-    padding: 10px 0;
-    color: #fff !important;
-    transition: all 0.3s ease;
-  }
+    h2 {
+      font-size: 1.3rem;
+      margin-bottom: 2rem;
+    }
 
-  .registrarse {
-    background-color: #2e7be7 !important;
-    &:hover {
-      background-color: #1e63c1 !important;
+    form {
+      gap: 1.25rem;
+
+      .form-row {
+        flex-direction: column;
+        align-items: stretch;
+
+        label {
+          text-align: left;
+          min-width: auto;
+          margin-bottom: 0.5rem;
+        }
+
+        &.tipo-usuario-row {
+          .radio-group {
+            flex-direction: column;
+            gap: 0.75rem;
+          }
+        }
+      }
+
+      .button-row {
+        flex-direction: column;
+        gap: 1rem;
+
+        button {
+          width: 100%;
+          min-width: auto;
+        }
+      }
     }
   }
+}
 
-  .volver {
-    background-color: #2b2b2b !important;
-    &:hover {
-      background-color: #000000 !important;
-    }
+@media (max-width: 576px) {
+  .register-wrapper {
+    padding: 1rem;
+  }
+
+  .register-card {
+    padding: 1.5rem 1.25rem;
   }
 }

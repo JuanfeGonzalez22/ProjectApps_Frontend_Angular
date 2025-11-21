@@ -49,15 +49,15 @@ export class GestionModulos implements OnInit {
   }
 
   cargarModulos(): void {
-    console.log('📡 Cargando módulos...');
+    console.log(' Cargando módulos...');
     this.moduleService.getAll().subscribe({
       next: (data: ModuleData[]) => {
-        console.log('✅ Módulos recibidos:', data);
+        console.log(' Módulos recibidos:', data);
         this.modulos = data;
         this.modulosFiltrados = [...data];
       },
       error: (err: any) => {
-        console.error('❌ Error cargando módulos:', err);
+        console.error('Error cargando módulos:', err);
         this.modulos = [];
         this.modulosFiltrados = [];
       }
@@ -72,7 +72,7 @@ export class GestionModulos implements OnInit {
       return;
     }
 
-    // ✅ CORREGIDO: Eliminado 'type', cambiado a 'orden'
+
     this.modulosFiltrados = this.modulos.filter(modulo =>
       modulo.title?.toLowerCase().includes(termino) ||
       modulo.description?.toLowerCase().includes(termino) ||
@@ -115,14 +115,14 @@ export class GestionModulos implements OnInit {
 
     this.moduleService.delete(id).subscribe({
       next: () => {
-        console.log('✅ Módulo eliminado:', id);
+        console.log('Módulo eliminado:', id);
         this.modulos = this.modulos.filter(m => m.id !== id);
         this.modulosFiltrados = this.modulosFiltrados.filter(m => m.id !== id);
         this.moduloSeleccionado = null;
         alert('Módulo eliminado correctamente.');
       },
       error: (err: any) => {
-        console.error('❌ Error eliminando módulo:', err);
+        console.error('Error eliminando módulo:', err);
         alert('Ocurrió un error al eliminar el módulo.');
       }
     });
@@ -134,7 +134,7 @@ export class GestionModulos implements OnInit {
 
   seleccionarModulo(modulo: ModuleData): void {
     this.moduloSeleccionado = modulo;
-    console.log('✅ Módulo seleccionado:', modulo);
+    console.log('Módulo seleccionado:', modulo);
   }
 
   onModuloCreado(nuevoModulo: ModuleData): void {

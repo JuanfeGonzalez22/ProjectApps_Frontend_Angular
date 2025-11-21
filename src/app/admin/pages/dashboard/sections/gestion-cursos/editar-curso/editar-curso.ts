@@ -33,21 +33,21 @@ export class EditarCursoComponent implements OnChanges {
 
   cursoForm: FormGroup;
 
-  niveles = ['1', '2', '3']; // Básico, Intermedio, Avanzado
+  niveles = ['1', '2', '3'];
 
   constructor(
     private fb: FormBuilder,
     private courseService: CourseService
   ) {
     this.cursoForm = this.fb.group({
-      id: [{ value: '', disabled: true }],   // ID solo lectura
+      id: [{ value: '', disabled: true }],
       title: ['', Validators.required],
       description: ['', Validators.required],
       estimatedDuration: [
         '',
         [
           Validators.required,
-          Validators.pattern(/^([01]\d|2[0-3]):[0-5]\d$/)  // HH:mm
+          Validators.pattern(/^([01]\d|2[0-3]):[0-5]\d$/)
         ]
       ],
       level: ['', Validators.required]
@@ -57,9 +57,8 @@ export class EditarCursoComponent implements OnChanges {
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['curso'] && this.curso) {
 
-      // Convertir "HH:mm:ss" → "HH:mm" para el input
       let duracion = this.curso.estimatedDuration || '';
-      if (duracion.length === 8) { // "HH:mm:ss"
+      if (duracion.length === 8) {
         duracion = duracion.substring(0, 5);
       }
 
@@ -80,7 +79,7 @@ export class EditarCursoComponent implements OnChanges {
 
     let duracion = raw.estimatedDuration as string;
     if (duracion.length === 5) {
-      duracion = duracion + ':00'; // HH:mm → HH:mm:ss
+      duracion = duracion + ':00';
     }
 
     const actualizado: CourseData = {
@@ -97,7 +96,7 @@ export class EditarCursoComponent implements OnChanges {
         alert('Curso actualizado correctamente');
       },
       error: (e) => {
-        console.error('❌ Error actualizando curso', e);
+        console.error('Error actualizando curso', e);
         alert('Ocurrió un error al actualizar el curso');
       }
     });

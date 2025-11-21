@@ -1,12 +1,19 @@
+// src/app/core/models/course.model.ts
+
 export interface CourseData {
   id?: number;
   title: string;
   description: string;
-  estimatedDuration: string; // LocalTime se maneja como string "HH:mm:ss"
+  estimatedDuration: string;
   level: number;
+  // ⬇️ SOLO AGREGA ESTAS 5 LÍNEAS - NO CAMBIES NADA MÁS
+  name?: string;
+  duration?: string;
+  instructor?: string;
+  inscrito?: boolean;
+  progress?: number;
 }
 
-// DTO para crear/actualizar (sin id)
 export interface CourseDTO {
   title: string;
   description: string;

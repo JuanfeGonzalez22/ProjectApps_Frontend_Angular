@@ -68,15 +68,15 @@ export class GestionEvaluaciones implements OnInit {
     console.log('📡 Cargando evaluaciones...');
     this.evaluationService.getAll().subscribe({
       next: (data) => {
-        console.log('✅ Evaluaciones recibidas:', data);
-        console.log('📊 Total de evaluaciones:', data.length);
+        console.log(' Evaluaciones recibidas:', data);
+        console.log('Total de evaluaciones:', data.length);
 
         // Verificar que todas tengan ID
         data.forEach((evaluacion, index) => {
           if (!evaluacion.id) {
-            console.warn(`⚠️ Evaluación ${index} sin ID:`, evaluacion);
+            console.warn(`Evaluación ${index} sin ID:`, evaluacion);
           } else {
-            console.log(`✅ Evaluación ${index} - ID: ${evaluacion.id}, Título: ${evaluacion.title}`);
+            console.log(` Evaluación ${index} - ID: ${evaluacion.id}, Título: ${evaluacion.title}`);
           }
         });
 
@@ -84,7 +84,7 @@ export class GestionEvaluaciones implements OnInit {
         this.evaluacionesFiltradas = [...data];
       },
       error: (err) => {
-        console.error('❌ Error cargando evaluaciones:', err);
+        console.error(' Error cargando evaluaciones:', err);
         this.evaluaciones = [];
         this.evaluacionesFiltradas = [];
       }
@@ -119,7 +119,7 @@ export class GestionEvaluaciones implements OnInit {
   }
 
   editarEvaluacion(): void {
-    console.log('🔍 Verificando evaluación seleccionada:', this.evaluacionSeleccionada);
+    console.log(' Verificando evaluación seleccionada:', this.evaluacionSeleccionada);
 
     if (!this.evaluacionSeleccionada) {
       alert('Primero selecciona una evaluación de la tabla.');
@@ -127,13 +127,13 @@ export class GestionEvaluaciones implements OnInit {
     }
 
     if (!this.evaluacionSeleccionada.id) {
-      console.error('❌ La evaluación no tiene ID');
+      console.error(' La evaluación no tiene ID');
       console.error('Objeto completo:', JSON.stringify(this.evaluacionSeleccionada, null, 2));
       alert('Error: La evaluación seleccionada no tiene un ID válido.');
       return;
     }
 
-    console.log('✅ Abriendo formulario de edición para ID:', this.evaluacionSeleccionada.id);
+    console.log(' Abriendo formulario de edición para ID:', this.evaluacionSeleccionada.id);
     this.vista = 'editar';
   }
 
@@ -144,7 +144,7 @@ export class GestionEvaluaciones implements OnInit {
     }
 
     if (!this.evaluacionSeleccionada.id) {
-      console.error('❌ La evaluación seleccionada no tiene ID:', this.evaluacionSeleccionada);
+      console.error('La evaluación seleccionada no tiene ID:', this.evaluacionSeleccionada);
       alert('Error: La evaluación seleccionada no tiene un ID válido.');
       return;
     }
@@ -157,18 +157,18 @@ export class GestionEvaluaciones implements OnInit {
 
     const id = this.evaluacionSeleccionada.id;
 
-    console.log('🗑️ Intentando eliminar evaluación con ID:', id);
+    console.log(' Intentando eliminar evaluación con ID:', id);
 
     this.evaluationService.delete(id).subscribe({
       next: () => {
-        console.log('✅ Evaluación eliminada:', id);
+        console.log(' Evaluación eliminada:', id);
         this.evaluaciones = this.evaluaciones.filter(e => e.id !== id);
         this.evaluacionesFiltradas = this.evaluacionesFiltradas.filter(e => e.id !== id);
         this.evaluacionSeleccionada = null;
         alert('Evaluación eliminada correctamente.');
       },
       error: (err: any) => {
-        console.error('❌ Error eliminando evaluación:', err);
+        console.error(' Error eliminando evaluación:', err);
         console.error('Status:', err.status);
         console.error('Message:', err.message);
         console.error('Error completo:', err);

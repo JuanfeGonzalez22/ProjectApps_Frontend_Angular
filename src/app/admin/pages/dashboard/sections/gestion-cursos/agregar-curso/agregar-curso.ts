@@ -57,7 +57,6 @@ export class AgregarCursoComponent {
 
     let duracion = formValue.estimatedDuration as string;
 
-    // Si viene como "01:34", le añadimos los segundos → "01:34:00"
     if (duracion && duracion.length === 5) {
       duracion = duracion + ':00';
     }

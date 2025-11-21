@@ -60,14 +60,14 @@ export class EditarUsuario {
 
   guardar() {
     if(!this.usuario) return;
-    
+
     const actualizado: User = {
       ...this.usuario,
       fullName: this.fullName,
       email: this.email,
       department: this.department,
       role: this.role,
-      password: this.usuario.password // No se edita
+      password: this.usuario.password
     };
 
     this.userService.update(this.usuario.id, actualizado).subscribe({
@@ -76,7 +76,7 @@ export class EditarUsuario {
         this.usuarioActualizado.emit(u);
       },
       error: (err) => {
-        console.error('❌ Error al actualizar usuario:', err);
+        console.error(' Error al actualizar usuario:', err);
         alert('Error al actualizar usuario.');
       }
     });

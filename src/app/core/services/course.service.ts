@@ -11,7 +11,7 @@ export class CourseService {
 
   constructor(private http: HttpClient) {}
 
-  // ✅ MÉTODO PARA OBTENER HEADERS CON TOKEN
+
   private getHeaders(): HttpHeaders {
     const token = localStorage.getItem('token');
 

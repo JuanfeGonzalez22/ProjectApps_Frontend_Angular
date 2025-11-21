@@ -13,22 +13,31 @@
   padding: 1rem 0;
 
   .logo {
-    text-align: center;
-    color: #2e7be7;
-    font-weight: 500;
-    font-size: 1rem;
-    margin-bottom: 2rem;
+  text-align: center;
+  color: #2e7be7;
+  font-weight: 500;
+  font-size: 1rem;
+  margin-bottom: 2rem;
 
-    h2 {
-      margin: 0;
-    }
+  h2 {
+    margin: 0;
+    font-size: 1.5rem;
+    font-weight: 700;
   }
+
+  .subtitle {
+    margin: 0.25rem 0 0 0;
+    font-size: 0.875rem;
+    opacity: 0.8;
+    color: #666;
+  }
+}
 
   .menu {
     display: flex;
     flex-direction: column;
     gap: 0.5rem;
-    flex: 1; /* ✅ Permite que el menú crezca */
+    flex: 1;
 
     .menu-item {
       justify-content: flex-start;
@@ -47,14 +56,14 @@
       }
     }
 
-    /* ✅ ESTILO PARA LA SECCIÓN DE LOGOUT */
+
     .logout-section {
-      margin-top: auto; /* Empuja el botón hacia abajo */
+      margin-top: auto;
       padding-top: 1rem;
       border-top: 1px solid #e0e0e0;
 
       .logout-button {
-        color: #d32f2f; /* Rojo para indicar acción de salida */
+        color: #d32f2f;
 
         mat-icon {
           color: #d32f2f;
@@ -85,7 +94,6 @@
     flex: 1 1 auto;
   }
 
-  /* ✅ Estilo para el botón de logout en el header */
   button[matTooltip] {
     &:hover {
       background-color: rgba(255, 255, 255, 0.1);

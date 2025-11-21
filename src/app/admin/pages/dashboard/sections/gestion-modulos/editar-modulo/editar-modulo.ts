@@ -43,8 +43,8 @@ export class EditarModuloComponent implements OnInit {
     this.moduloForm = this.fb.group({
       courseId: ['', Validators.required],
       title: ['', Validators.required],
-      tipo: ['', Validators.required],      // ✅ CORREGIDO: 'tipo' en lugar de 'type'
-      orden: ['', [Validators.required, Validators.min(1)]] // ✅ CORREGIDO: 'orden' en lugar de 'order'
+      tipo: ['', Validators.required],
+      orden: ['', [Validators.required, Validators.min(1)]]
     });
   }
 
@@ -56,8 +56,8 @@ export class EditarModuloComponent implements OnInit {
         this.moduloForm.patchValue({
           courseId: this.modulo.courseId,
           title: this.modulo.title,
-          tipo: this.modulo.tipo,      // ✅ CORREGIDO
-          orden: this.modulo.orden     // ✅ CORREGIDO
+          tipo: this.modulo.tipo,
+          orden: this.modulo.orden
         });
       }, 100);
     }
@@ -69,7 +69,7 @@ export class EditarModuloComponent implements OnInit {
         this.cursos = cursos;
       },
       error: (err) => {
-        console.error('❌ Error cargando cursos:', err);
+        console.error(' Error cargando cursos:', err);
       }
     });
   }
@@ -81,16 +81,16 @@ export class EditarModuloComponent implements OnInit {
         id: this.modulo.id
       };
 
-      console.log('📤 Actualizando módulo:', moduloActualizado);
+      console.log(' Actualizando módulo:', moduloActualizado);
 
       this.moduleService.update(this.modulo.id, moduloActualizado).subscribe({
         next: (modulo: ModuleData) => {
-          console.log('✅ Módulo actualizado:', modulo);
+          console.log(' Módulo actualizado:', modulo);
           this.moduloActualizado.emit(modulo);
           alert('Módulo actualizado correctamente');
         },
         error: (e: any) => {
-          console.error("❌ Error actualizando módulo", e);
+          console.error(" Error actualizando módulo", e);
           alert("Error actualizando el módulo: " + (e.error?.message || e.message));
         }
       });

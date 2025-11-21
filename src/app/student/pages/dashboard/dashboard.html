@@ -1,4 +1,4 @@
-<!-- src/app/student/pages/student-dashboard/student-dashboard.component.html -->
+<!-- src/app/student/pages/student-dashboard/dashboard.html -->
 
 <mat-sidenav-container class="student-container">
   <!-- Sidebar -->
@@ -15,6 +15,7 @@
       <button mat-button class="menu-item" [class.active]="section === 'mis-cursos'" (click)="setSection('mis-cursos')">
         <mat-icon>school</mat-icon> Mis Cursos
       </button>
+      <!-- 👇 NUEVO: Botón de Explorar/Inscripción -->
       <button mat-button class="menu-item" [class.active]="section === 'explorar'" (click)="setSection('explorar')">
         <mat-icon>explore</mat-icon> Explorar Cursos
       </button>
@@ -42,13 +43,8 @@
   <!-- Main content -->
   <mat-sidenav-content>
     <mat-toolbar class="student-header">
-      <span class="welcome">¡Hola, {{ userName }}! 👋</span>
+      <span class="welcome">¡Hola, {{ userName }}!</span>
       <span class="spacer"></span>
-
-      <div class="streak-badge">
-        <mat-icon>local_fire_department</mat-icon>
-        <span>{{ studyStreak }} días</span>
-      </div>
 
       <button mat-icon-button [matMenuTriggerFor]="notificationsMenu">
         <mat-icon [matBadge]="notificationCount" matBadgeColor="warn">notifications</mat-icon>
@@ -88,17 +84,27 @@
       <div *ngIf="section === 'inicio'">
         <h2>Bienvenido al Dashboard</h2>
         <p>Selecciona una opción del menú lateral para comenzar.</p>
+
+        <!-- 👇 OPCIONAL: Tarjeta de acceso rápido -->
+        <div class="quick-actions">
+          <button mat-raised-button color="primary" (click)="setSection('mis-cursos')">
+            <mat-icon>school</mat-icon>
+            Ver Mis Cursos
+          </button>
+          <button mat-raised-button color="accent" (click)="setSection('explorar')">
+            <mat-icon>add_circle</mat-icon>
+            Inscribirse a un Curso
+          </button>
+        </div>
       </div>
 
       <!-- Sección de Mis Cursos -->
       <app-courses-student *ngIf="section === 'mis-cursos'"></app-courses-student>
 
-      <!-- Otras secciones -->
-      <div *ngIf="section === 'explorar'">
-        <h2>Explorar Cursos</h2>
-        <p>Contenido en construcción...</p>
-      </div>
+      <!-- 👇 NUEVO: Sección de Explorar/Inscripción -->
+      <app-course-enrollment *ngIf="section === 'explorar'"></app-course-enrollment>
 
+      <!-- Otras secciones -->
       <div *ngIf="section === 'progreso'">
         <h2>Mi Progreso</h2>
         <p>Contenido en construcción...</p>
