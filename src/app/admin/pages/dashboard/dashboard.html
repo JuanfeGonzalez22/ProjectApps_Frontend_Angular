@@ -1,3 +1,4 @@
+<!-- src/app/admin/pages/dashboard/dashboard.html -->
 <mat-sidenav-container class="admin-container">
   <!-- Sidebar -->
   <mat-sidenav mode="side" opened class="admin-sidenav">
@@ -19,18 +20,20 @@
         <mat-icon>manage_accounts</mat-icon> Gestión de cursos
       </button>
       <button mat-button class="menu-item" (click)="setSection('asignacion-instructores')">
-  <mat-icon>person_add</mat-icon> Asignación de Instructores
-</button>
+        <mat-icon>person_add</mat-icon> Asignación de Instructores
+      </button>
       <button mat-button class="menu-item" (click)="setSection('gestion-modulos')">
         <mat-icon>view_module</mat-icon> Gestión de módulos
       </button>
-      <!-- ✅ NUEVO: Gestión de Evaluaciones -->
       <button mat-button class="menu-item" (click)="setSection('gestion-evaluaciones')">
         <mat-icon>quiz</mat-icon> Gestión de evaluaciones
       </button>
       <button mat-button class="menu-item" (click)="setSection('gestion-inscripciones')">
-    <mat-icon>assignment_ind</mat-icon> Gestión de Inscripciones
-  </button>
+        <mat-icon>assignment_ind</mat-icon> Gestión de Inscripciones
+      </button>
+      <button mat-button class="menu-item" (click)="setSection('gamificacion')">
+        <mat-icon>military_tech</mat-icon> Gamificación
+      </button>
       <button mat-button class="menu-item" (click)="setSection('reportes')">
         <mat-icon>bar_chart</mat-icon> Reportes
       </button>
@@ -49,7 +52,7 @@
   <!-- Main content -->
   <mat-sidenav-content>
     <mat-toolbar class="admin-header">
-      <span class="welcome">Bienvenido, {{ user }} 👋</span>
+      <span class="welcome">{{ user }} </span>
       <span class="spacer"></span>
       <button mat-icon-button><mat-icon>notifications</mat-icon></button>
       <button mat-icon-button><mat-icon>account_circle</mat-icon></button>
@@ -66,11 +69,11 @@
       <app-gestion-asignacion-instructores *ngIf="section === 'asignacion-instructores'"></app-gestion-asignacion-instructores>
       <app-gestion-modulos *ngIf="section === 'gestion-modulos'"></app-gestion-modulos>
       <app-gestion-cursos *ngIf="section === 'gestion-cursos'"></app-gestion-cursos>
-      <!-- ✅ NUEVO: Componente de Gestión de Evaluaciones -->
       <app-gestion-evaluaciones *ngIf="section === 'gestion-evaluaciones'"></app-gestion-evaluaciones>
+      <!-- ✅ CORREGIDO: Ahora usa 'gamificacion' en lugar de 'gestion-gamificacion' -->
+      <app-gestion-gamificacion *ngIf="section === 'gamificacion'"></app-gestion-gamificacion>
       <app-reportes *ngIf="section === 'reportes'"></app-reportes>
       <app-configuracion *ngIf="section === 'configuracion'"></app-configuracion>
-
     </div>
   </mat-sidenav-content>
 </mat-sidenav-container>
