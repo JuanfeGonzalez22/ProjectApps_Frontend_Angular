@@ -1,0 +1,66 @@
+<!-- src/app/admin/pages/dashboard/sections/gamificacion/gestion-gamificacion.html -->
+<div *ngIf="vista === 'tabla'" class="gamificacion-container">
+  <h1>🎮 Gestión de Gamificación</h1>
+  
+  <!-- Barra de búsqueda -->
+  <div class="search-bar">
+    <input 
+      type="text" 
+      [(ngModel)]="searchTerm" 
+      (input)="filtrar()"
+      placeholder="Buscar por nombre, código o criterio..."
+      class="search-input">
+  </div>
+
+  <!-- Tabla de gamificaciones -->
+  <table class="module-table">
+    <thead>
+      <tr>
+        <th>Ícono</th>
+        <th>Nombre</th>
+        <th>Criterio</th>
+        <th>Código</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr 
+        *ngFor="let item of datosFiltrados" 
+        (click)="seleccionar(item)"
+        [class.seleccionado]="elementoSeleccionado?.id === item.id">
+        <td class="icon-cell">{{ item.icono }}</td>
+        <td>{{ item.name }}</td>
+        <td>{{ item.criterion }}</td>
+        <td><code>{{ item.code }}</code></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- Mensaje si no hay datos -->
+  <div *ngIf="datosFiltrados.length === 0" class="no-data">
+    No se encontraron elementos de gamificación
+  </div>
+
+  <!-- Botones de acción -->
+  <div class="bottom-action">
+    <button class="eliminar" (click)="eliminar()">Eliminar</button>
+    <button class="editar" (click)="editar()">Editar</button>
+    <button class="nueva" (click)="nuevo()">Nueva Insignia</button>
+  </div>
+</div>
+
+<!-- Vista Agregar -->
+<div *ngIf="vista === 'agregar'">
+  <app-agregar-gamificacion
+    (volver)="volverATabla()"
+    (elementoCreado)="onElementoCreado($event)">
+  </app-agregar-gamificacion>
+</div>
+
+<!-- Vista Editar -->
+<div *ngIf="vista === 'editar' && elementoSeleccionado">
+  <app-editar-gamificacion
+    [elemento]="elementoSeleccionado"
+    (volver)="volverATabla()"
+    (elementoActualizado)="onElementoActualizado($event)">
+  </app-editar-gamificacion>
+</div>

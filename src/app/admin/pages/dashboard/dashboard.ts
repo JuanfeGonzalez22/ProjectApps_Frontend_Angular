@@ -20,7 +20,9 @@ import { GestionModulos } from "./sections/gestion-modulos/gestion-modulos";
 import { GestionEvaluaciones } from "./sections/gestion-evaluaciones/gestion-evaluaciones";
 import { AuthService } from '../../../auth/services/auth';
 import { GestionInscripciones } from "./sections/inscripcion/gestion-inscripciones";
-import { GestionAsignacionInstructores } from "./sections/asignacion-instructores/gestion-asignacion-instructores";
+import { GestionAsignacionInstructores } from "./sections/asignacion-instructores/gestion-asignacion-instructores"; 
+import { GestionGamificacion } from "./sections/gamificacion/gestion-gamificacion";
+
 
 
 @Component({
@@ -44,7 +46,8 @@ import { GestionAsignacionInstructores } from "./sections/asignacion-instructore
     GestionModulos,
     GestionEvaluaciones,
     GestionInscripciones,
-    GestionAsignacionInstructores
+    GestionAsignacionInstructores,
+    GestionGamificacion
   ],
   templateUrl: './dashboard.html',
   styleUrls: ['./dashboard.scss'],
